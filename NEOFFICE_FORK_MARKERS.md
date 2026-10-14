@@ -58,6 +58,13 @@ marker in place.
   `crates/ui-egui/src/lib.rs` (the field), `chrome.rs`, `home.rs` and `commands.rs`; new test file
   `crates/ui-egui/tests/host_community.rs`. Every other build behaves as before.
 
+- **A hosting page opens the documents** (`PdfCraftApp::host_owns_documents`, set by `apps/pdfcraft-web/src/main.rs`
+  next to the host bridge, so only when a page frames the editor): the editor offers no Open, no Recent list and takes
+  no document dropped on it, and `file.open`, Open Recent and the other ways of opening a file say that the page opens
+  the documents. The Combine files tab and every tool are as before. Marked changes in `crates/ui-egui/src/lib.rs`
+  (the field, `host_refuses_open` and its four callers) and `home.rs`; new test file
+  `crates/ui-egui/tests/host_documents.rs`. Every other build behaves as before.
+
 ## Files that cannot carry a comment
 
 None so far.

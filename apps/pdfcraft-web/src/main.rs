@@ -73,6 +73,8 @@ fn main() {
                         app.host_dirty = Some(bridge.dirty_fn());
                         // //// Neoffice — a page that frames the editor has its own community: upstream's links are not shown.
                         app.hide_community = true;
+                        // //// Neoffice — and it opens the documents: no Open, Recent or dropped document in the editor.
+                        app.host_owns_documents = true;
                         bridge.post_ready();
                     }
                     Ok(Box::new(app))

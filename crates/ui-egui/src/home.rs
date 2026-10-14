@@ -106,22 +106,31 @@ pub fn show(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                                 app.select_tool(g.id);
                             }
                         }
-                        let (rect, resp) = ui.allocate_exact_size(vec2(170.0, 104.0), Sense::click());
-                        resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, tl!("Open file")));
-                        let press = theme::Press::track(ui, &resp);
-                        card_lift(ui, &t, rect, press);
-                        ui.painter().rect(
-                            rect,
-                            CornerRadius::same(10),
-                            press.fill(t.pasteboard, t.hover, t.pressed),
-                            Stroke::new(1.0, t.divider),
-                            egui::StrokeKind::Inside,
-                        );
-                        let body = rect.translate(press.offset());
-                        icons::paint(ui, Rect::from_center_size(body.center() - vec2(0.0, 16.0), vec2(28.0, 28.0)), "folder-open", 26.0, t.icon);
-                        ui.painter().text(body.center() + vec2(0.0, 22.0), Align2::CENTER_CENTER, tl!("Open file"), theme::semibold(13.0), t.text);
-                        if theme::hand(resp).clicked() {
-                            app.open_dialog();
+                        // //// Neoffice — no Open card when the hosting page opens the documents (`host_owns_documents`).
+                        if !app.host_owns_documents {
+                            let (rect, resp) = ui.allocate_exact_size(vec2(170.0, 104.0), Sense::click());
+                            resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, tl!("Open file")));
+                            let press = theme::Press::track(ui, &resp);
+                            card_lift(ui, &t, rect, press);
+                            ui.painter().rect(
+                                rect,
+                                CornerRadius::same(10),
+                                press.fill(t.pasteboard, t.hover, t.pressed),
+                                Stroke::new(1.0, t.divider),
+                                egui::StrokeKind::Inside,
+                            );
+                            let body = rect.translate(press.offset());
+                            icons::paint(ui, Rect::from_center_size(body.center() - vec2(0.0, 16.0), vec2(28.0, 28.0)), "folder-open", 26.0, t.icon);
+                            ui.painter().text(
+                                body.center() + vec2(0.0, 22.0),
+                                Align2::CENTER_CENTER,
+                                tl!("Open file"),
+                                theme::semibold(13.0),
+                                t.text,
+                            );
+                            if theme::hand(resp).clicked() {
+                                app.open_dialog();
+                            }
                         }
                     });
                 });
@@ -134,7 +143,12 @@ pub fn show(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
 
             ui.add_space(26.0);
             let mut clear = false;
+            // //// Neoffice — no Recent list when the hosting page opens the documents: nothing in it could be opened.
+            let hosted = app.host_owns_documents;
             ui.horizontal(|ui| {
+                if hosted {
+                    return;
+                }
                 ui.label(egui::RichText::new(tl!("Recent")).font(theme::semibold(17.0)));
                 if !app.recent.is_empty() {
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
@@ -145,12 +159,14 @@ pub fn show(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 }
             });
             ui.add_space(8.0);
-            if app.recent.is_empty() {
+            // //// Neoffice — no hint about the Recent list when the hosting page opens the documents.
+            if app.recent.is_empty() && !hosted {
                 ui.label(egui::RichText::new(tl!("Files you open in PdfCraft appear here. Drop a PDF anywhere to open it.")).color(t.text_muted));
             }
             let mut open = None;
             let mut remove = None;
-            for r in &app.recent {
+            // //// Neoffice — and no row of it.
+            for r in app.recent.iter().filter(|_| !hosted) {
                 let (rect, resp) = ui.allocate_exact_size(vec2(ui.available_width(), 46.0), Sense::click());
                 resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &r.name));
                 let press = theme::Press::track(ui, &resp);

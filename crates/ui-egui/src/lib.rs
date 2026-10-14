@@ -554,6 +554,10 @@ pub struct PdfCraftApp {
     // //// Neoffice — added field: a hosting page hides the links to upstream's community (Discord).
     /// Hide the links to upstream's community: the title bar's button, the Home page's card, the Discord command (web host).
     pub hide_community: bool,
+    // //// Neoffice — added field: the embedding page (the Drive of the Suite, Neodesk's window) opens the documents.
+    /// The editor offers no Open, Recent or drop of a document, and refuses what would open one: the page gave it the
+    /// document to edit, and another one beside it would be saved to the page under a name the page did not ask for.
+    pub host_owns_documents: bool,
     // //// Neoffice — added field: the embedding page's refusals of a save (`pdfcraft:saved`), see `host_saves`.
     /// Saves the embedding page answered with `ok: false`. `mark_saved` ran when each file was
     /// handed over, so every entry puts its document back to unsaved. Read every frame, like
@@ -871,6 +875,7 @@ impl PdfCraftApp {
             host_dirty: None,
             // //// Neoffice — see `hide_community` and `host_saves`.
             hide_community: false,
+            host_owns_documents: false,
             refused_saves: Default::default(),
             close_request: None,
             save_override: None,
@@ -1132,8 +1137,22 @@ impl PdfCraftApp {
         Ok(())
     }
 
+    // //// Neoffice — added: a page that opens the documents (`host_owns_documents`) has the one to edit; true, and the
+    // person is told, when an open has to be refused.
+    fn host_refuses_open(&mut self) -> bool {
+        if !self.host_owns_documents {
+            return false;
+        }
+        self.notify("This document is opened from the page that hosts the editor.".to_string());
+        true
+    }
+
     #[cfg(not(target_arch = "wasm32"))]
     fn open_dropped(&mut self, f: egui::DroppedFileHandle, _ctx: &egui::Context) {
+        // //// Neoffice — not when the hosting page opens the documents.
+        if self.host_refuses_open() {
+            return;
+        }
         let p = f.path().to_string_lossy().into_owned();
         if !p.is_empty() && f.path().is_absolute() {
             self.open_path(&p);
@@ -1206,6 +1225,10 @@ impl PdfCraftApp {
     /// Browsers read dropped files asynchronously; the bytes land in `inbox` and open next frame.
     #[cfg(target_arch = "wasm32")]
     fn open_dropped(&mut self, f: egui::DroppedFileHandle, ctx: &egui::Context) {
+        // //// Neoffice — not when the hosting page opens the documents.
+        if self.host_refuses_open() {
+            return;
+        }
         self.startup_superseded = true;
         let inbox = self.inbox.clone();
         let ctx = ctx.clone();
@@ -1331,6 +1354,10 @@ impl PdfCraftApp {
     /// Open a file from a recent list: focus the tab already showing it, else open it (File ▸
     /// Open Recent and the Home view's list share this).
     pub fn open_recent(&mut self, path: &str) {
+        // //// Neoffice — not when the hosting page opens the documents.
+        if self.host_refuses_open() {
+            return;
+        }
         if let Some(i) = self.views.iter().position(|v| self.session.get(v.id).and_then(|d| d.path.as_deref()) == Some(path)) {
             self.active = Some(i);
         } else {
@@ -1397,6 +1424,10 @@ impl PdfCraftApp {
 
     #[cfg(not(target_arch = "wasm32"))]
     pub fn open_path(&mut self, path: &str) {
+        // //// Neoffice — not when the hosting page opens the documents.
+        if self.host_refuses_open() {
+            return;
+        }
         let name = std::path::Path::new(path).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_else(|| path.to_string());
         // Taken before reading: a build that rewrites the file meanwhile still counts as a change.
         let stamp = file_watch::Stamp::at(path);
@@ -1422,6 +1453,10 @@ impl PdfCraftApp {
     }
 
     pub fn open_dialog(&mut self) {
+        // //// Neoffice — not when the hosting page opens the documents.
+        if self.host_refuses_open() {
+            return;
+        }
         self.startup_superseded = true;
         #[cfg(not(target_arch = "wasm32"))]
         self.pick(
