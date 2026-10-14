@@ -66,7 +66,8 @@ fn main() {
                         {
                             app.comment_prefs.author = author.chars().take(200).collect();
                         }
-                        bridge.listen(app.startup_inbox.clone(), cc.egui_ctx.clone());
+                        // //// Neoffice — the queue of the parent's refusals (`pdfcraft:saved`) goes along with the startup inbox.
+                        bridge.listen(app.startup_inbox.clone(), app.refused_saves.clone(), cc.egui_ctx.clone());
                         app.host_save = Some(bridge.save_fn());
                         app.host_dirty = Some(bridge.dirty_fn());
                         bridge.post_ready();
@@ -127,6 +128,10 @@ async fn fetch_bytes(url: &str) -> Result<Vec<u8>, String> {
 ///   `Uint8Array` holding a PDF. It opens in a tab, like a `?file=` URL.
 /// - `pdfcraft:save` (to the parent): `{ name, saveAs, bytes }` when the user saves; `bytes` is
 ///   a transferred `ArrayBuffer`. The parent stores the file (and reports its own errors).
+// //// Neoffice — `pdfcraft:saved` is ours: upstream's bridge has no answer to a save.
+/// - `pdfcraft:saved` (from the parent): `{ name, ok, error }`, sent once the parent has tried to
+///   store the file it was given as `name`. `ok: false` puts that document back to unsaved and
+///   the notice says why (`error`). `ok: true`, or no answer, leaves it saved.
 /// - `pdfcraft:dirty` (to the parent): `{ dirty }` whenever unsaved work appears or goes away.
 /// - `pdfcraft:failed` (to the parent): `{ error }` when the app couldn't start.
 ///
@@ -176,7 +181,8 @@ mod host {
         }
 
         /// Hear `pdfcraft:open` from the parent and queue the file like a `?file=` download.
-        pub fn listen(&self, inbox: pdfcraft_ui_egui::Inbox, ctx: egui::Context) {
+        // //// Neoffice — also hears `pdfcraft:saved`: `refused` takes the parent's `ok: false` answers to a save.
+        pub fn listen(&self, inbox: pdfcraft_ui_egui::Inbox, refused: pdfcraft_ui_egui::RefusedSaves, ctx: egui::Context) {
             let parent = self.parent.clone();
             let origin = self.origin.clone();
             let on_message = Closure::<dyn FnMut(web_sys::MessageEvent)>::new(move |event: web_sys::MessageEvent| {
@@ -184,7 +190,17 @@ mod host {
                     return;
                 }
                 let data = event.data();
-                if string(&data, "type").as_deref() != Some("pdfcraft:open") {
+                let kind = string(&data, "type");
+                // //// Neoffice — `pdfcraft:saved { name, ok, error }`: this only reads the fields. What they mean (only
+                // `ok: false` is a refusal) and the session change it causes on the next frame are in `host_saves`.
+                if kind.as_deref() == Some("pdfcraft:saved") {
+                    let ok = js_sys::Reflect::get(&data, &JsValue::from_str("ok")).ok().and_then(|v| v.as_bool());
+                    if refused.answer(string(&data, "name"), ok, string(&data, "error")) {
+                        ctx.request_repaint();
+                    }
+                    return;
+                }
+                if kind.as_deref() != Some("pdfcraft:open") {
                     return;
                 }
                 let name = string(&data, "name").filter(|n| !n.trim().is_empty()).unwrap_or_else(|| "document.pdf".to_string());

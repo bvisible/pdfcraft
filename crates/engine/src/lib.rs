@@ -3619,6 +3619,18 @@ impl Session {
         Self::refresh(doc).inspect_err(|_| Self::show_released(doc))
     }
 
+    // //// Neoffice — the web build hands a saved file to the page that frames the editor and calls `mark_saved` at
+    // once; when that page then says it could not store the file, the document has unsaved changes again.
+    /// Put document `id` back to unsaved after [`Self::mark_saved`] recorded a save that did not
+    /// reach its destination. Nothing else changes: the working file, the undo and redo history
+    /// and the `generation` stay as they are (the next save writes the same bytes again, with
+    /// any later edit appended). Does nothing when `id` is not open.
+    pub fn mark_unsaved(&mut self, id: DocId) {
+        if let Some(doc) = self.docs.iter_mut().find(|d| d.id == id) {
+            doc.dirty = true;
+        }
+    }
+
     /// Enter the permissions (owner) password of a document opened with its user password,
     /// lifting its restrictions for this session (Acrobat asks for it before changing security).
     /// Not an edit: nothing is marked unsaved and there is no undo step. Undo and redo states

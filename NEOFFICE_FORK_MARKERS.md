@@ -16,8 +16,9 @@ picture of what is ours and why.
 
 ## What the fork adds
 
-Three workflow files, all new files that carry their own `//// Neoffice — added file` header. No
-file of upstream's is changed.
+Three workflow files and an answer to a save in the browser build's host bridge. Every new file
+carries its own `//// Neoffice — added file` header; the few changes to upstream's files carry a
+marker in place.
 
 - `.github/workflows/neoffice-web.yml`: builds the browser version on a GitHub runner, started by
   hand, with the packaging script upstream's own release job runs. Upstream's workflows are
@@ -27,6 +28,24 @@ file of upstream's is changed.
 - `.github/workflows/neoffice-ci.yml`: runs upstream's whole quality gate, `cargo xtask ci`, in one
   job on a GitHub runner (by hand, or on a push that touches code), because the maintainer's Mac has
   too little disk to run it for every change.
+- **The answer to a save, in the host bridge of the browser build** (`?host=parent`: the
+  `postMessage` contract of a same-origin page that frames the editor, `pdfcraft:ready`, `open`,
+  `save`, `dirty` and `failed`, which WordCraft, GridCraft and DeckCraft speak too, so that one host
+  page drives every Craft editor). Ours is `pdfcraft:saved { name, ok, error }`, which the page sends
+  once it tried to store a file that `pdfcraft:save` gave it. Upstream's bridge has no answer: the
+  document counts as saved as soon as the file is handed over, even when the page could not store it
+  (a right refused, a lock, the network). `ok: false` puts the document back to unsaved (the
+  unsaved-changes flag and `pdfcraft:dirty` follow) and the notice says why, with the existing
+  `Couldn't save {name}: {e}` string; `ok: true` or no answer changes nothing. An answer names a file,
+  not a save: when the same name was saved twice before the answer, it counts for the last save, and
+  an answer that no open document carries (no name, a document closed right after its save) is taken
+  for the active document, the safe side of a doubt.
+  New files: `crates/ui-egui/src/host_saves.rs` (the queue the web shell fills and the app empties
+  every frame, and what an answer does to the session) and `crates/ui-egui/tests/host_saves.rs`.
+  Marked changes: `crates/ui-egui/src/lib.rs` (the module, the queue as a field, and one call in
+  `logic`), `crates/engine/src/lib.rs` and `crates/engine/src/tests.rs` (`Session::mark_unsaved` and
+  its test), `apps/pdfcraft-web/src/main.rs` (reads the message). Drop it when upstream ships its own
+  answer to a save, keeping `pdfcraft:saved`.
 
 ## Files that cannot carry a comment
 

@@ -81,6 +81,9 @@ pub mod fill_sign;
 pub mod folders_ui;
 pub mod forms_ui;
 mod home;
+// //// Neoffice — added module: what the page that frames the editor answers to a save (`pdfcraft:saved`).
+mod host_saves;
+pub use host_saves::RefusedSaves;
 mod icon_data;
 pub mod icons;
 pub mod last_session;
@@ -548,6 +551,11 @@ pub struct PdfCraftApp {
     pub host_save: Option<HostSaveFn>,
     /// Reports unsaved work to the embedding page (web, see [`HostDirtyFn`]).
     pub host_dirty: Option<HostDirtyFn>,
+    // //// Neoffice — added field: the embedding page's refusals of a save (`pdfcraft:saved`), see `host_saves`.
+    /// Saves the embedding page answered with `ok: false`. `mark_saved` ran when each file was
+    /// handed over, so every entry puts its document back to unsaved. Read every frame, like
+    /// [`Self::failed_inbox`].
+    pub refused_saves: RefusedSaves,
     /// A pending "save changes?" question (closing a dirty tab or quitting).
     pub close_request: Option<CloseRequest>,
     /// Save to this path instead of asking (tests and automation).
@@ -858,6 +866,8 @@ impl PdfCraftApp {
             os_events: None,
             host_save: None,
             host_dirty: None,
+            // //// Neoffice — see `host_saves`.
+            refused_saves: Default::default(),
             close_request: None,
             save_override: None,
             props_draft: None,
@@ -2468,6 +2478,9 @@ impl eframe::App for PdfCraftApp {
         for (name, e) in failed {
             self.notify_fmt("Couldn't open {name}: {e}", &[("name", &name), ("e", &e)]);
         }
+        // //// Neoffice — a save the embedding page refused leaves its document unsaved again; before `guard_quit`
+        // below publishes the flag, so the browser's reload warning and the host's `pdfcraft:dirty` agree this frame.
+        self.settle_refused_saves();
         let os_events = self.os_events.as_mut().map(|poll| poll()).unwrap_or_default();
         for e in os_events {
             match e {

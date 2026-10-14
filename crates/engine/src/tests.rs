@@ -279,6 +279,37 @@ fn undo_still_works_after_save() {
     assert_eq!(doc.info.pages.len(), 2);
 }
 
+// //// Neoffice — covers `Session::mark_unsaved`: the web build marks a document saved when it hands the file to the
+// page that frames the editor, and that page may then refuse it.
+#[test]
+fn a_save_that_did_not_arrive_puts_the_document_back_to_unsaved_with_its_history() {
+    let (mut s, id) = session_with(3);
+    s.apply(id, Edit::DeletePages { pages: vec![0] }).unwrap();
+    s.apply(id, Edit::RotatePages { pages: vec![0], degrees: 90 }).unwrap();
+    let label = s.get(id).unwrap().can_undo().map(str::to_owned);
+    let saved = s.save_bytes(id).unwrap();
+    s.mark_saved(id, saved.clone(), None).unwrap();
+    assert!(!s.get(id).unwrap().dirty);
+
+    s.mark_unsaved(id);
+    let doc = s.get(id).unwrap();
+    assert!(doc.dirty, "the file never reached its destination");
+    assert_eq!(doc.can_undo().map(str::to_owned), label, "the undo history is the one from before the save");
+    assert_eq!(doc.info.pages.len(), 2, "the edits are still in the working file");
+    assert_eq!(s.save_bytes(id).unwrap(), saved, "saving again sends the same file");
+
+    // Undo still works, and the document stays unsaved.
+    s.undo(id).unwrap();
+    s.undo(id).unwrap();
+    assert_eq!(s.get(id).unwrap().info.pages.len(), 3);
+    assert!(s.get(id).unwrap().dirty);
+
+    // A document that is not open is ignored; the open one is left alone.
+    s.mark_saved(id, s.save_bytes(id).unwrap(), None).unwrap();
+    s.mark_unsaved(DocId(u64::MAX));
+    assert!(!s.get(id).unwrap().dirty);
+}
+
 #[test]
 fn full_save_is_readable_and_smaller_after_deletes() {
     let (mut s, id) = session_with(5);
