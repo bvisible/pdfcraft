@@ -52,6 +52,12 @@ marker in place.
   user renamed, kept signing comments as the first. The host knows who is signed in; WordCraft's
   bridge does the same.
 
+- **What a hosting page hides** (`PdfCraftApp::hide_community`, set by `apps/pdfcraft-web/src/main.rs` next to the host
+  bridge, so only when a page frames the editor): upstream's community links are not shown (the title bar's Discord
+  button, the Home page's community card), and the link commands (`help.discord`…) open nothing. Marked changes in
+  `crates/ui-egui/src/lib.rs` (the field), `chrome.rs`, `home.rs` and `commands.rs`; new test file
+  `crates/ui-egui/tests/host_community.rs`. Every other build behaves as before.
+
 ## Files that cannot carry a comment
 
 None so far.

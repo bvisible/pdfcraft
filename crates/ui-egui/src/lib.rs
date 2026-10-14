@@ -551,6 +551,9 @@ pub struct PdfCraftApp {
     pub host_save: Option<HostSaveFn>,
     /// Reports unsaved work to the embedding page (web, see [`HostDirtyFn`]).
     pub host_dirty: Option<HostDirtyFn>,
+    // //// Neoffice — added field: a hosting page hides the links to upstream's community (Discord).
+    /// Hide the links to upstream's community: the title bar's button, the Home page's card, the Discord command (web host).
+    pub hide_community: bool,
     // //// Neoffice — added field: the embedding page's refusals of a save (`pdfcraft:saved`), see `host_saves`.
     /// Saves the embedding page answered with `ok: false`. `mark_saved` ran when each file was
     /// handed over, so every entry puts its document back to unsaved. Read every frame, like
@@ -866,7 +869,8 @@ impl PdfCraftApp {
             os_events: None,
             host_save: None,
             host_dirty: None,
-            // //// Neoffice — see `host_saves`.
+            // //// Neoffice — see `hide_community` and `host_saves`.
+            hide_community: false,
             refused_saves: Default::default(),
             close_request: None,
             save_override: None,

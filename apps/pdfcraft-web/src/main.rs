@@ -71,6 +71,8 @@ fn main() {
                         bridge.listen(app.startup_inbox.clone(), app.refused_saves.clone(), cc.egui_ctx.clone());
                         app.host_save = Some(bridge.save_fn());
                         app.host_dirty = Some(bridge.dirty_fn());
+                        // //// Neoffice — a page that frames the editor has its own community: upstream's links are not shown.
+                        app.hide_community = true;
                         bridge.post_ready();
                     }
                     Ok(Box::new(app))

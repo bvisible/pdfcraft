@@ -200,7 +200,10 @@ impl PdfCraftApp {
                 self.dialog = Some(Dialog::NumberPages);
             }
             link if pdfcraft_engine::links::for_command(link).is_some() => {
-                if let Some(l) = pdfcraft_engine::links::for_command(link) {
+                // //// Neoffice — nothing to open when a hosting page hides the community links.
+                if let Some(l) = pdfcraft_engine::links::for_command(link)
+                    && !self.hide_community
+                {
                     self.open_url(l.url);
                 }
             }
