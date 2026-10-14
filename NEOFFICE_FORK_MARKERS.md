@@ -46,6 +46,11 @@ marker in place.
   `logic`), `crates/engine/src/lib.rs` and `crates/engine/src/tests.rs` (`Session::mark_unsaved` and
   its test), `apps/pdfcraft-web/src/main.rs` (reads the message). Drop it when upstream ships its own
   answer to a save, keeping `pdfcraft:saved`.
+- **`?author=` always wins** (`apps/pdfcraft-web/src/main.rs`). Upstream used it only while the
+  comment author was still the web default, "Guest". The browser saves that name with the other
+  settings, so the first name a host passed stuck: the next user of the same browser, or the same
+  user renamed, kept signing comments as the first. The host knows who is signed in; WordCraft's
+  bridge does the same.
 
 ## Files that cannot carry a comment
 

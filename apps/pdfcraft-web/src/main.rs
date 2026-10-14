@@ -59,11 +59,12 @@ fn main() {
                     if query_param("host").as_deref() == Some("parent")
                         && let Some(bridge) = host::Bridge::new()
                     {
-                        // `?author=`: the host's name for the user signs their comments,
-                        // unless they chose a name in PdfCraft (the web default is "Guest").
-                        if let Some(author) = query_param("author").map(|a| a.trim().to_string()).filter(|a| !a.is_empty())
-                            && app.comment_prefs.author == "Guest"
-                        {
+                        // `?author=`: the host's name for the user signs their comments.
+                        // //// Neoffice — upstream kept it "unless they chose a name in PdfCraft (the web default is "Guest")",
+                        // but the settings saved in the browser hold the name a first `?author=` set: the next user of that
+                        // browser, or the same user under a new name, kept signing as the first. The host knows who is
+                        // signed in, so its name wins (WordCraft's bridge does the same).
+                        if let Some(author) = query_param("author").map(|a| a.trim().to_string()).filter(|a| !a.is_empty()) {
                             app.comment_prefs.author = author.chars().take(200).collect();
                         }
                         // //// Neoffice — the queue of the parent's refusals (`pdfcraft:saved`) goes along with the startup inbox.
