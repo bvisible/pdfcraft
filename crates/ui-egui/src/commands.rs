@@ -80,6 +80,10 @@ impl PdfCraftApp {
     /// Whether a registered command can run now. The engine judges the document (security,
     /// contents, undo history); view state it can't see is checked here.
     pub(crate) fn command_enabled(&self, spec: &CommandSpec) -> bool {
+        // //// Neoffice — what opens or creates another document is not available when the hosting page opens the documents.
+        if self.host_hides(spec.id) {
+            return false;
+        }
         // Undo and Redo act on the Combine files list while its tab shows.
         if self.combine_showing() && matches!(spec.needs, commands::Needs::Undo | commands::Needs::Redo) {
             return self.combine_can_undo(spec.needs == commands::Needs::Undo);
@@ -105,6 +109,11 @@ impl PdfCraftApp {
 
     fn execute_unguarded(&mut self, id: &str) -> bool {
         let Some(spec) = commands::command(id) else { return false };
+        // //// Neoffice — told, not offered: a shortcut or the control channel still reaches a command the menus hide.
+        if self.host_hides(id) {
+            self.host_refuses_open();
+            return false;
+        }
         if !self.command_enabled(spec) {
             let why = match spec.needs {
                 commands::Needs::Undo => tl!("Nothing to undo").to_string(),
@@ -686,6 +695,10 @@ impl PdfCraftApp {
 /// Render a top-level menu's registered commands (with live labels, shortcuts and enablement).
 pub(crate) fn registry_menu(app: &mut PdfCraftApp, ui: &mut egui::Ui, menu: &str) {
     for spec in commands::menu(menu) {
+        // //// Neoffice — not the commands that open or create another document when the hosting page opens the documents.
+        if app.host_hides(spec.id) {
+            continue;
+        }
         let label = commands::current_label(spec, &app.session, app.active_ids().map(|(_, id)| id));
         let label = crate::i18n::menu_label(spec.id, &label);
         // Open Recent is a submenu of the live recent list, not one action: disabled while the

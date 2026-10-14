@@ -61,7 +61,12 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 };
                 let controls_width = discord_width + 2.0 * button + 30.0;
                 // Open stays in sight after the tabs: its icon, text and padding, and the gaps around it.
-                let open_width = ui.fonts_mut(|f| f.layout_no_wrap(tl!("Open").into(), theme::medium(13.0), t.text).size().x) + 38.0 + 12.0;
+                // //// Neoffice — no Open button, so no width kept for it, when the hosting page opens the documents.
+                let open_width = if app.host_owns_documents {
+                    0.0
+                } else {
+                    ui.fonts_mut(|f| f.layout_no_wrap(tl!("Open").into(), theme::medium(13.0), t.text).size().x) + 38.0 + 12.0
+                };
                 let mut tabs_width = (ui.available_width() - controls_width - open_width).max(0.0);
                 // Tabs shrink to share the strip (names end in "…") and scroll only once they reach
                 // their narrowest; then arrows either side say so and step through them.
@@ -195,9 +200,12 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                     ui.ctx().request_repaint();
                 }
                 ui.add_space(4.0);
-                let tip = crate::commands::command_tip(ui.ctx(), tl!("Open a PDF ({key})"), "file.open");
-                if widgets::ghost_button_sized(ui, "plus", tl!("Open"), tab_h).on_hover_text(tip).clicked() {
-                    app.open_dialog();
+                // //// Neoffice — no Open button when the hosting page opens the documents: it could only refuse.
+                if !app.host_owns_documents {
+                    let tip = crate::commands::command_tip(ui.ctx(), tl!("Open a PDF ({key})"), "file.open");
+                    if widgets::ghost_button_sized(ui, "plus", tl!("Open"), tab_h).on_hover_text(tip).clicked() {
+                        app.open_dialog();
+                    }
                 }
                 ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                     let (icon, label) = match app.theme_preference {

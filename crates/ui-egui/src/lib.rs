@@ -1147,6 +1147,32 @@ impl PdfCraftApp {
         true
     }
 
+    // //// Neoffice — added: the commands that open or create another document. A page that opens the documents
+    // (`host_owns_documents`) neither offers them (menus, palette, tab strip) nor runs them: its one document is the page's.
+    const HOST_HIDDEN_COMMANDS: &'static [&'static str] = &[
+        "file.open",
+        "file.open_recent",
+        "file.clear_recent",
+        "file.pin_folder",
+        "create.blank",
+        "create.file",
+        "create.multiple",
+        "create.multiple_separate",
+        "create.images",
+        "create.clipboard",
+        "page.combine",
+    ];
+
+    pub(crate) fn host_hides(&self, id: &str) -> bool {
+        self.host_owns_documents && Self::HOST_HIDDEN_COMMANDS.contains(&id)
+    }
+
+    // //// Neoffice — added: "Create a PDF" and "Combine files" only open or create other documents; a page that opens
+    // the documents has neither among its tools.
+    pub(crate) fn host_hides_tool(&self, id: &str) -> bool {
+        self.host_owns_documents && matches!(id, "create" | "combine")
+    }
+
     #[cfg(not(target_arch = "wasm32"))]
     fn open_dropped(&mut self, f: egui::DroppedFileHandle, _ctx: &egui::Context) {
         // //// Neoffice — not when the hosting page opens the documents.
@@ -1728,6 +1754,11 @@ impl PdfCraftApp {
     /// Enter a tool from the catalogue, Home, palette or control channel. Organize is a
     /// workspace, so opening its panel also opens the page grid (without toggling it off).
     pub(crate) fn select_tool(&mut self, id: &'static str) {
+        // //// Neoffice — not a tool that only opens or creates other documents when the hosting page opens the documents.
+        if self.host_hides_tool(id) {
+            self.host_refuses_open();
+            return;
+        }
         self.left = LeftPanel::Tool(id);
         self.reveal_tools();
         if let Some(view) = self.active.and_then(|i| self.views.get_mut(i)) {

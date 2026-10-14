@@ -56,8 +56,10 @@ fn all_tools(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens) {
         app.left_open = false;
     }
     egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
-        let shown = if app.all_tools_expanded { TOOL_GROUPS.len() } else { COLLAPSED_TOOLS.min(TOOL_GROUPS.len()) };
-        for g in &TOOL_GROUPS[..shown] {
+        // //// Neoffice — without the tools that only open or create other documents when the hosting page opens the documents.
+        let groups: Vec<&ToolGroup> = TOOL_GROUPS.iter().filter(|g| !app.host_hides_tool(g.id)).collect();
+        let shown = if app.all_tools_expanded { groups.len() } else { COLLAPSED_TOOLS.min(groups.len()) };
+        for g in &groups[..shown] {
             if tool_row(ui, t, g).clicked() {
                 app.select_tool(g.id);
             }
