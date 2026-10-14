@@ -67,4 +67,6 @@ marker in place.
 
 ## Files that cannot carry a comment
 
-None so far.
+| File | Why it is ours |
+|---|---|
+| `Cargo.lock` | `rustls` is at 0.23.46 (upstream's file has 0.23.45): `cargo deny` refuses 0.23.45, RUSTSEC-2026-0349 (a ServerHello that downgrades later connections to classical key exchange), and the quality gate stops there. On a merge conflict, take upstream's file; if it still has `rustls` below 0.23.46, run `cargo update -p rustls`. |
