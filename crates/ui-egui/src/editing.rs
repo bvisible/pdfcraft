@@ -698,6 +698,11 @@ impl PdfCraftApp {
 
     /// Close a tab, asking first if it has unsaved changes.
     pub fn request_close_tab(&mut self, index: usize) {
+        // //// Neoffice — the page that opens the documents keeps its document in its tab.
+        if self.host_owns_documents {
+            self.host_refuses_command("file.close");
+            return;
+        }
         // Text typed into a field counts as an unsaved change.
         if self.has_unsaved_work(index)
             && let Some(id) = self.views.get(index).map(|v| v.id)

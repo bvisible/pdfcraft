@@ -111,7 +111,7 @@ impl PdfCraftApp {
         let Some(spec) = commands::command(id) else { return false };
         // //// Neoffice — told, not offered: a shortcut or the control channel still reaches a command the menus hide.
         if self.host_hides(id) {
-            self.host_refuses_open();
+            self.host_refuses_command(id);
             return false;
         }
         if !self.command_enabled(spec) {

@@ -1161,10 +1161,23 @@ impl PdfCraftApp {
         "create.images",
         "create.clipboard",
         "page.combine",
+        // The page's document stays in its tab: closing it would leave the editor with nothing to show.
+        "file.close",
+        "file.close_all",
     ];
 
     pub(crate) fn host_hides(&self, id: &str) -> bool {
         self.host_owns_documents && Self::HOST_HIDDEN_COMMANDS.contains(&id)
+    }
+
+    // //// Neoffice — added: told, not offered. What a shortcut or the control channel reaches among the hidden commands
+    // gets the page's own words: opened for the commands that bring another document, closed for the ones that close.
+    fn host_refuses_command(&mut self, id: &str) {
+        if matches!(id, "file.close" | "file.close_all") {
+            self.notify("This document is closed from the page that hosts the editor.".to_string());
+        } else {
+            self.host_refuses_open();
+        }
     }
 
     // //// Neoffice — added: "Create a PDF" and "Combine files" only open or create other documents; a page that opens

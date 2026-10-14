@@ -127,6 +127,8 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                                     i,
                                     cap,
                                     tab_h,
+                                    // //// Neoffice — the page's document has no close button.
+                                    !app.host_owns_documents,
                                 );
                                 if changed && app.active == Some(i) && !app.combine_showing() {
                                     response.scroll_to_me(Some(Align::Center));
@@ -134,7 +136,8 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                                 let id = app.views[i].id;
                                 let reveal = cfg!(not(target_arch = "wasm32")) && doc.path.is_some();
                                 response.context_menu(|ui| {
-                                    if ui.button(tl!("Close Tab")).clicked() {
+                                    // //// Neoffice — no Close Tab on the document a hosting page opens.
+                                    if !app.host_owns_documents && ui.button(tl!("Close Tab")).clicked() {
                                         action = Some(crate::tab_context::Action::Close(id));
                                         ui.close();
                                     }
@@ -176,6 +179,8 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                                     usize::MAX,
                                     cap,
                                     tab_h,
+                                    // //// Neoffice — the Combine tab always has its close button.
+                                    true,
                                 );
                                 if changed && app.combine_showing() {
                                     response.scroll_to_me(Some(Align::Center));
@@ -335,6 +340,8 @@ fn tab(
     index: usize,
     cap: Option<f32>,
     height: f32,
+    // //// Neoffice — false for the tab of the document a hosting page opens: it has no close button.
+    closable: bool,
 ) -> egui::Response {
     let font = theme::regular(13.0);
     let mut label = tab_name(name);
@@ -379,10 +386,12 @@ fn tab(
     // Unsaved changes: a dot where the close button sits, until the tab is hovered.
     if dirty && !resp.hovered() && !x.hovered() {
         ui.painter().circle_filled(x_rect.center(), 4.0, if active { t.text } else { t.text_muted });
-    } else if active || resp.hovered() || x.hovered() {
+        // //// Neoffice — the close button is painted, and clickable, only on a tab that can be closed (`closable`).
+    } else if closable && (active || resp.hovered() || x.hovered()) {
         icons::paint(ui, x_rect.translate(x_press.offset()), "x", 13.0, t.text_muted);
     }
-    if theme::hand(x).clicked() {
+    // //// Neoffice — see above: no click on the close button of the document a hosting page opens.
+    if closable && theme::hand(x).clicked() {
         *close = Some(index);
     }
     let shown = match file {

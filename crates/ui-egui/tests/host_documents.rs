@@ -120,3 +120,20 @@ fn the_palette_finds_no_command_that_opens_or_creates_a_document_for_a_host_that
         assert_eq!(found > 0, !hosted, "{query:?}, hosted {hosted}: {found} hit(s)");
     }
 }
+
+#[test]
+fn the_document_of_the_host_stays_in_its_tab() {
+    let mut shown = with_a_document(false);
+    shown.state_mut().request_close_tab(0);
+    shown.run_steps(2);
+    assert_eq!(shown.state().views.len(), 0, "elsewhere a tab closes");
+
+    let mut hosted = with_a_document(true);
+    assert!(!hosted.state_mut().execute("file.close"), "file.close ran");
+    assert!(!hosted.state_mut().execute("file.close_all"), "file.close_all ran");
+    hosted.state_mut().request_close_tab(0);
+    hosted.run_steps(2);
+    assert_eq!(hosted.state().views.len(), 1, "the page's document is still open");
+    let said = hosted.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
+    assert!(said.contains("closed from the page"), "the person is told: {said:?}");
+}
