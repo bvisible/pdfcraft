@@ -65,6 +65,18 @@ marker in place.
   (the field, `host_refuses_open` and its four callers) and `home.rs`; new test file
   `crates/ui-egui/tests/host_documents.rs`. Every other build behaves as before.
 
+- **The account button of the tab strip** (new file `crates/ui-egui/src/account.rs`; one marked line in `lib.rs` and two
+  in `chrome.rs`'s `tab_strip`; new test file `crates/ui-egui/tests/account_button.rs`): at the right end of the strip,
+  the window's top row, the button WordCraft has at the end of its title bar, so the four editors show the person the
+  same way: a round badge in the accent colour, a square of the strip's control height, with up to two initials (the
+  first letters of the words of `CommentPrefs::author`, the name a hosting page passes as `?author=`), and the name,
+  nothing else, as the hover text. The initials take, of white and the theme's dark, the one that reads better on the
+  accent, at least 4.5:1 (a test checks it): white on the light theme (5.4:1, the text of the primary buttons there),
+  the strip's own colour on the dark theme (5.2:1; white reads at 3.3:1 there). The room the strip keeps
+  for its controls on the right counts the button, so the tabs never run under it. It shows only when a name is known:
+  not while the name is blank or PdfCraft's default for a user nobody named (the login name, "Guest" on the web). No
+  new text.
+
 ## Files that cannot carry a comment
 
 | File | Why it is ours |

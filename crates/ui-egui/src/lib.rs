@@ -23,6 +23,8 @@ macro_rules! tl_ctx {
 }
 
 mod a11y_ui;
+// //// Neoffice — added module: the tab strip's account button (WordCraft's), the initials of the person a hosting page names.
+mod account;
 mod actions_ui;
 mod appearance;
 pub mod canvas;

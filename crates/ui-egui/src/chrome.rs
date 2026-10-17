@@ -60,6 +60,8 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                     ui.fonts_mut(|f| f.layout_no_wrap("Discord".into(), theme::medium(13.0), t.text).size().x) + 20.0
                 };
                 let controls_width = discord_width + 2.0 * button + 30.0;
+                // //// Neoffice — and the account button's square and gap, when it shows (a name is known).
+                let controls_width = controls_width + crate::account::width(&app.comment_prefs.author, button, ui.spacing().item_spacing.x);
                 // Open stays in sight after the tabs: its icon, text and padding, and the gaps around it.
                 // //// Neoffice — no Open button, so no width kept for it, when the hosting page opens the documents.
                 let open_width = if app.host_owns_documents {
@@ -213,6 +215,8 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                     }
                 }
                 ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                    // //// Neoffice — at the right end, the account button WordCraft has there, when a name is known.
+                    crate::account::button(ui, &app.comment_prefs.author, button);
                     let (icon, label) = match app.theme_preference {
                         ThemePreference::System => ("monitor", tl!("Use system setting")),
                         ThemePreference::Light => ("sun", tl!("Light gray")),
