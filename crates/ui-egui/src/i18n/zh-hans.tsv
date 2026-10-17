@@ -2302,3 +2302,54 @@ animation effects	Off	关
 	The linked PDF opened, but its named destination was not applied.	已打开链接的 PDF，但未应用其命名目标。
 	The linked PDF opened, but its page destination was out of range.	已打开链接的 PDF，但其页面目标超出范围。
 	Local cross-PDF links require the desktop app	PDF 之间的本地链接需要桌面应用
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	此版本暂不提供 Nora
+	Nora is waiting for you to finish what you are doing in the document.	Nora 正在等待您结束文档中的当前操作。
+	There is no document open for Nora to work in.	没有可供 Nora 操作的已打开文档。
+	`{command}` is refused: Nora may not run it.	`{command}` 被拒绝：Nora 无权运行此命令。
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	`{command}` 无法由 Nora 在 NeoPDF 中运行：该命令只能通过界面操作。
+	`{command}` is played by several tools ({tools}): name the one to run.	`{command}` 由多个工具提供（{tools}）：请指定要运行的工具。
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` 不是 NeoPDF 的命令：command_list 列出了 Nora 可以运行的命令。
+	`{command}` is refused: its parameters are nested too deeply.	`{command}` 被拒绝：参数的嵌套层级过深。
+	`{command}` is refused: `{key}` would reach a file of the computer.	`{command}` 被拒绝：`{key}` 将会访问计算机上的文件。
+	`{command}` is refused: `{key}` is a password, which only you enter.	`{command}` 被拒绝：`{key}` 是密码，只能由您本人输入。
+	The parameters of `{command}` must be an object.	`{command}` 的参数必须是对象。
+	Nora works in the document open in this window: `doc` names another one.	Nora 在此窗口中打开的文档里工作：`doc` 指定的是另一个文档。
+	`{command}` failed unexpectedly ({error}); the document was not changed.	`{command}` 意外失败（{error}）；文档未作更改。
+	Commands in one batch: {count} at most.	单批次命令数上限：{count}。
+	`{command}` failed: {error}	`{command}` 执行失败：{error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	文档中“{text}”的出现次数：{count}（不是 {occurrence}）。
+	“{text}” is not in the first {pages} pages of the document.	“{text}”不在文档的前 {pages} 页中。
+	“{text}” is not in the document.	文档中没有“{text}”。
+	There is no text to type.	没有可输入的文本。
+	There is no page {page}: the last page is {count}.	不存在第 {page} 页：最后一页是第 {count} 页。
+	{name} was not saved: {why}	{name} 未保存：{why}
+	Nora has nothing left to undo.	Nora 已没有可撤销的更改。
+	The document has changed since Nora's last change: use Undo in the editor instead.	自 Nora 上次更改以来，文档已有改动：请改用编辑器中的“撤销”。
+	Undo failed at step {step} of {count}: {error}	第 {step} 步（共 {count} 步）撤销失败：{error}
+	New conversation	新建对话
+	Undo the last change Nora made to the document	撤销 Nora 对文档所做的最后一次更改
+	Ask Nora…	向 Nora 提问…
+	Send	发送
+	Nora is working…	Nora 正在工作…
+	Ask Nora to read, summarize, fill in or annotate your document.	让 Nora 阅读、总结、填写或批注您的文档。
+	Nora wants to:	Nora 想要执行以下操作：
+	Allow	允许
+	Refuse	拒绝
+	Read the document	阅读文档
+	Run {command}	运行 {command}
+	Run several commands ({count})	运行多条命令（{count}）
+	Select “{text}”	选择“{text}”
+	Type “{text}”	输入“{text}”
+	Look at page {page}	查看第 {page} 页
+	Save the document	保存文档
+	Undo the last change	撤销最后一次更改
+	Assistant	助手
+	Show the Nora assistant pane (experimental)	显示 Nora 助手面板（实验性）
+	Nora assistant	Nora 助手
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	`{command}` 被拒绝：您的签名和姓名首字母只能由您自己添加。
+	`{command}` is refused: this document's security forbids copying its text.	`{command}` 被拒绝：本文档的安全设置禁止复制其文本。
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora 的更改太旧，无法整体撤销：请改用编辑器中的“撤销”。

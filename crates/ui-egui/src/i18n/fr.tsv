@@ -2338,3 +2338,54 @@ animation effects	Off	Désactivés
 	The linked PDF opened, but its named destination was not applied.	Le PDF lié s'est ouvert, mais sa destination nommée n'a pas été appliquée.
 	The linked PDF opened, but its page destination was out of range.	Le PDF lié s'est ouvert, mais sa page de destination est hors limites.
 	Local cross-PDF links require the desktop app	Les liens locaux entre PDF nécessitent l'application de bureau
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora n'est pas encore disponible dans cette version
+	Nora is waiting for you to finish what you are doing in the document.	Nora attend que vous ayez terminé ce que vous faites dans le document.
+	There is no document open for Nora to work in.	Aucun document n'est ouvert dans lequel Nora puisse travailler.
+	`{command}` is refused: Nora may not run it.	La commande `{command}` est refusée : Nora n'a pas le droit de l'exécuter.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	La commande `{command}` ne peut pas être exécutée par Nora dans NeoPDF : elle ne fonctionne que par l'interface.
+	`{command}` is played by several tools ({tools}): name the one to run.	La commande `{command}` est proposée par plusieurs outils ({tools}) : indiquez celui à exécuter.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` n'est pas une commande de NeoPDF : command_list liste celles que Nora peut exécuter.
+	`{command}` is refused: its parameters are nested too deeply.	La commande `{command}` est refusée : ses paramètres sont imbriqués trop profondément.
+	`{command}` is refused: `{key}` would reach a file of the computer.	La commande `{command}` est refusée : `{key}` atteindrait un fichier de l'ordinateur.
+	`{command}` is refused: `{key}` is a password, which only you enter.	La commande `{command}` est refusée : `{key}` est un mot de passe, que vous seul saisissez.
+	The parameters of `{command}` must be an object.	Les paramètres de `{command}` doivent être un objet.
+	Nora works in the document open in this window: `doc` names another one.	Nora travaille dans le document ouvert dans cette fenêtre : `doc` désigne un autre document.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	La commande `{command}` a échoué de façon inattendue ({error}) : le document n'a pas été modifié.
+	Commands in one batch: {count} at most.	Commandes dans un même lot : {count} au maximum.
+	`{command}` failed: {error}	La commande `{command}` a échoué : {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Occurrences de « {text} » dans le document : {count} (et non {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	« {text} » ne figure pas dans les {pages} premières pages du document.
+	“{text}” is not in the document.	« {text} » ne figure pas dans le document.
+	There is no text to type.	Il n'y a aucun texte à saisir.
+	There is no page {page}: the last page is {count}.	Il n'y a pas de page {page} : la dernière est la page {count}.
+	{name} was not saved: {why}	Le fichier {name} n'a pas été enregistré : {why}
+	Nora has nothing left to undo.	Il n'y a plus aucune modification de Nora à annuler.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Le document a été modifié depuis la dernière modification de Nora : utilisez plutôt la fonction Annuler de l'éditeur.
+	Undo failed at step {step} of {count}: {error}	L'annulation a échoué à l'étape {step} sur {count} : {error}
+	New conversation	Nouvelle conversation
+	Undo the last change Nora made to the document	Annuler la dernière modification faite par Nora dans le document
+	Ask Nora…	Demander à Nora…
+	Send	Envoyer
+	Nora is working…	Nora travaille…
+	Ask Nora to read, summarize, fill in or annotate your document.	Demandez à Nora de lire, résumer, remplir ou annoter votre document.
+	Nora wants to:	Nora souhaite :
+	Allow	Autoriser
+	Refuse	Refuser
+	Read the document	Lire le document
+	Run {command}	Exécuter {command}
+	Run several commands ({count})	Exécuter plusieurs commandes ({count})
+	Select “{text}”	Sélectionner « {text} »
+	Type “{text}”	Saisir « {text} »
+	Look at page {page}	Consulter la page {page}
+	Save the document	Enregistrer le document
+	Undo the last change	Annuler la dernière modification
+	Assistant	Assistant
+	Show the Nora assistant pane (experimental)	Afficher le volet de l'assistant Nora (expérimental)
+	Nora assistant	Assistant Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	La commande `{command}` est refusée : c'est à vous seul d'ajouter votre signature et vos initiales.
+	`{command}` is refused: this document's security forbids copying its text.	La commande `{command}` est refusée : la protection de ce document interdit de copier son texte.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	La modification de Nora est trop ancienne pour être annulée intégralement : utilisez plutôt la fonction Annuler de l'éditeur.

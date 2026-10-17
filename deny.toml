@@ -33,7 +33,9 @@ allow-wildcard-paths = true
 unknown-registry = "deny"
 unknown-git = "deny"
 # Shared UI components; Cargo.toml pins the immutable revision.
-allow-git = ["https://github.com/storytold/craft-libs"]
+# //// Neoffice — and Neoffice's fork of craft-libs, which carries the Nora pane's client core and panel (craft-nora,
+# craft-nora-ui), pinned the same way.
+allow-git = ["https://github.com/storytold/craft-libs", "https://github.com/bvisible/craft-libs"]
 
 [advisories]
 yanked = "warn"

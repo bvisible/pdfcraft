@@ -17,6 +17,11 @@ pdfcraft-cos = { workspace = true }
 pdfcraft-render = { workspace = true }
 pdfcraft-model = { workspace = true }
 pdfcraft-platform = { workspace = true }
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's client core and its egui panel, and the headless tool table
+# its commands are played with in the open document (the surface the MCP server and `pdfcraft-cli run` use).
+craft-nora = { workspace = true }
+craft-nora-ui = { workspace = true }
+pdfcraft-automation = { workspace = true }
 egui = { workspace = true, features = ["bytemuck"] }
 egui_extras = { workspace = true }
 eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "persistence", "links"] }

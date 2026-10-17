@@ -310,6 +310,51 @@ fn a_save_that_did_not_arrive_puts_the_document_back_to_unsaved_with_its_history
     assert!(!s.get(id).unwrap().dirty);
 }
 
+// //// Neoffice — covers `Session::checkpoint` and `Session::restore`, which the Nora assistant pane uses to put a
+// document back as it was when one of its requests fails half-way.
+#[test]
+fn a_checkpoint_puts_back_the_document_its_history_and_its_unsaved_flag() {
+    let (mut s, id) = session_with(3);
+    // A saved document whose last edit was undone: something to redo, nothing unsaved.
+    s.apply(id, Edit::RotatePages { pages: vec![0], degrees: 90 }).unwrap();
+    s.apply(id, Edit::DeletePages { pages: vec![2] }).unwrap();
+    s.undo(id).unwrap();
+    s.mark_saved(id, s.save_bytes(id).unwrap(), None).unwrap();
+    let before = s.get(id).unwrap();
+    let (bytes, undo, redo, generation) =
+        (before.bytes.clone(), before.can_undo().map(str::to_owned), before.can_redo().map(str::to_owned), before.edit_generation());
+    assert!(!before.dirty && redo.is_some());
+
+    let checkpoint = s.checkpoint(id).unwrap();
+    assert_eq!(checkpoint.doc(), id);
+    s.apply(id, Edit::DeletePages { pages: vec![0] }).unwrap();
+    s.apply(id, Edit::RotatePages { pages: vec![0], degrees: 180 }).unwrap();
+    assert_eq!(s.get(id).unwrap().info.pages.len(), 2);
+    assert!(s.get(id).unwrap().can_redo().is_none(), "an edit drops the redo list");
+
+    s.restore(checkpoint).unwrap();
+    let after = s.get(id).unwrap();
+    assert_eq!(after.bytes, bytes, "the working file of before");
+    assert_eq!(after.info.pages.len(), 3, "and what is displayed is read from it");
+    assert_eq!(after.info.pages[0].rotation, 90);
+    assert_eq!(after.can_undo().map(str::to_owned), undo, "the undo history of before");
+    assert_eq!(after.can_redo().map(str::to_owned), redo, "and its redo list");
+    assert!(!after.dirty, "still saved");
+    assert!(after.edit_generation() > generation, "the generation moves on, so what was drawn is drawn again");
+    // The history works as before.
+    s.redo(id).unwrap();
+    assert_eq!(s.get(id).unwrap().info.pages.len(), 2);
+    s.undo(id).unwrap();
+    s.undo(id).unwrap();
+    assert_eq!(s.get(id).unwrap().info.pages[0].rotation, 0);
+
+    // A document that is not open has no checkpoint, and a checkpoint of a closed document can't be restored.
+    assert!(s.checkpoint(DocId(u64::MAX)).is_none());
+    let checkpoint = s.checkpoint(id).unwrap();
+    s.close(id);
+    assert!(matches!(s.restore(checkpoint), Err(EditError::NoDocument)));
+}
+
 #[test]
 fn full_save_is_readable_and_smaller_after_deletes() {
     let (mut s, id) = session_with(5);

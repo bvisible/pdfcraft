@@ -2337,3 +2337,54 @@ animation effects	Off	Ki
 	The linked PDF opened, but its named destination was not applied.	A hivatkozott PDF megnyílt, de a nevesített cél nem lett alkalmazva.
 	The linked PDF opened, but its page destination was out of range.	A hivatkozott PDF megnyílt, de a céloldal a tartományon kívül esik.
 	Local cross-PDF links require the desktop app	A PDF-ek közötti helyi hivatkozásokhoz az asztali alkalmazás szükséges
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora ebben a verzióban még nem érhető el
+	Nora is waiting for you to finish what you are doing in the document.	Nora arra vár, hogy befejezd, amit éppen csinálsz a dokumentumban.
+	There is no document open for Nora to work in.	Nincs megnyitott dokumentum, amelyben Nora dolgozhatna.
+	`{command}` is refused: Nora may not run it.	A(z) `{command}` parancs elutasítva: Nora nem futtathatja.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	A(z) `{command}` parancsot Nora nem futtathatja a NeoPDF-ben: csak a felületen keresztül működik.
+	`{command}` is played by several tools ({tools}): name the one to run.	A(z) `{command}` több eszközhöz is tartozik ({tools}): meg kell adni, melyiket kell futtatni.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	A(z) `{command}` nem a NeoPDF parancsa: a command_list azokat sorolja fel, amelyeket Nora futtathat.
+	`{command}` is refused: its parameters are nested too deeply.	A(z) `{command}` parancs elutasítva: a paraméterei túl mélyen vannak egymásba ágyazva.
+	`{command}` is refused: `{key}` would reach a file of the computer.	A(z) `{command}` parancs elutasítva: a `{key}` a számítógép egy fájljához férne hozzá.
+	`{command}` is refused: `{key}` is a password, which only you enter.	A(z) `{command}` parancs elutasítva: a `{key}` jelszó, amelyet csak te adhatsz meg.
+	The parameters of `{command}` must be an object.	A(z) `{command}` paramétereinek objektumnak kell lennie.
+	Nora works in the document open in this window: `doc` names another one.	Nora az ebben az ablakban megnyitott dokumentumban dolgozik: a `doc` egy másikat nevez meg.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	A(z) `{command}` váratlanul meghiúsult ({error}); a dokumentum nem változott.
+	Commands in one batch: {count} at most.	Egy kötegben futtatható parancsok: legfeljebb {count}.
+	`{command}` failed: {error}	A(z) `{command}` meghiúsult: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	„{text}” előfordulásainak száma a dokumentumban: {count} (nem {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	„{text}” nincs a dokumentum első {pages} oldalán.
+	“{text}” is not in the document.	„{text}” nincs a dokumentumban.
+	There is no text to type.	Nincs beírandó szöveg.
+	There is no page {page}: the last page is {count}.	Nincs {page}. oldal: az utolsó oldal a(z) {count}. oldal.
+	{name} was not saved: {why}	A(z) {name} nem lett mentve: {why}
+	Nora has nothing left to undo.	Nora-nak már nincs visszavonható módosítása.
+	The document has changed since Nora's last change: use Undo in the editor instead.	A dokumentum Nora utolsó módosítása óta megváltozott: használd inkább a szerkesztőben a Visszavonást.
+	Undo failed at step {step} of {count}: {error}	A visszavonás a(z) {step}. lépésnél meghiúsult ({count} lépésből): {error}
+	New conversation	Új beszélgetés
+	Undo the last change Nora made to the document	Nora utolsó, a dokumentumon végzett módosításának visszavonása
+	Ask Nora…	Írj Nora-nak…
+	Send	Küldés
+	Nora is working…	Nora dolgozik…
+	Ask Nora to read, summarize, fill in or annotate your document.	Kérd meg Nora-t, hogy olvassa el, foglalja össze, töltse ki vagy jegyzetekkel lássa el a dokumentumodat.
+	Nora wants to:	Nora engedélyt kér a következőkre:
+	Allow	Engedélyezés
+	Refuse	Elutasítás
+	Read the document	A dokumentum olvasása
+	Run {command}	A(z) {command} futtatása
+	Run several commands ({count})	Több parancs futtatása ({count})
+	Select “{text}”	„{text}” kijelölése
+	Type “{text}”	„{text}” beírása
+	Look at page {page}	{page}. oldal megtekintése
+	Save the document	A dokumentum mentése
+	Undo the last change	Az utolsó módosítás visszavonása
+	Assistant	Asszisztens
+	Show the Nora assistant pane (experimental)	A Nora-asszisztens panel megjelenítése (kísérleti)
+	Nora assistant	Nora-asszisztens
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	A(z) `{command}` parancs elutasítva: az aláírásodat és monogramodat csak te adhatod hozzá.
+	`{command}` is refused: this document's security forbids copying its text.	A(z) `{command}` parancs elutasítva: a dokumentum biztonsági beállításai tiltják a szövegének a másolását.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora módosítása túl régi ahhoz, hogy egészében visszavonható legyen: használd inkább a szerkesztőben a Visszavonást.

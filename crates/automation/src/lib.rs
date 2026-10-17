@@ -139,6 +139,14 @@ impl Automation {
         &self.session
     }
 
+    // //// Neoffice — the Nora assistant pane (ui-egui's `nora_pane.rs`) plays Nora's commands with these tools in the
+    // window's own documents: it swaps the app's session in for a call and back out after it, so the tools act on what the
+    // person sees. Upstream's tools only ever act on the documents they opened.
+    /// The session the tools act on, to exchange with another one (`std::mem::swap`).
+    pub fn session_mut(&mut self) -> &mut Session {
+        &mut self.session
+    }
+
     /// Save `bytes` that a caller writes on the session's behalf, such as `pdfcraft-cli run`
     /// saving a rendered page. With a root, it is confined like a tool's own output (a relative
     /// path resolves inside it) and written atomically. Without one, the path is written as
@@ -371,7 +379,9 @@ impl Automation {
             "doc_revisions" => self.doc_revisions(&a)?,
             "text_lines" => {
                 let page = self.page(&a)?;
-                let doc = self.doc(&a)?;
+                // //// Neoffice — every line's text, as text_extract and text_paragraphs give it: refused as they are when the
+                // document's security forbids copying its text (it was the way round that rule).
+                let doc = self.doc_to_copy(&a)?;
                 let info = &doc.info.pages[page];
                 let r = |x: f32| (x as f64 * 100.0).round() / 100.0;
                 let lines: Vec<Value> = doc

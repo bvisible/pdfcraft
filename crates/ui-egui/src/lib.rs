@@ -90,6 +90,10 @@ mod icon_data;
 pub mod icons;
 pub mod last_session;
 pub mod motion;
+// //// Neoffice — added modules: the Nora assistant pane (Neoffice's assistant, built on craft-nora and craft-nora-ui), and
+// where its calls may go in a browser (the rules the web build applies, tested natively).
+pub mod nora_origin;
+mod nora_pane;
 mod page_selection_ui;
 mod pageboxes;
 mod palette;
@@ -393,6 +397,16 @@ pub type HostSaveFn = Box<dyn Fn(&str, &[u8], bool) -> Result<(), String>>;
 /// Told every frame whether any tab has unsaved work, so a host page can warn before leaving.
 pub type HostDirtyFn = Box<dyn FnMut(bool)>;
 
+// //// Neoffice — the connection of the Nora assistant pane (`nora_pane`). Nora (the agent) lives on the Neoffice server,
+// so the pane needs the session and the credentials of whoever hosts the editor: the host makes the HTTP call and delivers
+// the answer through `NoraInbox`. Without a connection the pane says that Nora isn't available and offers no text box.
+/// Makes one call for the Nora pane: a `POST` of a JSON body to a path of the Neoffice instance. The host adds the origin
+/// and the credentials of its session, and puts the answer in the [`NoraInbox`].
+pub type NoraHttpFn = Box<dyn Fn(craft_nora::HttpRequest)>;
+/// The answers to the Nora pane's calls, delivered asynchronously by the host, like [`Inbox`].
+pub type NoraInbox = std::sync::Arc<std::sync::Mutex<Vec<craft_nora::HttpResponse>>>;
+pub use craft_nora::{HttpRequest, HttpResponse};
+
 pub struct PasswordPrompt {
     pub name: String,
     pub path: Option<String>,
@@ -565,6 +579,16 @@ pub struct PdfCraftApp {
     /// handed over, so every entry puts its document back to unsaved. Read every frame, like
     /// [`Self::failed_inbox`].
     pub refused_saves: RefusedSaves,
+    // //// Neoffice — added fields: the Nora assistant pane (`nora_pane`).
+    /// Preferences ▸ Assistant: show the Nora pane at the right of the window (the `ui.nora` command), kept between runs.
+    /// A host that offers Nora opens it.
+    pub nora_pane: bool,
+    /// The connection of the Nora pane, set by a host that offers Nora (the web build): see [`NoraHttpFn`].
+    pub nora_http: Option<NoraHttpFn>,
+    /// The answers to the calls of [`Self::nora_http`].
+    pub nora_inbox: Option<NoraInbox>,
+    /// The conversation with Nora, and what she changed in the documents.
+    pub(crate) nora: nora_pane::NoraState,
     /// A pending "save changes?" question (closing a dirty tab or quitting).
     pub close_request: Option<CloseRequest>,
     /// Save to this path instead of asking (tests and automation).
@@ -879,6 +903,11 @@ impl PdfCraftApp {
             hide_community: false,
             host_owns_documents: false,
             refused_saves: Default::default(),
+            // //// Neoffice — the Nora pane is off, and has no connection, until a host or the person says otherwise.
+            nora_pane: false,
+            nora_http: None,
+            nora_inbox: None,
+            nora: Default::default(),
             close_request: None,
             save_override: None,
             props_draft: None,
@@ -1897,6 +1926,8 @@ impl PdfCraftApp {
             "combine_view": self.combine_view.as_str(),
             "combine_zoom": self.combine_zoom,
             "comments_panel_closed": self.comments_panel_closed,
+            // //// Neoffice — Preferences ▸ Assistant (the Nora pane).
+            "nora_pane": self.nora_pane,
         })
         .to_string()
     }
@@ -1957,6 +1988,10 @@ impl PdfCraftApp {
         }
         if let Some(closed) = v["comments_panel_closed"].as_bool() {
             self.comments_panel_closed = closed;
+        }
+        // //// Neoffice — the Nora pane: settings saved before it existed, or unreadable, leave it off.
+        if let Some(on) = v["nora_pane"].as_bool() {
+            self.nora_pane = on;
         }
         if let Some(defaults) = v["default_zoom"].as_str().and_then(|zoom| self.view_defaults.with_zoom(zoom)) {
             self.view_defaults = defaults;
@@ -2291,6 +2326,14 @@ impl PdfCraftApp {
                 };
             }
             ("author", _) => self.comment_prefs.author = value.to_string(),
+            // //// Neoffice — `--nora on|off` (and `ui.set`): show or hide the Nora assistant pane; `ui.nora` toggles it.
+            ("nora", _) => {
+                self.nora_pane = match value {
+                    "on" | "true" => true,
+                    "off" | "false" => false,
+                    _ => return Err("nora must be on or off".into()),
+                };
+            }
             ("ui-scale", _) => self.ui_scale = ui_scale::parse(value)?,
             ("flatten-fill-sign", _) => {
                 self.flatten_fill_sign_on_save = match value {
@@ -2672,6 +2715,11 @@ impl eframe::App for PdfCraftApp {
         }
         chrome::tab_strip(self, ui);
         chrome::mode_bar(self, ui);
+        // //// Neoffice — the Nora assistant pane, outermost at the right, when `ui.nora` (Preferences ▸ Assistant) or a
+        // host that offers Nora shows it.
+        if self.nora_pane {
+            nora_pane::pane(self, ui);
+        }
         if self.active.is_some() {
             chrome::right_rail(self, ui);
             // Read mode hides the tools, not the navigation panes: the rail stays visible

@@ -35,8 +35,9 @@ pub fn width(name: &str, size: f32, gap: f32) -> f32 {
 
 /// The colour of the initials on the accent: of white and the theme's dark, the one that reads
 /// better there. White on the light theme (5.4:1, the text of the primary buttons there); on the
-/// dark theme, where white reads at 3.3:1, the strip's own colour (5.2:1).
-fn ink(t: &Tokens) -> Color32 {
+/// dark theme, where white reads at 3.3:1, the strip's own colour (5.2:1). The Nora pane's bubbles of the person's
+/// messages, on the accent too, take it as well.
+pub(crate) fn ink(t: &Tokens) -> Color32 {
     if t.dark() { t.titlebar } else { Color32::WHITE }
 }
 

@@ -2582,3 +2582,54 @@ key	Esc	Esc
 key	Home	Home
 key	End	End
 key	Space	Tarpas
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora šioje versijoje dar nėra prieinama
+	Nora is waiting for you to finish what you are doing in the document.	Nora laukia, kol baigsite tai, ką darote dokumente.
+	There is no document open for Nora to work in.	Nėra atverto dokumento, kuriame Nora galėtų dirbti.
+	`{command}` is refused: Nora may not run it.	Komanda `{command}` atmesta: Nora jos vykdyti negali.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Komanda `{command}` NeoPDF programoje negali būti vykdoma Nora: ji veikia tik per sąsają.
+	`{command}` is played by several tools ({tools}): name the one to run.	Komandą `{command}` apdoroja keli įrankiai ({tools}): nurodykite, kurį iš jų paleisti.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` nėra NeoPDF komanda: command_list nurodo komandas, kurias Nora gali vykdyti.
+	`{command}` is refused: its parameters are nested too deeply.	Komanda `{command}` atmesta: jos parametrai įdėti pernelyg giliai.
+	`{command}` is refused: `{key}` would reach a file of the computer.	Komanda `{command}` atmesta: `{key}` pasiektų failą kompiuteryje.
+	`{command}` is refused: `{key}` is a password, which only you enter.	Komanda `{command}` atmesta: `{key}` yra slaptažodis, kurį įvedate tik jūs.
+	The parameters of `{command}` must be an object.	Komandos `{command}` parametrai turi būti objektas.
+	Nora works in the document open in this window: `doc` names another one.	Nora dirba su dokumentu, atvertu šiame lange: `doc` nurodo kitą dokumentą.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	Komanda `{command}` netikėtai nepavyko ({error}); dokumentas nebuvo pakeistas.
+	Commands in one batch: {count} at most.	Komandų vienoje partijoje: daugiausia {count}.
+	`{command}` failed: {error}	Komanda `{command}` nepavyko: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	„{text}“ pasitaikymai dokumente: {count} (ne {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	„{text}“ nėra pirmuosiuose {pages} dokumento puslapių.
+	“{text}” is not in the document.	„{text}“ dokumente nėra.
+	There is no text to type.	Nėra teksto įvedimui.
+	There is no page {page}: the last page is {count}.	Puslapio {page} nėra. Paskutinis puslapis: {count}.
+	{name} was not saved: {why}	Nepavyko įrašyti failo {name}: {why}
+	Nora has nothing left to undo.	Nora nebeturi ką anuliuoti.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Dokumentas pasikeitė po paskutinio asistento Nora pakeitimo: vietoj to naudokite redaktoriaus mygtuką Anuliuoti.
+	Undo failed at step {step} of {count}: {error}	Anuliavimas nepavyko žingsnyje {step} iš {count}: {error}
+	New conversation	Naujas pokalbis
+	Undo the last change Nora made to the document	Anuliuoti paskutinį dokumento pakeitimą, kurį atliko Nora
+	Ask Nora…	Klauskite asistento Nora…
+	Send	Siųsti
+	Nora is working…	Nora dirba…
+	Ask Nora to read, summarize, fill in or annotate your document.	Paprašykite asistento Nora perskaityti, apibendrinti, užpildyti arba pažymėti jūsų dokumentą.
+	Nora wants to:	Nora nori:
+	Allow	Leisti
+	Refuse	Atmesti
+	Read the document	Perskaityti dokumentą
+	Run {command}	Vykdyti {command}
+	Run several commands ({count})	Vykdyti kelias komandas ({count})
+	Select “{text}”	Pasirinkti „{text}“
+	Type “{text}”	Įvesti „{text}“
+	Look at page {page}	Peržiūrėti puslapį {page}
+	Save the document	Įrašyti dokumentą
+	Undo the last change	Anuliuoti paskutinį pakeitimą
+	Assistant	Asistentas
+	Show the Nora assistant pane (experimental)	Rodyti asistento Nora skydelį (eksperimentinis)
+	Nora assistant	Asistentas Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	Komanda `{command}` atmesta: jūsų parašą ir inicialus galite pridėti tik jūs patys.
+	`{command}` is refused: this document's security forbids copying its text.	Komanda `{command}` atmesta: šio dokumento saugos nuostatos draudžia kopijuoti jo tekstą.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Asistento Nora pakeitimas per senas, kad būtų visiškai atšauktas: vietoj to naudokite redaktoriaus mygtuką Anuliuoti.

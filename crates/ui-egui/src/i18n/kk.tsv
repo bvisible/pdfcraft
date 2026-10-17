@@ -2336,3 +2336,54 @@ animation effects	Off	Өшірулі
 	The linked PDF opened, but its named destination was not applied.	Байланысты PDF ашылды, бірақ оның аталған мақсаты қолданылмады.
 	The linked PDF opened, but its page destination was out of range.	Байланысты PDF ашылды, бірақ оның мақсатты беті ауқымнан тыс.
 	Local cross-PDF links require the desktop app	PDF файлдары арасындағы жергілікті сілтемелер үшін жұмыс үстелі қолданбасы қажет
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora бұл нұсқада әлі қолжетімді емес
+	Nora is waiting for you to finish what you are doing in the document.	Nora құжатта атқарып жатқан ісіңізді аяқтауыңызды күтуде.
+	There is no document open for Nora to work in.	Nora жұмыс істей алатын ашық құжат жоқ.
+	`{command}` is refused: Nora may not run it.	`{command}` бас тартылды: Nora оны орындауға құқылы емес.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	`{command}` командасын Nora NeoPDF-те орындай алмайды: ол тек интерфейс арқылы жұмыс істейді.
+	`{command}` is played by several tools ({tools}): name the one to run.	`{command}` командасын бірнеше құрал өңдейді ({tools}): орындалатын құралды көрсетіңіз.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` NeoPDF-тің командасы емес: command_list Nora орындай алатын командаларды тізімдейді.
+	`{command}` is refused: its parameters are nested too deeply.	`{command}` бас тартылды: оның параметрлері тым терең ұяланған.
+	`{command}` is refused: `{key}` would reach a file of the computer.	`{command}` бас тартылды: `{key}` компьютердегі файлға жетер еді.
+	`{command}` is refused: `{key}` is a password, which only you enter.	`{command}` бас тартылды: `{key}` — тек сіз енгізетін құпия сөз.
+	The parameters of `{command}` must be an object.	`{command}` командасының параметрлері объект болуы керек.
+	Nora works in the document open in this window: `doc` names another one.	Nora осы терезедегі ашық құжатпен жұмыс істейді: `doc` басқа құжатты көрсетеді.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	`{command}` күтпеген қатеге ұшырады ({error}); құжат өзгертілмеген.
+	Commands in one batch: {count} at most.	Бір топтамадағы командалар: ең көбі {count}.
+	`{command}` failed: {error}	`{command}` орындалмады: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Құжаттағы «{text}» кездесулері: {count} ({occurrence} емес).
+	“{text}” is not in the first {pages} pages of the document.	«{text}» құжаттың алғашқы {pages} бетінде жоқ.
+	“{text}” is not in the document.	«{text}» құжатта жоқ.
+	There is no text to type.	Енгізетін мәтін жоқ.
+	There is no page {page}: the last page is {count}.	Бет {page} жоқ. Соңғы бет: {count}.
+	{name} was not saved: {why}	{name} сақталмады: {why}
+	Nora has nothing left to undo.	Nora-да болдырмайтын ештеңе қалмады.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Nora-ның соңғы өзгерісінен бері құжат өзгерді: оның орнына редактордағы «Болдырмау» түймесін пайдаланыңыз.
+	Undo failed at step {step} of {count}: {error}	Болдырмау {step}-қадамда сәтсіз аяқталды (барлығы {count}): {error}
+	New conversation	Жаңа әңгіме
+	Undo the last change Nora made to the document	Nora құжатқа енгізген соңғы өзгерісті болдырмау
+	Ask Nora…	Nora-дан сұраңыз…
+	Send	Жіберу
+	Nora is working…	Nora жұмыс істеп жатыр…
+	Ask Nora to read, summarize, fill in or annotate your document.	Nora-дан құжатыңызды оқуды, қысқаша мазмұндауды, толтыруды немесе түсініктеме қосуды сұраңыз.
+	Nora wants to:	Nora келесіні жасағысы келеді:
+	Allow	Рұқсат беру
+	Refuse	Бас тарту
+	Read the document	Құжатты оқу
+	Run {command}	{command} орындау
+	Run several commands ({count})	Бірнеше команданы орындау ({count})
+	Select “{text}”	«{text}» таңдау
+	Type “{text}”	«{text}» енгізу
+	Look at page {page}	{page}-бетті қарау
+	Save the document	Құжатты сақтау
+	Undo the last change	Соңғы өзгерісті болдырмау
+	Assistant	Көмекші
+	Show the Nora assistant pane (experimental)	Nora көмекшісі панелін көрсету (эксперименттік)
+	Nora assistant	Nora көмекшісі
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	`{command}` бас тартылды: қолтаңбаны да, бас әріптерді де тек өзіңіз қоса аласыз.
+	`{command}` is refused: this document's security forbids copying its text.	`{command}` бас тартылды: бұл құжаттың қауіпсіздік параметрлері оның мәтінін көшіруге тыйым салады.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora-ның өзгерісі тым ескі, оны түгел болдырмау мүмкін емес: оның орнына редактордағы «Болдырмау» түймесін пайдаланыңыз.

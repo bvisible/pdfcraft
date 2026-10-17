@@ -463,6 +463,10 @@ pub(crate) fn preferences_body(ui: &mut egui::Ui, app: &mut PdfCraftApp, t: &Tok
         ui.add(crate::widgets::line(&mut app.comment_prefs.author).desired_width(220.0).char_limit(crate::MAX_AUTHOR_CHARS)).labelled_by(label.id);
     });
     ui.add_space(8.0);
+    // //// Neoffice — the switch of the Nora assistant pane (nora_pane.rs), the `ui.nora` setting; off by default.
+    ui.label(egui::RichText::new(tl!("Assistant")).font(theme::semibold(13.0)));
+    ui.add(widgets::checkbox(&mut app.nora_pane, tl!("Show the Nora assistant pane (experimental)")));
+    ui.add_space(8.0);
     ui.label(egui::RichText::new(tl!("Fill & Sign")).font(theme::semibold(13.0)));
     ui.add(widgets::checkbox(&mut app.flatten_fill_sign_on_save, tl!("Flatten Fill & Sign when saving")));
     ui.label(

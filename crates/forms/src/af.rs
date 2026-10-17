@@ -446,7 +446,11 @@ pub fn calculate_js(c: &Calculate) -> Option<String> {
             js_str(op.code()),
             fields.iter().map(|f| js_str(f)).collect::<Vec<_>>().join(", ")
         )),
-        Calculate::Notation(expr) => Some(format!("/** BVCALC {expr} EVCALC **/ event.value = AFMakeNumber(0);")),
+        // //// Neoffice — the notation is kept in a script comment: a `*/` in it (two operators in a row, or an escaped `\*`
+        // before a `/`) ended the comment and ran the rest as script, which whoever sets a field's calculation (an
+        // automation client, the Nora pane) could use to plant a script in the PDF. A space between keeps the notation's
+        // meaning (a name ends at a space, operators are read one by one) and the comment whole.
+        Calculate::Notation(expr) => Some(format!("/** BVCALC {} EVCALC **/ event.value = AFMakeNumber(0);", expr.replace("*/", "* /"))),
     }
 }
 
@@ -1006,6 +1010,20 @@ mod tests {
             parse_calculate("/** BVCALC Price * Qty EVCALC **/ event.value = AFMakeNumber(getField(\"Price\").value) * …"),
             Some(Calculate::Notation("Price * Qty".into()))
         );
+        // //// Neoffice — a notation can't end its comment (calculate_js): the first `*/` is the comment's own, and the
+        // notation means what it meant.
+        let planted = calculate_js(&Calculate::Notation("Qty */ app.launchURL(\"https://example.com\"); /* Price".into())).unwrap_or_default();
+        let end = planted.find("*/").unwrap_or(0);
+        assert_eq!(planted.get(end.saturating_sub(8)..end + 2), Some("EVCALC **/"), "{planted}");
+        let escaped = calculate_js(&Calculate::Notation("Price\\*/Qty".into())).unwrap_or_default();
+        let Some(Calculate::Notation(read)) = parse_calculate(&escaped) else { panic!("{escaped}") };
+        let value = |name: &str| match name {
+            "Price*" => 6.0,
+            "Qty" => 2.0,
+            _ => f64::NAN,
+        };
+        assert_eq!(eval_notation(&read, &value), Some(3.0), "{read}");
+        assert_eq!(eval_notation("Price\\*/Qty", &value), Some(3.0));
         // Round trips through what the tabs write.
         for f in [
             Format::Number { decimals: 2, sep: 2, neg: 2, currency: "€".into(), prepend: false },

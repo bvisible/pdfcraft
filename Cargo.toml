@@ -16,6 +16,12 @@ repository = "https://github.com/storytold/pdfcraft"
 craft-ui = { git = "https://github.com/storytold/craft-libs", version = "0.1.0", rev = "5c874d51eeb3de70e735c8ce87a59a7dedd47675", features = ["serde"] }
 # Shared system spooler; document composition remains in pdfcraft-print.
 craft-print = { git = "https://github.com/storytold/craft-libs", version = "0.1.0", rev = "d991bf6792f8ade99c51358bf3c1d902c8cd96b5" }
+# //// Neoffice — the Nora assistant pane (crates/ui-egui/src/nora_pane.rs), the one NeoWrite (WordCraft) has, so that the
+# same Nora works in every editor. Neoffice's craft-libs fork carries Nora's client core and its egui panel, at the revision
+# WordCraft uses. Both depend on egui only (the same 0.36 as here), so upstream's craft-libs types are not duplicated. To
+# follow a newer craft-libs, move this revision; nothing else changes.
+craft-nora = { git = "https://github.com/bvisible/craft-libs", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.7.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.7.0" }

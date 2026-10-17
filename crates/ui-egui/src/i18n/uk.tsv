@@ -2360,3 +2360,54 @@ animation effects	Off	Вимкнено
 	The linked PDF opened, but its named destination was not applied.	Пов’язаний PDF відкрито, але його іменоване призначення не застосовано.
 	The linked PDF opened, but its page destination was out of range.	Пов’язаний PDF відкрито, але сторінка призначення поза межами діапазону.
 	Local cross-PDF links require the desktop app	Локальні посилання між PDF працюють лише в настільному застосунку
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora ще недоступна в цій версії
+	Nora is waiting for you to finish what you are doing in the document.	Nora чекає, поки ви завершите те, що робите в документі.
+	There is no document open for Nora to work in.	Немає відкритого документа, з яким може працювати Nora.
+	`{command}` is refused: Nora may not run it.	Команда `{command}` відхилена: Nora не має права її виконувати.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Команда `{command}` не може бути виконана Nora в NeoPDF: вона працює лише через інтерфейс.
+	`{command}` is played by several tools ({tools}): name the one to run.	Команда `{command}` обробляється кількома інструментами ({tools}): вкажіть, який із них запустити.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	Команди `{command}` немає в NeoPDF: command_list перелічує команди, які Nora може виконати.
+	`{command}` is refused: its parameters are nested too deeply.	Команда `{command}` відхилена: її параметри вкладені занадто глибоко.
+	`{command}` is refused: `{key}` would reach a file of the computer.	Команда `{command}` відхилена: через `{key}` було б отримано доступ до файлу на комп’ютері.
+	`{command}` is refused: `{key}` is a password, which only you enter.	Команда `{command}` відхилена: `{key}` — це пароль, який вводите лише ви.
+	The parameters of `{command}` must be an object.	Параметри команди `{command}` мають бути об’єктом.
+	Nora works in the document open in this window: `doc` names another one.	Nora працює з документом, відкритим у цьому вікні: `doc` вказує на інший документ.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	Команда `{command}` несподівано завершилася помилкою ({error}); документ не змінено.
+	Commands in one batch: {count} at most.	Команд в одному пакеті: не більше {count}.
+	`{command}` failed: {error}	Команду `{command}` не виконано: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Входження «{text}» у документі: {count} (а не {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	У перших {pages} сторінках документа немає «{text}».
+	“{text}” is not in the document.	У документі немає «{text}».
+	There is no text to type.	Немає тексту для введення.
+	There is no page {page}: the last page is {count}.	Сторінки {page} немає. Остання сторінка: {count}.
+	{name} was not saved: {why}	Файл {name} не збережено: {why}
+	Nora has nothing left to undo.	У Nora більше нічого скасовувати.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Документ змінився після останньої зміни Nora: натомість скористайтеся «Скасувати» в редакторі.
+	Undo failed at step {step} of {count}: {error}	Скасування не вдалося на кроці {step} із {count}: {error}
+	New conversation	Новий діалог
+	Undo the last change Nora made to the document	Скасувати останню зміну, зроблену Nora у документі
+	Ask Nora…	Запитайте Nora…
+	Send	Надіслати
+	Nora is working…	Nora працює…
+	Ask Nora to read, summarize, fill in or annotate your document.	Попросіть Nora прочитати, підсумувати, заповнити або позначити ваш документ.
+	Nora wants to:	Nora хоче:
+	Allow	Дозволити
+	Refuse	Відмовити
+	Read the document	Прочитати документ
+	Run {command}	Виконати {command}
+	Run several commands ({count})	Виконати кілька команд ({count})
+	Select “{text}”	Вибрати «{text}»
+	Type “{text}”	Ввести «{text}»
+	Look at page {page}	Переглянути сторінку {page}
+	Save the document	Зберегти документ
+	Undo the last change	Скасувати останню зміну
+	Assistant	Помічник
+	Show the Nora assistant pane (experimental)	Показати панель помічника Nora (експериментально)
+	Nora assistant	Помічник Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	Команда `{command}` відхилена: свій підпис і свої ініціали можете додати лише ви самі.
+	`{command}` is refused: this document's security forbids copying its text.	Команда `{command}` відхилена: налаштування захисту цього документа забороняють копіювання його тексту.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Зміна Nora надто давня, щоб скасувати її цілком: натомість скористайтеся «Скасувати» в редакторі.

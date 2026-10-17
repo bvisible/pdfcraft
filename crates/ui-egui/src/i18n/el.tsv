@@ -2348,3 +2348,54 @@ animation effects	Off	Ανενεργά
 	Local cross-PDF links require the desktop app	Οι τοπικοί σύνδεσμοι μεταξύ PDF απαιτούν την εφαρμογή υπολογιστή
 	The existing action will be preserved.	Η υπάρχουσα ενέργεια θα διατηρηθεί.
 	This form's scripts are turned off because one ran too long. Reopen the document to run them again.	Τα σενάρια αυτής της φόρμας είναι απενεργοποιημένα, επειδή ένα από αυτά εκτελούνταν για πολύ ώρα. Ανοίξτε ξανά το έγγραφο για να εκτελεστούν ξανά.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Ο βοηθός Nora δεν είναι ακόμη διαθέσιμος σε αυτήν την έκδοση
+	Nora is waiting for you to finish what you are doing in the document.	Ο βοηθός Nora περιμένει να ολοκληρώσετε αυτό που κάνετε στο έγγραφο.
+	There is no document open for Nora to work in.	Δεν υπάρχει ανοιχτό έγγραφο στο οποίο να μπορεί να εργαστεί ο βοηθός Nora.
+	`{command}` is refused: Nora may not run it.	Η εντολή `{command}` απορρίπτεται: ο βοηθός Nora δεν έχει δικαίωμα να την εκτελέσει.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Η εντολή `{command}` δεν μπορεί να εκτελεστεί από τον βοηθό Nora στο NeoPDF: λειτουργεί μόνο μέσω της διεπαφής.
+	`{command}` is played by several tools ({tools}): name the one to run.	Η εντολή `{command}` υπάρχει σε πολλά εργαλεία ({tools}): επιλέξτε ποιο εργαλείο να εκτελεστεί.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` δεν είναι εντολή του NeoPDF: το command_list εμφανίζει τις εντολές που μπορεί να εκτελέσει ο βοηθός Nora.
+	`{command}` is refused: its parameters are nested too deeply.	Η εντολή `{command}` απορρίπτεται: οι παράμετροί της είναι εμφωλευμένες υπερβολικά βαθιά.
+	`{command}` is refused: `{key}` would reach a file of the computer.	Η εντολή `{command}` απορρίπτεται: το `{key}` θα έφτανε σε ένα αρχείο του υπολογιστή.
+	`{command}` is refused: `{key}` is a password, which only you enter.	Η εντολή `{command}` απορρίπτεται: το `{key}` είναι κωδικός πρόσβασης, τον οποίο εισάγετε μόνο εσείς.
+	The parameters of `{command}` must be an object.	Οι παράμετροι της εντολής `{command}` πρέπει να είναι ένα αντικείμενο.
+	Nora works in the document open in this window: `doc` names another one.	Ο βοηθός Nora εργάζεται στο έγγραφο που είναι ανοιχτό σε αυτό το παράθυρο: το `doc` αναφέρεται σε άλλο έγγραφο.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	Η εντολή `{command}` απέτυχε απροσδόκητα ({error}). Το έγγραφο δεν άλλαξε.
+	Commands in one batch: {count} at most.	Εντολές σε μία παρτίδα: το πολύ {count}.
+	`{command}` failed: {error}	Η εντολή `{command}` απέτυχε: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Εμφανίσεις «{text}» στο έγγραφο: {count} (και όχι {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	«{text}» δεν υπάρχει στις πρώτες {pages} σελίδες του εγγράφου.
+	“{text}” is not in the document.	«{text}» δεν υπάρχει στο έγγραφο.
+	There is no text to type.	Δεν υπάρχει κείμενο για πληκτρολόγηση.
+	There is no page {page}: the last page is {count}.	Δεν υπάρχει η σελίδα {page}: η τελευταία είναι η σελίδα {count}.
+	{name} was not saved: {why}	Το αρχείο {name} δεν αποθηκεύτηκε: {why}
+	Nora has nothing left to undo.	Ο βοηθός Nora δεν έχει πλέον τίποτα να αναιρέσει.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Το έγγραφο έχει αλλάξει μετά την τελευταία αλλαγή του βοηθού Nora: χρησιμοποιήστε αντί αυτού την Αναίρεση του επεξεργαστή.
+	Undo failed at step {step} of {count}: {error}	Η αναίρεση απέτυχε στο βήμα {step} από {count}: {error}
+	New conversation	Νέα συνομιλία
+	Undo the last change Nora made to the document	Αναίρεση της τελευταίας αλλαγής που έκανε ο βοηθός Nora στο έγγραφο
+	Ask Nora…	Ρωτήστε τον βοηθό Nora…
+	Send	Αποστολή
+	Nora is working…	Ο βοηθός Nora εργάζεται…
+	Ask Nora to read, summarize, fill in or annotate your document.	Ζητήστε από τον βοηθό Nora να διαβάσει, να συνοψίσει, να συμπληρώσει ή να προσθέσει σημειώσεις στο έγγραφό σας.
+	Nora wants to:	Ο βοηθός Nora θέλει να:
+	Allow	Να επιτραπεί
+	Refuse	Άρνηση
+	Read the document	Ανάγνωση του εγγράφου
+	Run {command}	Εκτέλεση {command}
+	Run several commands ({count})	Εκτέλεση πολλών εντολών ({count})
+	Select “{text}”	Επιλογή «{text}»
+	Type “{text}”	Πληκτρολόγηση «{text}»
+	Look at page {page}	Προβολή της σελίδας {page}
+	Save the document	Αποθήκευση του εγγράφου
+	Undo the last change	Αναίρεση της τελευταίας αλλαγής
+	Assistant	Βοηθός
+	Show the Nora assistant pane (experimental)	Εμφάνιση του πίνακα του βοηθού Nora (πειραματικό)
+	Nora assistant	Βοηθός Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	Η εντολή `{command}` απορρίπτεται: μόνο εσείς μπορείτε να προσθέσετε την υπογραφή και τη μονογραφή σας.
+	`{command}` is refused: this document's security forbids copying its text.	Η εντολή `{command}` απορρίπτεται: οι ρυθμίσεις ασφαλείας του εγγράφου απαγορεύουν την αντιγραφή του κειμένου του.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Η αλλαγή του βοηθού Nora είναι πολύ παλιά για να αναιρεθεί ολόκληρη: χρησιμοποιήστε αντί αυτού την Αναίρεση του επεξεργαστή.

@@ -2359,3 +2359,54 @@ animation effects	Off	معطّلة
 	The linked PDF opened, but its named destination was not applied.	فُتح ملف PDF المرتبط، لكن لم تُطبَّق وجهته المسماة.
 	The linked PDF opened, but its page destination was out of range.	فُتح ملف PDF المرتبط، لكن وجهة الصفحة خارج النطاق.
 	Local cross-PDF links require the desktop app	تتطلب الروابط المحلية بين ملفات PDF تطبيق سطح المكتب
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora غير متاح في هذا الإصدار بعد
+	Nora is waiting for you to finish what you are doing in the document.	Nora في انتظار انتهائك مما تقوم به في المستند.
+	There is no document open for Nora to work in.	لا يوجد مستند مفتوح ليعمل فيه Nora.
+	`{command}` is refused: Nora may not run it.	تم رفض `{command}`: لا يُسمح لـ Nora بتشغيله.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	لا يمكن لـ Nora تشغيل `{command}` في NeoPDF: لا يعمل هذا الأمر إلا عبر الواجهة.
+	`{command}` is played by several tools ({tools}): name the one to run.	`{command}` متوفر في عدة أدوات ({tools}): حدِّد الأداة المراد تشغيلها.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` ليس أمرًا من أوامر NeoPDF: تعرض command_list الأوامر التي يمكن لـ Nora تشغيلها.
+	`{command}` is refused: its parameters are nested too deeply.	تم رفض `{command}`: المعاملات متداخلة بعمق زائد.
+	`{command}` is refused: `{key}` would reach a file of the computer.	تم رفض `{command}`: سيؤدي `{key}` إلى الوصول إلى ملف على الحاسوب.
+	`{command}` is refused: `{key}` is a password, which only you enter.	تم رفض `{command}`: `{key}` كلمة مرور، ولا يُدخلها إلا أنت.
+	The parameters of `{command}` must be an object.	يجب أن تكون معاملات `{command}` كائنًا.
+	Nora works in the document open in this window: `doc` names another one.	يعمل Nora في المستند المفتوح في هذه النافذة: يحدِّد `doc` مستندًا آخر.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	فشل `{command}` بشكل غير متوقع ({error})؛ لم يتغير المستند.
+	Commands in one batch: {count} at most.	الحد الأقصى للأوامر في الدفعة الواحدة: {count}.
+	`{command}` failed: {error}	فشل `{command}`: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	عدد مرات ورود «{text}» في المستند: {count} (وليس {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	«{text}» غير موجود في الصفحات الأولى من المستند (حتى الصفحة {pages}).
+	“{text}” is not in the document.	«{text}» غير موجود في المستند.
+	There is no text to type.	لا يوجد نص للكتابة.
+	There is no page {page}: the last page is {count}.	لا توجد صفحة {page}: آخر صفحة هي الصفحة {count}.
+	{name} was not saved: {why}	لم يُحفظ {name}: {why}
+	Nora has nothing left to undo.	لم يبقَ لدى Nora ما يمكن التراجع عنه.
+	The document has changed since Nora's last change: use Undo in the editor instead.	تغيّر المستند منذ آخر تغيير أجراه Nora: استخدم «تراجع» في المحرر بدلًا من ذلك.
+	Undo failed at step {step} of {count}: {error}	فشل التراجع في الخطوة {step} من {count}: {error}
+	New conversation	محادثة جديدة
+	Undo the last change Nora made to the document	التراجع عن آخر تغيير أجراه Nora في المستند
+	Ask Nora…	اسأل Nora…
+	Send	إرسال
+	Nora is working…	Nora يعمل…
+	Ask Nora to read, summarize, fill in or annotate your document.	اطلب من Nora قراءة مستندك أو تلخيصه أو تعبئة حقوله أو إضافة تعليقات توضيحية إليه.
+	Nora wants to:	يطلب Nora الإذن بما يلي:
+	Allow	السماح
+	Refuse	رفض
+	Read the document	قراءة المستند
+	Run {command}	تشغيل {command}
+	Run several commands ({count})	تشغيل عدة أوامر ({count})
+	Select “{text}”	تحديد «{text}»
+	Type “{text}”	كتابة «{text}»
+	Look at page {page}	الاطلاع على الصفحة {page}
+	Save the document	حفظ المستند
+	Undo the last change	التراجع عن آخر تغيير
+	Assistant	المساعد
+	Show the Nora assistant pane (experimental)	عرض لوحة مساعد Nora (تجريبي)
+	Nora assistant	مساعد Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	تم رفض `{command}`: إضافة توقيعك وأحرفك الأولى تعود إليك وحدك.
+	`{command}` is refused: this document's security forbids copying its text.	تم رفض `{command}`: إعدادات أمان هذا المستند تمنع نسخ نصه.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	تغيير Nora قديم جدًا فلا يمكن التراجع عنه كاملًا: استخدم «تراجع» في المحرر بدلًا من ذلك.

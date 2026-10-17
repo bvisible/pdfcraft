@@ -105,6 +105,9 @@ pub const SIDEWAYS: &[(&str, &str)] = &[
     ("ui-egui", "ui-common"),
     ("ui-egui", "platform"),
     ("automation", "platform"),
+    // //// Neoffice — the Nora assistant pane (ui-egui's `nora_pane.rs`) plays Nora's commands with the headless tool
+    // table, the way upstream meant the control channel to use it later (crates/automation, its lib.rs header).
+    ("ui-egui", "automation"),
 ];
 
 /// External crates that constitute a UI toolkit / windowing dependency (prefix match with `*`).
@@ -294,6 +297,9 @@ mod tests {
     fn listed_sideways_edges_allowed() {
         assert!(check(&[c("pdfcraft-redact", &[("pdfcraft-edit", Normal, true)])]).is_empty());
         assert!(!check(&[c("pdfcraft-edit", &[("pdfcraft-redact", Normal, true)])]).is_empty());
+        // //// Neoffice — the Nora pane of the egui shell plays its commands with the automation tools, never the reverse.
+        assert!(check(&[c("pdfcraft-ui-egui", &[("pdfcraft-automation", Normal, true)])]).is_empty());
+        assert!(!check(&[c("pdfcraft-automation", &[("pdfcraft-ui-egui", Normal, true)])]).is_empty());
     }
 
     #[test]

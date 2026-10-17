@@ -2343,3 +2343,54 @@ animation effects	Off	Izklopljeni
 	The linked PDF opened, but its named destination was not applied.	Povezani PDF se je odprl, vendar njegov poimenovani cilj ni bil uporabljen.
 	The linked PDF opened, but its page destination was out of range.	Povezani PDF se je odprl, vendar je ciljna stran zunaj obsega.
 	Local cross-PDF links require the desktop app	Lokalne povezave med PDF-ji zahtevajo namizno aplikacijo
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora še ni na voljo v tej različici
+	Nora is waiting for you to finish what you are doing in the document.	Nora čaka, da dokončate, kar počnete v dokumentu.
+	There is no document open for Nora to work in.	Ni odprtega dokumenta, v katerem lahko deluje Nora.
+	`{command}` is refused: Nora may not run it.	Ukaz `{command}` je zavrnjen: Nora ga ne sme zagnati.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Ukaz `{command}` v NeoPDF Nora ne more zagnati: deluje le prek vmesnika.
+	`{command}` is played by several tools ({tools}): name the one to run.	Ukaz `{command}` obdeluje več orodij ({tools}): izberite, katero naj se zažene.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` ni ukaz programa NeoPDF: command_list navaja ukaze, ki jih Nora lahko zažene.
+	`{command}` is refused: its parameters are nested too deeply.	Ukaz `{command}` je zavrnjen: njegovi parametri so preveč globoko gnezdeni.
+	`{command}` is refused: `{key}` would reach a file of the computer.	Ukaz `{command}` je zavrnjen: prek `{key}` bi se prišlo do datoteke v računalniku.
+	`{command}` is refused: `{key}` is a password, which only you enter.	Ukaz `{command}` je zavrnjen: `{key}` je geslo, ki ga vnesete samo vi.
+	The parameters of `{command}` must be an object.	Parametri ukaza `{command}` morajo biti objekt.
+	Nora works in the document open in this window: `doc` names another one.	Nora dela v dokumentu, odprtem v tem oknu: `doc` označuje drug dokument.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	Ukaz `{command}` je nepričakovano spodletel ({error}); dokument ni bil spremenjen.
+	Commands in one batch: {count} at most.	Ukazi v enem paketu: največ {count}.
+	`{command}` failed: {error}	Ukaz `{command}` ni uspel: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Pojavitve „{text}“ v dokumentu: {count} (ne {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	V prvih {pages} straneh dokumenta ni „{text}“.
+	“{text}” is not in the document.	V dokumentu ni „{text}“.
+	There is no text to type.	Ni besedila za vnos.
+	There is no page {page}: the last page is {count}.	Strani {page} ni. Zadnja stran: {count}.
+	{name} was not saved: {why}	Datoteka {name} ni bila shranjena: {why}
+	Nora has nothing left to undo.	Nora nima več česa razveljaviti.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Dokument se je spremenil od zadnje spremembe, ki jo je naredila Nora: namesto tega uporabite gumb Razveljavi v urejevalniku.
+	Undo failed at step {step} of {count}: {error}	Razveljavitev ni uspela na koraku {step} od {count}: {error}
+	New conversation	Nov pogovor
+	Undo the last change Nora made to the document	Razveljavi zadnjo spremembo, ki jo je Nora naredila v dokumentu
+	Ask Nora…	Vprašajte pomočnika Nora…
+	Send	Pošlji
+	Nora is working…	Nora dela…
+	Ask Nora to read, summarize, fill in or annotate your document.	Prosite pomočnika Nora, naj prebere, povzame, izpolni ali doda opombe k dokumentu.
+	Nora wants to:	Nora želi:
+	Allow	Dovoli
+	Refuse	Zavrni
+	Read the document	Preberi dokument
+	Run {command}	Zaženi {command}
+	Run several commands ({count})	Zaženi več ukazov ({count})
+	Select “{text}”	Izberi „{text}“
+	Type “{text}”	Vnesi „{text}“
+	Look at page {page}	Poglej stran {page}
+	Save the document	Shrani dokument
+	Undo the last change	Razveljavi zadnjo spremembo
+	Assistant	Pomočnik
+	Show the Nora assistant pane (experimental)	Pokaži podokno pomočnika Nora (eksperimentalno)
+	Nora assistant	Pomočnik Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	Ukaz `{command}` je zavrnjen: svoj podpis in svoje začetnice lahko dodate samo vi.
+	`{command}` is refused: this document's security forbids copying its text.	Ukaz `{command}` je zavrnjen: varnostne nastavitve tega dokumenta prepovedujejo kopiranje njegovega besedila.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Sprememba, ki jo je naredila Nora, je prestara, da bi jo bilo mogoče v celoti razveljaviti: namesto tega uporabite gumb Razveljavi v urejevalniku.

@@ -218,6 +218,9 @@ pub const COMMANDS: &[CommandSpec] = &[
     c("view.read_mode", "Read mode", VIEW, Some(Shortcut { command: true, shift: false, mac_ctrl: true, key: "H" }), Document, "book-open"),
     c("view.focus_page_input", "Go to page…", VIEW, Some(Shortcut::cmd_shift("N")), Document, "text-cursor-input"),
     c("ui.dock.reset", "Reset panel layout", VIEW, None, Nothing, "settings"),
+    // //// Neoffice — shows or hides the Nora assistant pane (ui-egui's `nora_pane.rs`). Kept out of the generated menus,
+    // which stay upstream's; the palette runs it, and Preferences ▸ Assistant is its switch.
+    c("ui.nora", "Nora assistant", None, None, Nothing, "sparkles"),
     c("view.theme", "Switch light / dark theme", None, None, Nothing, "moon"),
     c("view.theme.system", "Use system setting", None, None, Nothing, "settings"),
     c("view.theme.light", "Light gray", None, None, Nothing, "sun"),

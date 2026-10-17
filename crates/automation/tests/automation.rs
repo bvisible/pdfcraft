@@ -1492,6 +1492,8 @@ fn protecting_through_tools() {
     for (tool, args) in [
         ("text_extract", json!({ "doc": re })),
         ("text_paragraphs", json!({ "doc": re, "page": 1 })),
+        // //// Neoffice — every line's text, refused as text_extract's is (text_lines was the way round that rule).
+        ("text_lines", json!({ "doc": re, "page": 1 })),
         ("doc_export_text", json!({ "doc": re, "path": "out.txt" })),
         ("doc_export_images", json!({ "doc": re, "folder": "pages" })),
         ("doc_export_all_images", json!({ "doc": re, "folder": "images" })),

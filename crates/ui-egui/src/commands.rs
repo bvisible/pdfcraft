@@ -159,6 +159,8 @@ impl PdfCraftApp {
                     self.notify(error);
                 }
             }
+            // //// Neoffice — shows or hides the Nora assistant pane (Preferences ▸ Assistant is the same setting).
+            "ui.nora" => self.nora_pane = !self.nora_pane,
             "file.open" => self.open_dialog(),
             "file.open_recent" => match self.recent.first().map(|r| r.path.clone()) {
                 // The palette runs commands without a submenu: open the most recent file.

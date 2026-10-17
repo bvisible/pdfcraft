@@ -1,7 +1,16 @@
 //! PdfCraft in the browser. Build: `cd apps/pdfcraft-web && trunk build --release`
 //! (trunk generates the JS loader; no handwritten JS — plan/execution-plan.md §1).
+//!
+//! `?nora` opens the Nora assistant pane, connected with the page's session (`?nora=<origin>` is taken only for a
+//! loopback stand-in from a loopback page); a page that makes Nora's calls itself offers
+//! `window.pdfcraftNoraCall(path, body)` instead (see `nora`).
+// //// Neoffice — the paragraph above is ours: upstream has no Nora pane.
 
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
+
+// //// Neoffice — added module: the Nora pane's connection (a `fetch` with the page's own session, or the host's own call).
+#[cfg(target_arch = "wasm32")]
+mod nora;
 
 #[cfg(target_arch = "wasm32")]
 fn main() {
@@ -26,6 +35,13 @@ fn main() {
                     // "printcraft": settings saved under the app's former name, PrintCraft.
                     if let Some(json) = cc.storage.and_then(|s| s.get_string("pdfcraft").or_else(|| s.get_string("printcraft"))) {
                         app.restore(&json);
+                    }
+                    // //// Neoffice — a page that asks for Nora (`?nora`, read by name) gets the Nora pane, connected with the
+                    // page's own session, and open whatever the settings saved; a host that makes the calls itself
+                    // (`window.pdfcraftNoraCall`, Neodesk) turns it on the same way.
+                    if let Some(origin) = nora::requested().or_else(|| nora::offered().then(String::new)) {
+                        nora::connect(&mut app, origin, cc.egui_ctx.clone());
+                        app.nora_pane = true;
                     }
                     // `?file=<url>` opens a PDF from a URL (same-origin or CORS-enabled).
                     if let Some(url) = query_param("file") {
