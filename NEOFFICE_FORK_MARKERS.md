@@ -142,6 +142,16 @@ carry a marker in place.
   - **The words** go through the interface's catalogs: every new string is in all 21 of them (translated by a model,
     French reusing the wording of WordCraft's pane). "Nora" is a name and stays untranslated.
 
+- **Our product's name in our builds** (new file `crates/ui-egui/src/brand.rs`): `brand::name()` is
+  `NEOFFICE_PRODUCT_NAME` when the build sets it (only the build step of `neoffice-web.yml`: `NeoPDF`), upstream's name
+  otherwise, so upstream's builds and every test run are unchanged. `i18n::tr`, `tr_ctx` and `tr_id` pass their result
+  through `brand::rebrand`, which swaps the whole word `PdfCraft` in every language without touching the catalogs (the
+  Home page's welcome, About, the help texts); the labels of the links to upstream's web page and GitHub keep it. The
+  window title, the About dialog's heading and the browser print page's title call `brand::name()` (marked lines in
+  `lib.rs`, `i18n/mod.rs`, `dialogs.rs` and `web_print.rs`). The page title is ours in `apps/pdfcraft-web/index.html`.
+  Stored or compared names (storage folders, `pdfcraft:*` messages, the `pdfcraft` canvas, `ai.storyteller.*`) and the
+  native app keep upstream's.
+
 ## Files that cannot carry a comment
 
 | File | Why it is ours |

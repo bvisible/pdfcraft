@@ -433,7 +433,8 @@ pub fn key_name(s: &str) -> &str {
 
 /// Translate an English UI string; unknown strings come back unchanged.
 pub fn tr(lang: Lang, s: &str) -> &str {
-    lang.catalog().plain(s).unwrap_or(s)
+    // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise (brand.rs).
+    crate::brand::rebrand(s, lang.catalog().plain(s).unwrap_or(s))
 }
 
 /// How the layers below say their own sentences in the current language.
@@ -449,12 +450,14 @@ pub fn words(wording: &str) -> String {
 
 /// Like [`tr`], for an English string that needs a disambiguating `context`.
 pub fn tr_ctx<'a>(lang: Lang, context: &str, s: &'a str) -> &'a str {
-    lang.catalog().contextual(context, s).unwrap_or_else(|| tr(lang, s))
+    // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise (brand.rs).
+    lang.catalog().contextual(context, s).map(|t| crate::brand::rebrand(s, t)).unwrap_or_else(|| tr(lang, s))
 }
 
 /// A string keyed by its command id, falling back to the translation of the English `label`.
 pub fn tr_id<'a>(lang: Lang, id: &str, label: &'a str) -> &'a str {
-    lang.catalog().id(id).unwrap_or_else(|| tr(lang, label))
+    // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise (brand.rs).
+    lang.catalog().id(id).map(|t| crate::brand::rebrand(label, t)).unwrap_or_else(|| tr(lang, label))
 }
 
 /// Fill `{name}` placeholders in one pass. Unknown placeholders are left as written, and inserted

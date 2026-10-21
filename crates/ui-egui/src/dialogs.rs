@@ -1097,7 +1097,8 @@ fn dialogs(app: &mut PdfCraftApp, ctx: &egui::Context) {
                         ui.horizontal(|ui| {
                             widgets::artcraft_mark(ui, 40.0);
                             ui.vertical(|ui| {
-                                ui.label(egui::RichText::new("PdfCraft").font(theme::semibold(20.0)));
+                                // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise.
+                                ui.label(egui::RichText::new(crate::brand::name()).font(theme::semibold(20.0)));
                                 ui.label(crate::i18n::fmt(tl!("Version {v}"), &[("v", env!("CARGO_PKG_VERSION"))]));
                             });
                         });

@@ -128,7 +128,11 @@ pub(crate) fn print_document_html(sheets: &[(f64, f64)], urls: &[String]) -> Str
             html_sheets.push_str(&format!("<div class=\"s{k}\"><img alt=\"\" style=\"width:{w};height:{h}\" src=\"{src}\"></div>"));
         }
     }
-    format!("<!doctype html><html><head><meta charset=\"utf-8\"><title>PdfCraft</title><style>{css}</style></head><body>{html_sheets}</body></html>")
+    // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise.
+    format!(
+        "<!doctype html><html><head><meta charset=\"utf-8\"><title>{}</title><style>{css}</style></head><body>{html_sheets}</body></html>",
+        crate::brand::name()
+    )
 }
 
 /// A browser print being prepared: the print-ready PDF's sheets drawn one [`WebPrintJob::step`]

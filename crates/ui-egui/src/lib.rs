@@ -27,6 +27,8 @@ mod a11y_ui;
 mod account;
 mod actions_ui;
 mod appearance;
+// //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise (see brand.rs).
+pub mod brand;
 pub mod canvas;
 mod chrome;
 mod combine_grid;
@@ -2690,7 +2692,8 @@ impl eframe::App for PdfCraftApp {
             .and_then(|i| self.session.get(self.views[i].id))
             .map(|d| d.display_name())
             .or_else(|| self.combine_showing().then(|| tl!("Combine files").to_owned()))
-            .map_or_else(|| "PdfCraft".to_owned(), |name| format!("{name} — PdfCraft"));
+            // //// Neoffice — our builds show our product's name (NEOFFICE_PRODUCT_NAME), upstream's otherwise.
+            .map_or_else(|| brand::name().to_owned(), |name| format!("{name} — {}", brand::name()));
         if title != self.window_title {
             ctx.send_viewport_cmd(egui::ViewportCommand::Title(title.clone()));
             self.window_title = title;
