@@ -19,9 +19,10 @@ craft-print = { git = "https://github.com/storytold/craft-libs", version = "0.1.
 # //// Neoffice — the Nora assistant pane (crates/ui-egui/src/nora_pane.rs), the one NeoWrite (WordCraft) has, so that the
 # same Nora works in every editor. Neoffice's craft-libs fork carries Nora's client core and its egui panel, at the revision
 # WordCraft uses. Both depend on egui only (the same 0.36 as here), so upstream's craft-libs types are not duplicated. To
-# follow a newer craft-libs, move this revision; nothing else changes.
-craft-nora = { git = "https://github.com/bvisible/craft-libs", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
+# follow a newer craft-libs, move this revision; nothing else changes. With its version, as upstream pins craft-ui and
+# craft-print: cargo-deny counts a git dependency without one as a wildcard, and refuses it in a public crate.
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.7.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.7.0" }
