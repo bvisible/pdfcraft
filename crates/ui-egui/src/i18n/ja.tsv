@@ -2389,3 +2389,12 @@ animation effects	Off	オフ
 	`{command}` is refused: your signature and initials are yours to add.	`{command}` は拒否されました: 署名とイニシャルを追加できるのは本人だけです。
 	`{command}` is refused: this document's security forbids copying its text.	`{command}` は拒否されました: この文書のセキュリティ設定により、そのテキストのコピーは禁止されています。
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora の変更は古すぎて全体を取り消せません: 代わりにエディターで「取り消し」を使ってください。
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	停止
+	Stopped.	停止しました。
+	Nora did not answer in time.	Nora からの応答が時間内に届きませんでした。
+	Nora could not be reached. Check the connection and try again.	Nora に接続できませんでした。接続を確認して、もう一度お試しください。
+	Your session has expired. Sign in again.	セッションの有効期限が切れました。もう一度サインインしてください。
+	The server could not answer (error {status}). Try again in a moment.	サーバーから応答がありませんでした（エラー {status}）。しばらくしてから再度お試しください。
+	Nora's answer could not be read.	Nora の回答を読み取れませんでした。

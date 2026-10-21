@@ -34,8 +34,8 @@ use std::sync::{Arc, LazyLock};
 use std::time::Duration;
 
 use craft_nora::{
-    AppKind, CommandCall, CommandPolicy, Decision, DocActionKind, DocumentCall, DocumentInfo, HttpRequest, HttpResponse, Input, NoraSession, Output,
-    PageContext, Selection, SessionConfig,
+    AppKind, CommandCall, CommandPolicy, Decision, DocActionKind, DocumentCall, DocumentInfo, HttpRequest, HttpResponse, Input, NoraError,
+    NoraSession, Output, PageContext, Selection, SessionConfig,
 };
 use craft_nora_ui::{NoraLabels, NoraPanel, NoraStyle, PanelAction, drive};
 use egui::{Stroke, Ui};
@@ -237,7 +237,7 @@ impl Default for NoraState {
         let config = SessionConfig { policy: POLICY.clone(), ..SessionConfig::default() };
         NoraState {
             session: NoraSession::new(config, context),
-            panel: NoraPanel::new(),
+            panel: NoraPanel::new().with_error_words(error_words),
             changes: Vec::new(),
             waiting: Vec::new(),
             automation: Automation::new(),
@@ -1179,12 +1179,30 @@ fn labels() -> NoraLabels {
         undo_hint: tl!("Undo the last change Nora made to the document").to_string(),
         placeholder: tl!("Ask Nora…").to_string(),
         send: tl!("Send").to_string(),
+        stop: tl!("Stop").to_string(),
         working: tl!("Nora is working…").to_string(),
+        stopped: tl!("Stopped.").to_string(),
         empty: tl!("Ask Nora to read, summarize, fill in or annotate your document.").to_string(),
         confirm_heading: tl!("Nora wants to:").to_string(),
         allow: tl!("Allow").to_string(),
         refuse: tl!("Refuse").to_string(),
         describe,
+    }
+}
+
+/// A failure of the connection to Nora in the interface language (the panel shows the editor's own sentences, an action
+/// it refused, as they come). The server's own words, when it gave some, are shown as they are: the server writes them
+/// for the person.
+fn error_words(failure: &NoraError) -> String {
+    match failure {
+        NoraError::Timeout => tl!("Nora did not answer in time.").to_string(),
+        NoraError::Unreachable(_) => tl!("Nora could not be reached. Check the connection and try again.").to_string(),
+        NoraError::Http(401 | 403) => tl!("Your session has expired. Sign in again.").to_string(),
+        NoraError::Http(status) => {
+            fmt(tl!("The server could not answer (error {status}). Try again in a moment."), &[("status", &status.to_string())])
+        }
+        NoraError::Server { message, .. } => message.clone(),
+        NoraError::Malformed(_) => tl!("Nora's answer could not be read.").to_string(),
     }
 }
 
@@ -2150,5 +2168,40 @@ mod tests {
             let missing: Vec<char> = "—«»’…“”".chars().filter(|c| face.charmap().map(*c).is_none()).collect();
             assert!(missing.is_empty(), "{first} lacks {missing:?}");
         }
+    }
+
+    /// While Nora works, the pane's Send button is a Stop button: a click ends her turn there and then, the pane says
+    /// so, and the next message can go.
+    #[test]
+    fn stop_ends_nora_s_turn() {
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        let mut h = window(app);
+        start(&mut h, &outbox, &inbox, "Summarize the document");
+        assert!(h.state().nora.session.is_busy(), "Nora is at work");
+        h.get_by_label("Stop").click();
+        h.run_steps(4);
+        assert!(!h.state().nora.session.is_busy(), "her turn ended");
+        assert!(h.query_by_label("Stopped.").is_some(), "the pane says Nora was stopped");
+        assert!(h.query_by_label("Send").is_some(), "the next message can go");
+    }
+
+    /// A call that got no answer at all is said in the interface language, not with the browser's English reason.
+    #[test]
+    fn no_answer_from_nora_is_said_in_the_interface_language() {
+        let mut app = document();
+        app.set_option("language", "fr").unwrap();
+        let (outbox, inbox) = connect(&mut app);
+        let mut h = window(app);
+        h.state_mut().nora.panel.set_draft("Bonjour");
+        h.run_steps(2);
+        h.get_by_label("Envoyer").click();
+        h.run_steps(4);
+        let sent = take(&outbox);
+        let body = json!({ "exception": "No answer from Nora: TypeError: Failed to fetch" }).to_string();
+        inbox.lock().unwrap().push(HttpResponse { id: sent[0].id, status: 0, body });
+        h.run_steps(4);
+        assert!(h.query_by_label("Nora n'a pas pu être jointe. Vérifiez la connexion et réessayez.").is_some());
+        assert!(h.query_by_label("No answer from Nora: TypeError: Failed to fetch").is_none());
     }
 }

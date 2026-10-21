@@ -2387,3 +2387,12 @@ animation effects	Off	Өшірулі
 	`{command}` is refused: your signature and initials are yours to add.	`{command}` бас тартылды: қолтаңбаны да, бас әріптерді де тек өзіңіз қоса аласыз.
 	`{command}` is refused: this document's security forbids copying its text.	`{command}` бас тартылды: бұл құжаттың қауіпсіздік параметрлері оның мәтінін көшіруге тыйым салады.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora-ның өзгерісі тым ескі, оны түгел болдырмау мүмкін емес: оның орнына редактордағы «Болдырмау» түймесін пайдаланыңыз.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Тоқтату
+	Stopped.	Тоқтатылды.
+	Nora did not answer in time.	Nora уақытында жауап бермеді.
+	Nora could not be reached. Check the connection and try again.	Nora-ға қосылу мүмкін болмады. Байланысты тексеріп, қайта әрекет етіңіз.
+	Your session has expired. Sign in again.	Сеанс мерзімі өтті. Қайта кіріңіз.
+	The server could not answer (error {status}). Try again in a moment.	Сервер жауап бере алмады (қате {status}). Біраз уақыттан кейін қайта әрекет етіңіз.
+	Nora's answer could not be read.	Nora-ның жауабын оқу мүмкін болмады.

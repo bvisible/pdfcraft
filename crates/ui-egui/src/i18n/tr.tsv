@@ -2385,3 +2385,12 @@ animation effects	Off	Kapalı
 	`{command}` is refused: your signature and initials are yours to add.	`{command}` komutu reddedildi: imzanızı ve parafınızı yalnızca siz ekleyebilirsiniz.
 	`{command}` is refused: this document's security forbids copying its text.	`{command}` komutu reddedildi: bu belgenin güvenlik ayarları metninin kopyalanmasını yasaklıyor.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora'nın değişikliği bütünüyle geri alınamayacak kadar eski: bunun yerine düzenleyicideki Geri al komutunu kullanın.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Durdur
+	Stopped.	Durduruldu.
+	Nora did not answer in time.	Nora zamanında yanıt vermedi.
+	Nora could not be reached. Check the connection and try again.	Nora'ya bağlanılamadı. Bağlantınızı kontrol edip yeniden deneyin.
+	Your session has expired. Sign in again.	Oturumunuzun süresi doldu. Lütfen yeniden oturum açın.
+	The server could not answer (error {status}). Try again in a moment.	Sunucu yanıt veremedi (hata {status}). Lütfen birazdan yeniden deneyin.
+	Nora's answer could not be read.	Nora'nın yanıtı okunamadı.

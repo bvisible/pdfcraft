@@ -2263,3 +2263,12 @@ animation effects	Off	關
 	`{command}` is refused: your signature and initials are yours to add.	`{command}` 被拒絕：您的簽名和姓名首字母只能由您自己新增。
 	`{command}` is refused: this document's security forbids copying its text.	`{command}` 被拒絕：本文件的安全設定禁止複製其文字。
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora 的變更太舊，無法整體復原：請改用編輯器中的「復原」。
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	停止
+	Stopped.	已停止。
+	Nora did not answer in time.	Nora 未能及時回覆。
+	Nora could not be reached. Check the connection and try again.	無法連線至 Nora。請檢查網路連線後再試一次。
+	Your session has expired. Sign in again.	您的工作階段已過期，請重新登入。
+	The server could not answer (error {status}). Try again in a moment.	伺服器無法回應（錯誤 {status}）。請稍後再試。
+	Nora's answer could not be read.	無法讀取 Nora 的回覆。

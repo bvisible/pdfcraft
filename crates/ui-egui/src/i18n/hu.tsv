@@ -2388,3 +2388,12 @@ animation effects	Off	Ki
 	`{command}` is refused: your signature and initials are yours to add.	A(z) `{command}` parancs elutasítva: az aláírásodat és monogramodat csak te adhatod hozzá.
 	`{command}` is refused: this document's security forbids copying its text.	A(z) `{command}` parancs elutasítva: a dokumentum biztonsági beállításai tiltják a szövegének a másolását.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora módosítása túl régi ahhoz, hogy egészében visszavonható legyen: használd inkább a szerkesztőben a Visszavonást.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Leállítás
+	Stopped.	Leállítva.
+	Nora did not answer in time.	Nora nem válaszolt időben.
+	Nora could not be reached. Check the connection and try again.	Nora nem érhető el. Ellenőrizze a kapcsolatot, majd próbálja újra.
+	Your session has expired. Sign in again.	A munkamenet lejárt. Jelentkezzen be újra.
+	The server could not answer (error {status}). Try again in a moment.	A kiszolgáló nem tudott válaszolni (hiba: {status}). Próbálja újra néhány perc múlva.
+	Nora's answer could not be read.	Nora válaszát nem sikerült értelmezni.

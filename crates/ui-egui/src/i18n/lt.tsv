@@ -2633,3 +2633,12 @@ key	Space	Tarpas
 	`{command}` is refused: your signature and initials are yours to add.	Komanda `{command}` atmesta: jūsų parašą ir inicialus galite pridėti tik jūs patys.
 	`{command}` is refused: this document's security forbids copying its text.	Komanda `{command}` atmesta: šio dokumento saugos nuostatos draudžia kopijuoti jo tekstą.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Asistento Nora pakeitimas per senas, kad būtų visiškai atšauktas: vietoj to naudokite redaktoriaus mygtuką Anuliuoti.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Sustabdyti
+	Stopped.	Sustabdyta.
+	Nora did not answer in time.	Nora neatsakė laiku.
+	Nora could not be reached. Check the connection and try again.	Nepavyko prisijungti prie Nora. Patikrinkite ryšį ir bandykite dar kartą.
+	Your session has expired. Sign in again.	Jūsų sesija baigėsi. Prisijunkite iš naujo.
+	The server could not answer (error {status}). Try again in a moment.	Serveris negalėjo atsakyti (klaida {status}). Bandykite dar kartą po akimirkos.
+	Nora's answer could not be read.	Nora atsakymo nepavyko perskaityti.

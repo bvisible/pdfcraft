@@ -21,8 +21,10 @@ craft-print = { git = "https://github.com/storytold/craft-libs", version = "0.1.
 # WordCraft uses. Both depend on egui only (the same 0.36 as here), so upstream's craft-libs types are not duplicated. To
 # follow a newer craft-libs, move this revision; nothing else changes. With its version, as upstream pins craft-ui and
 # craft-print: cargo-deny counts a git dependency without one as a wildcard, and refuses it in a public crate.
-craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "8fee6abfbd33ae783a4d74bbcf005ae3ca986f84" }
+# //// Neoffice — revision adbcef6 (craft-libs version-15, 17.10.2026): the Stop, Undo offered only for what Nora
+# changed, replies that stay in view, and connection errors in the app's language (`NoraPanel::with_error_words`).
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "adbcef6c286b6bcd264cc91fbf50dc3f42d60e5a" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "adbcef6c286b6bcd264cc91fbf50dc3f42d60e5a" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.7.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.7.0" }

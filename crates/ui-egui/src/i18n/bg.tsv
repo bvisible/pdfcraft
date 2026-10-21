@@ -2352,3 +2352,12 @@ animation effects	Off	Изключени
 	`{command}` is refused: your signature and initials are yours to add.	Командата `{command}` е отхвърлена: само вие можете да добавите своя подпис и своите инициали.
 	`{command}` is refused: this document's security forbids copying its text.	Командата `{command}` е отхвърлена: настройките за защита на този документ забраняват копирането на текста му.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Промяната на Nora е твърде стара, за да бъде отменена изцяло: вместо това използвайте „Отмени“ в редактора.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Спри
+	Stopped.	Спряно.
+	Nora did not answer in time.	Nora не отговори навреме.
+	Nora could not be reached. Check the connection and try again.	Не можа да се свърже с Nora. Проверете връзката и опитайте отново.
+	Your session has expired. Sign in again.	Сесията ви изтече. Влезте отново.
+	The server could not answer (error {status}). Try again in a moment.	Сървърът не можа да отговори (грешка {status}). Опитайте отново след малко.
+	Nora's answer could not be read.	Отговорът на Nora не можа да бъде прочетен.

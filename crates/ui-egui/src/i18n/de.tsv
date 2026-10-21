@@ -2390,3 +2390,12 @@ animation effects	Off	Aus
 	`{command}` is refused: your signature and initials are yours to add.	Der Befehl `{command}` wird abgelehnt: Nur du selbst darfst deine Unterschrift und deine Initialen hinzufügen.
 	`{command}` is refused: this document's security forbids copying its text.	Der Befehl `{command}` wird abgelehnt: Die Sicherheitseinstellungen dieses Dokuments verbieten das Kopieren seines Textes.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Noras Änderung ist zu alt, um sie als Ganzes rückgängig zu machen: Verwende stattdessen Rückgängig im Editor.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Stoppen
+	Stopped.	Gestoppt.
+	Nora did not answer in time.	Nora hat nicht rechtzeitig geantwortet.
+	Nora could not be reached. Check the connection and try again.	Nora war nicht erreichbar. Prüfen Sie die Verbindung und versuchen Sie es erneut.
+	Your session has expired. Sign in again.	Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.
+	The server could not answer (error {status}). Try again in a moment.	Der Server konnte nicht antworten (Fehler {status}). Versuchen Sie es in einem Moment erneut.
+	Nora's answer could not be read.	Die Antwort von Nora konnte nicht gelesen werden.

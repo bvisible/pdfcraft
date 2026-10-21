@@ -2399,3 +2399,12 @@ animation effects	Off	Ανενεργά
 	`{command}` is refused: your signature and initials are yours to add.	Η εντολή `{command}` απορρίπτεται: μόνο εσείς μπορείτε να προσθέσετε την υπογραφή και τη μονογραφή σας.
 	`{command}` is refused: this document's security forbids copying its text.	Η εντολή `{command}` απορρίπτεται: οι ρυθμίσεις ασφαλείας του εγγράφου απαγορεύουν την αντιγραφή του κειμένου του.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Η αλλαγή του βοηθού Nora είναι πολύ παλιά για να αναιρεθεί ολόκληρη: χρησιμοποιήστε αντί αυτού την Αναίρεση του επεξεργαστή.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Διακοπή
+	Stopped.	Διακόπηκε.
+	Nora did not answer in time.	Ο βοηθός Nora δεν απάντησε εγκαίρως.
+	Nora could not be reached. Check the connection and try again.	Δεν ήταν δυνατή η σύνδεση με τον βοηθό Nora. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.
+	Your session has expired. Sign in again.	Η συνεδρία σας έληξε. Συνδεθείτε ξανά.
+	The server could not answer (error {status}). Try again in a moment.	Ο διακομιστής δεν μπόρεσε να απαντήσει (σφάλμα {status}). Δοκιμάστε ξανά σε λίγο.
+	Nora's answer could not be read.	Η απάντηση του βοηθού Nora δεν μπόρεσε να διαβαστεί.

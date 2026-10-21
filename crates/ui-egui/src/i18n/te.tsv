@@ -2302,3 +2302,12 @@ animation effects	Off	ఆఫ్
 	`{command}` is refused: your signature and initials are yours to add.	`{command}` తిరస్కరించబడింది: మీ సంతకం మరియు పొడి అక్షరాలను జోడించే హక్కు మీకు మాత్రమే ఉంది.
 	`{command}` is refused: this document's security forbids copying its text.	`{command}` తిరస్కరించబడింది: ఈ పత్రం భద్రతా సెట్టింగ్‌లు దాని టెక్స్ట్‌ను కాపీ చేయడాన్ని నిషేధిస్తాయి.
 	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Nora చేసిన మార్పు మొత్తంగా రద్దు చేయడానికి చాలా పాతది: బదులుగా ఎడిటర్‌లో రద్దు చేయిని ఉపయోగించండి.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	ఆపు
+	Stopped.	ఆపివేయబడింది.
+	Nora did not answer in time.	Nora సమయానికి స్పందించలేదు.
+	Nora could not be reached. Check the connection and try again.	Nora కు కనెక్ట్ కాలేకపోయింది. కనెక్షన్‌ను తనిఖీ చేసి, మళ్లీ ప్రయత్నించండి.
+	Your session has expired. Sign in again.	మీ సెషన్ గడువు ముగిసింది. దయచేసి మళ్లీ సైన్ ఇన్ చేయండి.
+	The server could not answer (error {status}). Try again in a moment.	సర్వర్ స్పందించలేకపోయింది (లోపం {status}). కొద్దిసేపటి తర్వాత మళ్లీ ప్రయత్నించండి.
+	Nora's answer could not be read.	Nora సమాధానాన్ని చదవడం సాధ్యం కాలేదు.
