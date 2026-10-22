@@ -183,6 +183,12 @@ const REFUSED: &[&str] = &[
     "sign_trust",
 ];
 
+// //// Neoffice — what Nora may play only once the person clicks Allow in this pane (craft-nora's `Decision::Confirm`:
+// //// the panel shows « Nora wants to: Apply redactions » with Allow and Refuse, and nothing runs before the click).
+// //// Applying the redactions removes what is under the marks for good once the document is saved; the server asks the
+// //// person in the conversation too, and this click is the yes that nothing written in the conversation can give.
+const CONFIRMED: &[&str] = &["redact_apply", "redact.apply"];
+
 /// The tool table of `pdfcraft-automation`.
 static TOOLS: LazyLock<Vec<ToolDef>> = LazyLock::new(pdfcraft_automation::tools);
 
@@ -190,7 +196,9 @@ static TOOLS: LazyLock<Vec<ToolDef>> = LazyLock::new(pdfcraft_automation::tools)
 static POLICY: LazyLock<CommandPolicy> = LazyLock::new(policy);
 
 fn policy() -> CommandPolicy {
-    REFUSED.iter().fold(CommandPolicy::default(), |policy, prefix| policy.deny_prefix(*prefix))
+    let policy = REFUSED.iter().fold(CommandPolicy::default(), |policy, prefix| policy.deny_prefix(*prefix));
+    // //// Neoffice — the commands of CONFIRMED wait for the person's click (a refusal still wins over it).
+    CONFIRMED.iter().fold(policy, |policy, command| policy.confirm_prefix(*command))
 }
 
 /// The size of the text in a text box of Nora's, in points.
@@ -1210,6 +1218,11 @@ fn error_words(failure: &NoraError) -> String {
 fn describe(kind: &DocActionKind) -> String {
     match kind {
         DocActionKind::Observe => tl!("Read the document").to_string(),
+        // //// Neoffice — the redactions say what they do, in the words of PdfCraft's own Apply button, already translated.
+        DocActionKind::Execute { command, .. } if CONFIRMED.contains(&command.as_str()) => tl!("Apply redactions").to_string(),
+        DocActionKind::Batch { commands } if commands.iter().any(|call| CONFIRMED.contains(&call.command.as_str())) => {
+            tl!("Apply redactions").to_string()
+        }
         DocActionKind::Execute { command, .. } => fmt(tl!("Run {command}"), &[("command", command)]),
         DocActionKind::Batch { commands } => match commands.as_slice() {
             [only] => fmt(tl!("Run {command}"), &[("command", &only.command)]),
@@ -2203,5 +2216,48 @@ mod tests {
         h.run_steps(4);
         assert!(h.query_by_label("Nora n'a pas pu être jointe. Vérifiez la connexion et réessayez.").is_some());
         assert!(h.query_by_label("No answer from Nora: TypeError: Failed to fetch").is_none());
+    }
+
+    // //// Neoffice — applying the redactions waits for the person's click in the pane, whatever the conversation said.
+    #[test]
+    fn applying_redactions_waits_for_the_person_s_click() {
+        assert_eq!(POLICY.check("redact_apply"), Decision::Confirm);
+        assert_eq!(POLICY.check("redact.apply"), Decision::Confirm);
+        assert_eq!(POLICY.check("redact_mark"), Decision::Allow, "marking is no redaction yet");
+        assert_eq!(describe(&exec("redact_apply", json!({}))), "Apply redactions");
+        let batch = DocActionKind::Batch { commands: vec![step("redact_mark", json!({ "find": "Hello" })), step("redact_apply", json!({}))] };
+        assert_eq!(describe(&batch), "Apply redactions", "a batch that applies them says so");
+
+        for (click, applied) in [("Allow", true), ("Refuse", false)] {
+            let mut app = document();
+            let (outbox, inbox) = connect(&mut app);
+            let mut h = window(app);
+            let polls = start(&mut h, &outbox, &inbox, "Redact Hello");
+            let told = act(
+                &mut h,
+                &outbox,
+                &inbox,
+                &polls,
+                json!([
+                    { "action": "doc_execute", "command": "redact_mark", "params": { "find": "Hello" }, "callback_id": "c1" },
+                    { "action": "doc_execute", "command": "redact_apply", "params": {}, "callback_id": "c2" }
+                ]),
+            );
+            assert_eq!(observation(&told, "c1")["ok"], true, "{click}: marking runs at once");
+            assert!(
+                !told.iter().any(|r| r.path.ends_with("receive_observation") && r.body["callback_id"] == "c2"),
+                "{click}: nothing is applied before the click"
+            );
+            assert!(h.query_by_label("Apply redactions").is_some(), "{click}: the pane says what Nora wants to do");
+            let text = |h: &mut Window| run(h.state_mut(), exec("text_extract", json!({ "pages": [1] }))).unwrap()["pages"][0]["text"].clone();
+            assert!(text(&mut h).as_str().is_some_and(|t| t.contains("Hello")), "{click}: still there before the click");
+            h.get_by_label(click).click();
+            h.run_steps(6);
+            let told = take(&outbox);
+            let seen = observation(&told, "c2");
+            assert_eq!(seen["ok"], applied, "{click}: {seen}");
+            let left = text(&mut h);
+            assert_eq!(left.as_str().is_some_and(|t| t.contains("Hello")), !applied, "{click}: {left}");
+        }
     }
 }
