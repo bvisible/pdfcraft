@@ -2170,6 +2170,8 @@ mod tests {
             select_all: false,
             calendar: None,
             calendar_rect: None,
+            press: None,
+            calendar_text: None,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Lausanne\nVaud".into(), paragraphs: true }).unwrap();
         assert_eq!((typed["field"].clone(), typed["page"].clone()), (json!("city"), json!(1)));
@@ -2241,6 +2243,8 @@ mod tests {
             select_all: false,
             calendar: None,
             calendar_rect: None,
+            press: None,
+            calendar_text: None,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Москва".into(), paragraphs: false }).unwrap();
         assert_eq!(typed["field"], json!("city"));
@@ -2324,6 +2328,8 @@ mod tests {
             select_all: false,
             calendar: None,
             calendar_rect: None,
+            press: None,
+            calendar_text: None,
         });
         h.run_steps(3);
         let told = act(&mut h, &outbox, &inbox, &polls, json!([{ "action": "doc_type_text", "text": "Grace", "callback_id": "c1" }]));
