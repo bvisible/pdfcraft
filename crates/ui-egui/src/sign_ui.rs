@@ -559,6 +559,11 @@ impl PdfCraftApp {
     /// Open saved revision `n` (1 = the oldest) of the active document as a new document.
     /// A repeat reuses the tab: every click used to open another identical one.
     pub fn open_revision(&mut self, n: usize) {
+        // //// Neoffice — not when the hosting page opens the documents: the revision would open in a tab of its own,
+        // which the page never asked for and can't close.
+        if self.host_refuses_open() {
+            return;
+        }
         let Some((_, id)) = self.active_ids() else { return };
         let Some(doc) = self.session.get(id) else { return };
         // The revision's byte range, as `Session::open_revision` reads it. An unknown `n`
@@ -615,6 +620,10 @@ impl PdfCraftApp {
     /// Open the signed version of a signature as a new document (View signed version).
     /// A repeat reuses the tab: every click used to open another identical one.
     pub fn view_signed_version(&mut self, len: usize, revision: usize) {
+        // //// Neoffice — not when the hosting page opens the documents: as `open_revision`.
+        if self.host_refuses_open() {
+            return;
+        }
         let Some((_, id)) = self.active_ids() else { return };
         let Some(doc) = self.session.get(id) else { return };
         let end = len.min(doc.bytes.len());

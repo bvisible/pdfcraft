@@ -42,3 +42,16 @@ fn the_discord_command_opens_nothing_when_the_host_hides_the_community_links() {
     shown.state_mut().execute("help.discord");
     assert_eq!(shown.state().last_opened_url.as_deref(), Some("https://discord.gg/artcraft"));
 }
+
+/// Upstream's update check opens upstream's releases page in the browser build; a hosting page serves the editor's
+/// version, so the command is neither offered nor run there.
+#[test]
+fn the_update_check_is_hidden_when_the_host_hides_the_community_links() {
+    let mut hidden = harness(true);
+    assert!(!hidden.state_mut().execute("help.check_updates"), "help.check_updates ran");
+    assert!(hidden.state().last_opened_url.is_none(), "upstream's releases page");
+
+    let mut shown = harness(false);
+    assert!(shown.state_mut().execute("help.check_updates"));
+    assert!(shown.state().last_opened_url.is_some(), "elsewhere, without an update source, the releases page opens");
+}

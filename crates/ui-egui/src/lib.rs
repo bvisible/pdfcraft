@@ -1526,29 +1526,37 @@ impl PdfCraftApp {
         "create.images",
         "create.clipboard",
         "page.combine",
+        // What only makes another document from the page's one (a comment summary) or opens another to compare with.
+        "comment.summarize",
+        "doc.compare",
         // The page's document stays in its tab: closing it would leave the editor with nothing to show.
         "file.close",
         "file.close_all",
     ];
 
     pub(crate) fn host_hides(&self, id: &str) -> bool {
-        self.host_owns_documents && Self::HOST_HIDDEN_COMMANDS.contains(&id)
+        (self.host_owns_documents && Self::HOST_HIDDEN_COMMANDS.contains(&id))
+            // Upstream's update check too, where the page hides upstream's links (`hide_community`): in the browser
+            // build it opens upstream's releases page, and the hosting page serves the editor's version.
+            || (self.hide_community && id == "help.check_updates")
     }
 
     // //// Neoffice — added: told, not offered. What a shortcut or the control channel reaches among the hidden commands
     // gets the page's own words: opened for the commands that bring another document, closed for the ones that close.
     fn host_refuses_command(&mut self, id: &str) {
-        if matches!(id, "file.close" | "file.close_all") {
+        if id == "help.check_updates" {
+            // Hidden with upstream's links: nothing to say, nothing to open.
+        } else if matches!(id, "file.close" | "file.close_all") {
             self.notify("This document is closed from the page that hosts the editor.".to_string());
         } else {
             self.host_refuses_open();
         }
     }
 
-    // //// Neoffice — added: "Create a PDF" and "Combine files" only open or create other documents; a page that opens
-    // the documents has neither among its tools.
+    // //// Neoffice — added: "Create a PDF", "Combine files" and "Compare files" only open or create other documents; a
+    // page that opens the documents has none of them among its tools.
     pub(crate) fn host_hides_tool(&self, id: &str) -> bool {
-        self.host_owns_documents && matches!(id, "create" | "combine")
+        self.host_owns_documents && matches!(id, "create" | "combine" | "compare")
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -1706,6 +1714,11 @@ impl PdfCraftApp {
         match (data, open) {
             (Err(e), _) => self.notify_fmt("Couldn't read {name}: {e}", &[("name", &att.name), ("e", &e.to_string())]),
             (Ok(bytes), true) => {
+                // //// Neoffice — not when the hosting page opens the documents: the attachment would open in a tab of its
+                // own (a hostile file can carry a PDF that way), which the page never asked for and can't close.
+                if self.host_refuses_open() {
+                    return;
+                }
                 // The tab name later names files written from the tab (Split, Extract pages).
                 if let Err(e) = self.open_bytes(&crate::files::attachment_file_name(&att.name), None, bytes) {
                     self.notify_fmt("Couldn't open {name}: {e}", &[("name", &att.name), ("e", &e.to_string())]);

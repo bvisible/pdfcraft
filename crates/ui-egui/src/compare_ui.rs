@@ -267,6 +267,10 @@ impl PdfCraftApp {
             },
             PanelAction::Report => match self.session.compare_report(old, new) {
                 Ok(bytes) => {
+                    // //// Neoffice — not when the hosting page opens the documents: the report would open in a tab of its own.
+                    if self.host_refuses_open() {
+                        return;
+                    }
                     if let Err(e) = self.open_bytes("Compare Report.pdf", None, bytes.to_vec()) {
                         self.notify_error(e);
                     }

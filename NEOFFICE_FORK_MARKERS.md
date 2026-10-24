@@ -56,15 +56,21 @@ carry a marker in place.
 
 - **What a hosting page hides** (`PdfCraftApp::hide_community`, set by `apps/pdfcraft-web/src/main.rs` next to the host
   bridge, so only when a page frames the editor): upstream's community links are not shown (the title bar's Discord
-  button, the Home page's community card), and the link commands (`help.discord`…) open nothing. Marked changes in
+  button, the Home page's community card), and the link commands (`help.discord`…) open nothing; upstream's update check
+  (`help.check_updates`, which opens upstream's releases page in the browser build) is neither offered nor run (since 2026-10-24). Marked changes in
   `crates/ui-egui/src/lib.rs` (the field), `chrome.rs`, `home.rs` and `commands.rs`; new test file
   `crates/ui-egui/tests/host_community.rs`. Every other build behaves as before.
 
 - **A hosting page opens the documents** (`PdfCraftApp::host_owns_documents`, set by `apps/pdfcraft-web/src/main.rs`
   next to the host bridge, so only when a page frames the editor): the editor offers no Open, no Recent list and takes
   no document dropped on it, and `file.open`, Open Recent and the other ways of opening a file say that the page opens
-  the documents. The Combine files tab and every tool are as before. Marked changes in `crates/ui-egui/src/lib.rs`
-  (the field, `host_refuses_open` and its callers, `open_path_then` since upstream 0.11) and `home.rs`; new test file
+  the documents. Nor does it open in a tab of its own what it makes from the page's document (since 2026-10-24): a comment
+  summary or another created document (`open_created`), the pages extracted into one document (refused before anything is
+  extracted, so Delete pages after extracting takes nothing from the page's document; separate files still download), an
+  attachment, a saved revision, a signed version, a comparison's report; Summarize comments and the Compare files tool
+  (`comment.summarize`, `doc.compare`, the `compare` tools group) are not offered. The Combine files tab and every other tool are as before.
+  Marked changes in `crates/ui-egui/src/lib.rs` (the field, `host_refuses_open` and its callers, `open_path_then` since
+  upstream 0.11, `attachment_action`), `files.rs`, `sign_ui.rs`, `compare_ui.rs` and `home.rs`; new test file
   `crates/ui-egui/tests/host_documents.rs`. Every other build behaves as before.
 
 - **The account button of the tab strip** (new file `crates/ui-egui/src/account.rs`; one marked line in `lib.rs` and two
@@ -90,7 +96,8 @@ carry a marker in place.
   text since upstream 0.12, as ours was, and one marked line of `crates/automation/tests/it/automation.rs` keeps it in upstream's
   list of the tools that refuse it),
   `crates/forms/src/af.rs` (`calculate_js`: a `*/` in a calculation's notation can no longer end its script comment and
-  plant a script, tested there) and `xtask/src/layers.rs` (the edge `ui-egui → automation` allowed, with its test)):
+  plant a script, tested there; since upstream 0.12 writes a translation after the comment, it is written only for a
+  well-formed notation, `checked_notation_js`) and `xtask/src/layers.rs` (the edge `ui-egui → automation` allowed, with its test)):
   Neoffice's assistant, the chat at the right of the window that NeoWrite
   (WordCraft) has, so that the same Nora works in every editor. It is built on `craft-nora` and `craft-nora-ui` from
   Neoffice's craft-libs fork, at the revision WordCraft uses; to follow a newer one, move the revision in `Cargo.toml`.
@@ -128,7 +135,8 @@ carry a marker in place.
     and `path` and `image` when they hold text: a bookmark's `path` is a list of numbers) or a password (a name holding
     `password` or `passphrase`), at any depth and in any case; and, in a document that forbids copying its text, every
     tool that gives it (`COPYING_TOOLS`: its lines, paragraphs and objects, a search, OCR, the accessibility tags, what a
-    redaction covers), SelectText and RenderPage. **Applying the redactions** (`redact_apply`, `redact.apply`, alone or in a
+    redaction covers, an image of a page, the addresses, headings, labels and tag texts other tools take from it), SelectText
+    and RenderPage. **Applying the redactions** (`redact_apply`, `redact.apply`, alone or in a
     batch) waits for the person's click on Allow in the pane (craft-nora's `Decision::Confirm`, `CONFIRMED`): what is under
     the marks is gone for good once the document is saved; marking stays immediate. `doc` is always the active document. A batch holds
     50 commands at most. Results carry no path of the person's files. Observe: the text of the pages, the visible ones

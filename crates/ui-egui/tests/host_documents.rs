@@ -137,3 +137,28 @@ fn the_document_of_the_host_stays_in_its_tab() {
     let said = hosted.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
     assert!(said.contains("closed from the page"), "the person is told: {said:?}");
 }
+
+/// What the editor makes from the page's document opens in a tab of its own elsewhere: a comment summary, a saved
+/// revision, a signed version, an attachment, the pages extracted into one document. A page that opens the documents gets
+/// none of them (the tab could not be closed, and its Save would store a file the page never asked for), and Delete pages
+/// after extracting takes nothing from the page's document.
+#[test]
+fn a_document_made_from_the_page_s_one_is_refused_when_the_host_opens_the_documents() {
+    let mut shown = with_a_document(false);
+    shown.state_mut().summarize_comments();
+    shown.run_steps(2);
+    assert_eq!(shown.state().views.len(), 2, "elsewhere the comment summary opens in a tab of its own");
+
+    let mut hosted = with_a_document(true);
+    hosted.state_mut().summarize_comments();
+    hosted.state_mut().open_revision(1);
+    hosted.state_mut().view_signed_version(PAGE.len(), 1);
+    hosted.state_mut().extract_draft.delete = true;
+    hosted.state_mut().extract_selection();
+    hosted.run_steps(2);
+    assert_eq!(hosted.state().views.len(), 1, "no other document came in");
+    let id = hosted.state().views[0].id;
+    assert_eq!(hosted.state().session.get(id).map(|d| d.info.pages.len()), Some(1), "the page's document kept its page");
+    let said = hosted.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
+    assert!(said.contains("hosts the editor"), "the person is told: {said:?}");
+}

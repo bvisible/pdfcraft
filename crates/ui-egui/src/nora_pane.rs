@@ -84,8 +84,17 @@ const REFUSED_VALUES: &[(&str, &str, &[&str])] = &[("fill_sign_add", "type", &["
 /// The tools that give the text of a document's pages, refused in one whose security forbids copying its text (as
 /// Observe gives none of it, and SelectText and RenderPage are refused): its lines, its paragraphs and objects, what OCR
 /// or the accessibility tags read in it, what a redaction covers, and a search's matches and their places, which would
-/// spell it out.
+/// spell it out; and an image of a page, which shows it (as RenderPage is refused): a rendering, a preview, a page
+/// without one of its signatures; and what other tools take from the text: the addresses written in it, the headings
+/// made bookmarks, the labels made field names, the tags' alternate and actual text.
 const COPYING_TOOLS: &[&str] = &[
+    "page_render",
+    "render_preview",
+    "comment_image_preview",
+    "links_from_urls",
+    "bookmark_from_structure",
+    "form_detect_fields",
+    "accessibility_tags",
     "text_find",
     "text_lines",
     "text_extract",
@@ -1892,6 +1901,13 @@ mod tests {
             ("ocr_recognize", json!({ "pages": [1] })),
             ("accessibility_autotag_preview", json!({ "page": 1 })),
             ("doc_audit_redactions", json!({})),
+            ("page_render", json!({ "page": 1 })),
+            ("render_preview", json!({ "page": 1 })),
+            ("comment_image_preview", json!({ "page": 1, "index": 1 })),
+            ("links_from_urls", json!({})),
+            ("bookmark_from_structure", json!({})),
+            ("form_detect_fields", json!({})),
+            ("accessibility_tags", json!({ "page": 1 })),
         ] {
             let error = run(&mut app, exec(command, params)).unwrap_err();
             assert!(error.contains("forbids copying its text"), "{command}: {error}");

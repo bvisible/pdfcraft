@@ -465,13 +465,109 @@ pub fn calculate_js(c: &Calculate) -> Option<String> {
         // //// Neoffice — the notation is kept in a script comment: a `*/` in it (two operators in a row, or an escaped `\*`
         // before a `/`) ended the comment and ran the rest as script, which whoever sets a field's calculation (an
         // automation client, the Nora pane) could use to plant a script in the PDF. A space between keeps the notation's
-        // meaning (a name ends at a space, operators are read one by one) and the comment whole; the translation after it
-        // is made from the same text, so the two say the same.
+        // meaning (a name ends at a space, operators are read one by one) and the comment whole. The translation after it
+        // is made from the same text, by `checked_notation_js` rather than upstream's `notation_js` (see there), and is
+        // the former placeholder when the notation is no expression.
         Calculate::Notation(expr) => {
             let kept = expr.replace("*/", "* /");
-            Some(format!("/** BVCALC {kept} EVCALC **/ event.value = {};", notation_js(&kept)))
+            let js = checked_notation_js(&kept).unwrap_or_else(|| "AFMakeNumber(0)".to_owned());
+            Some(format!("/** BVCALC {kept} EVCALC **/ event.value = {js};"))
         }
     }
+}
+
+// //// Neoffice — added function: the translation written after the comment, for a well-formed notation only. Upstream's
+// `notation_js` translates whatever text the notation holds, operators and white space as written; this writes one only
+// for an expression of the grammar `eval_notation` reads (numbers and names joined by `+ - * /` and parentheses, `-`
+// before a value, at most MAX_NESTING deep), token by token: a space where the notation had white space or between two
+// operators, a number as a plain decimal (no leading zero, which a script reads as octal), a name as its `getField`. So the
+// script after the comment is always a plain arithmetic expression of the fields, whoever set the calculation. Upstream's
+// output is unchanged for a well-formed notation written with single spaces. Drop it when upstream translates only those.
+/// The JavaScript Acrobat writes after a `BVCALC` comment for `expr`, or `None` when `expr` is not an expression of
+/// simplified field notation.
+fn checked_notation_js(expr: &str) -> Option<String> {
+    let tokens = notation_tokens(expr);
+    let kinds: Vec<&Notation> = tokens.iter().map(|(_, t)| t).collect();
+    fn sum(t: &[&Notation], i: &mut usize, d: usize) -> bool {
+        if !product(t, i, d) {
+            return false;
+        }
+        while matches!(t.get(*i), Some(Notation::Op('+' | '-'))) {
+            *i += 1;
+            if !product(t, i, d) {
+                return false;
+            }
+        }
+        true
+    }
+    fn product(t: &[&Notation], i: &mut usize, d: usize) -> bool {
+        if !value(t, i, d) {
+            return false;
+        }
+        while matches!(t.get(*i), Some(Notation::Op('*' | '/'))) {
+            *i += 1;
+            if !value(t, i, d) {
+                return false;
+            }
+        }
+        true
+    }
+    fn value(t: &[&Notation], i: &mut usize, d: usize) -> bool {
+        if d > MAX_NESTING {
+            return false;
+        }
+        match t.get(*i) {
+            Some(Notation::Number | Notation::Name(_)) => {
+                *i += 1;
+                true
+            }
+            Some(Notation::Op('-')) => {
+                *i += 1;
+                value(t, i, d + 1)
+            }
+            Some(Notation::Op('(')) => {
+                *i += 1;
+                let inner = sum(t, i, d + 1);
+                let closed = matches!(t.get(*i), Some(Notation::Op(')')));
+                *i += 1;
+                inner && closed
+            }
+            _ => false,
+        }
+    }
+    let mut at = 0;
+    if !(sum(&kinds, &mut at, 0) && at == kinds.len()) {
+        return None;
+    }
+    // //// Neoffice — (checked_notation_js, all of it ours) the expression, written one token after the other.
+    let mut out = String::new();
+    let mut previous: Option<(usize, &Notation)> = None;
+    for (range, token) in &tokens {
+        if let Some((end, before)) = previous {
+            let spaced = expr.get(end..range.start).is_some_and(|gap| !gap.is_empty());
+            let operators = matches!(before, Notation::Op('+' | '-' | '*' | '/')) && matches!(token, Notation::Op('+' | '-' | '*' | '/'));
+            if spaced || operators {
+                out.push(' ');
+            }
+        }
+        match token {
+            Notation::Number => {
+                let text = expr.get(range.clone())?;
+                text.parse::<f64>().ok().filter(|v| v.is_finite())?;
+                let digits = text.trim_start_matches('0');
+                if digits.is_empty() || digits.starts_with('.') {
+                    out.push('0');
+                }
+                out.push_str(digits);
+            }
+            Notation::Op(c) => out.push(*c),
+            Notation::Name(name) => {
+                let _ = write!(out, "AFMakeNumber(this.getField({}).value)", js_str(name));
+            }
+        }
+        previous = Some((range.end, token));
+    }
+    Some(out)
 }
 
 // ── renaming fields in calculations ─────────────────────────────────────────────────────────
@@ -1482,6 +1578,17 @@ mod tests {
         };
         assert_eq!(eval_notation(&read, &value), Some(3.0), "{read}");
         assert_eq!(eval_notation("Price\\*/Qty", &value), Some(3.0));
+        // //// Neoffice — the translation after the comment is written only for a well-formed notation (checked_notation_js);
+        // any other gets the placeholder; operators never touch; a number is a plain decimal.
+        let after = |expr: &str| {
+            let js = calculate_js(&Calculate::Notation(expr.into())).unwrap_or_default();
+            js.split_once("EVCALC **/").map(|(_, rest)| rest.to_owned()).unwrap_or_default()
+        };
+        for malformed in ["a // b", "a /* b", "a / / b", "(a", "a)", "a b", "", "1.2.3 + a"] {
+            assert_eq!(after(malformed), " event.value = AFMakeNumber(0);", "{malformed}");
+        }
+        assert_eq!(after("a--b"), " event.value = AFMakeNumber(this.getField(\"a\").value)- -AFMakeNumber(this.getField(\"b\").value);");
+        assert_eq!(after("007 * a / 0.50"), " event.value = 7 * AFMakeNumber(this.getField(\"a\").value) / 0.50;");
         // Round trips through what the tabs write.
         for f in [
             Format::Number { decimals: 2, sep: 2, neg: 2, currency: "€".into(), prepend: false },

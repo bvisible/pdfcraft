@@ -657,6 +657,12 @@ impl PdfCraftApp {
             });
             return;
         } else {
+            // //// Neoffice — not when the hosting page opens the documents: the extract would open in a tab of its own,
+            // which the page never asked for and can't close, and Delete pages would then take them from the page's
+            // document with nowhere kept. Refused before anything is extracted or deleted; separate files still download.
+            if self.host_refuses_open() {
+                return;
+            }
             match self.session.extract(id, &pages) {
                 Ok(bytes) => {
                     let message = if pages.len() == 1 {
@@ -811,6 +817,11 @@ impl PdfCraftApp {
     }
 
     pub(crate) fn open_created(&mut self, name: &str, bytes: Arc<Vec<u8>>, message: &str) {
+        // //// Neoffice — not when the hosting page opens the documents: a created document (a comment summary, combined
+        // files) would open in a tab the page never asked for, can't close, and whose Save stores another file.
+        if self.host_refuses_open() {
+            return;
+        }
         match self.session.open_new(name, bytes) {
             Ok(id) => {
                 // The reading-colours preference is app-wide: the newly created document starts with it.
