@@ -477,6 +477,8 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
     app.nora.panel.labels = labels();
     app.nora.panel.style = style(t);
     app.nora.panel.offline = app.nora_http.is_none().then(|| tl!("Nora isn't available in this version yet").to_string());
+    // A card's answer is not carried here (`kept`): the card says so, in place of buttons that would do nothing.
+    app.nora.panel.cards_unanswered = Some(tl!("Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.").to_string());
     if !app.nora.waiting.is_empty() {
         ui.add(
             egui::Label::new(egui::RichText::new(tl!("Nora is waiting for you to finish what you are doing in the document.")).color(t.text_muted))

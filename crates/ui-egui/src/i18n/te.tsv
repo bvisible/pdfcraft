@@ -2428,6 +2428,7 @@ animation effects	Off	ఆఫ్
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	ఈ వెర్షన్లో ఇంకా Nora అందుబాటులో లేదు
 	Nora is waiting for you to finish what you are doing in the document.	పత్రంలో మీరు చేస్తున్న పని పూర్తయ్యే వరకు Nora వేచి ఉంది.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	ఈ కార్డ్‌కు Neoffice లోని Nora చాట్‌లో సమాధానం ఇవ్వండి: NeoPDF ఇంకా దీన్ని స్వీకరించలేదు.
 	There is no document open for Nora to work in.	Nora పని చేయడానికి తెరిచి ఉన్న పత్రం ఏదీ లేదు.
 	`{command}` is refused: Nora may not run it.	`{command}` తిరస్కరించబడింది: దీన్ని Nora అమలు చేయడానికి అనుమతి లేదు.
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	NeoPDF లో `{command}` ను Nora అమలు చేయలేరు: ఇది ఇంటర్ఫేస్ ద్వారా మాత్రమే పనిచేస్తుంది.

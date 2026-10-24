@@ -8,7 +8,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Greek UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "0bff7892a1a233b1408f560d82258ae3e0a423ee416259aa8978789265f04896"
+sha256 = "1236d4547c14363e1a0afffad5fa1a531f551ebe562931f735a6dbf376f6050b"
 
 # ATTRIBUTION.toml: one entry per asset (AGENTS.md §1). The source of truth for provenance and licences.
 # ATTRIBUTION.md is generated from this file: `cargo xtask assets --write`. Checked by `cargo xtask assets` (part of `xtask ci`).
@@ -32,7 +32,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Simplified Chinese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "a61ba990fa0458bf6fb17c0de0fac35b39056332d62ae0f8d5c77bb55ab23efc"
+sha256 = "bc84e21f66bac3ecb4a30b0f2f09030ac955385602a20823c583541629beaaaa"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/zh-hant.tsv"
@@ -44,7 +44,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Traditional Chinese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "e1e47d84ea1459c45c969d14395991d73ac2fc5b7c2312eb077448026ea5add3"
+sha256 = "82b91a43f0ae1b18370874b5a5440b2a2cbf6c263ac6806519655f2e9c10a042"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/cs.tsv"
@@ -56,7 +56,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Czech UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "69ea59f08aff89f71874f91100cbbfee09384a8892c5f42b6eec2295f73f52fd"
+sha256 = "29cead3e6212f84fc1f4f5ece98e8449b3c951b4edb4eacc0278ed62b100d8cf"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/pt-br.tsv"
@@ -68,7 +68,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Brazilian Portuguese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "cbceb25433e50c8849123c6b019f2c78edcf31f828ec1535287538bd4c92c6c9"
+sha256 = "86ecec1212314170a6b3e79e6babcd524bdce87dcaf4fecc6e9667271cc40e09"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/es.tsv"
@@ -80,7 +80,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Spanish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "35c68bcf1cd802272cb1b918c5bf015661086d726249afb3f9f771b090a3cf5b"
+sha256 = "89a39d361436d257800ec978cb0d3f8e399dc515ef6a5462b635159f894a24c5"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/fr.tsv"
@@ -92,7 +92,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "French UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "82fa539c1b1c8d41ab740f47a02821449448805e9cd3db58d34a4fdf814e8d23"
+sha256 = "beaf5a2d0c0cafe32cbf4a95ae7d41afb406a880995360d715e2f15375f82e4a"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/de.tsv"
@@ -104,7 +104,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "German UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "f6a09a5dbfdefef70792ce19075594b1d29344203b42ea49d2910133b206b8f8"
+sha256 = "d47694a29f0e38ba6104eade4c7007ce717104d281ee78c5e80ede34f85d0845"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/lo.tsv"
@@ -116,7 +116,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Lao UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "ef93e7fec472cb8a214ff5ca425b1a8a4a84708919dc0e5ee67047a1c08faee4"
+sha256 = "ae2da60bd4a78fac63178ac5bdae9cd7d5a7bdf9290b5b03e65381f5136e525f"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/te.tsv"
@@ -128,7 +128,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Telugu UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "ca213e5622e9faf3319182ba4ef31cb5b1905d46ef13ec1718710238032533b7"
+sha256 = "857e2b5af7ec0aec65bbb4f74b39d93136c790c441f5da52cd86bda971c8c09b"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/it.tsv"
@@ -140,7 +140,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Italian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "35ff5fef0a0af3c241e21a41d582b29e1fb1d1d0f6e4d9dab63c07ce8769914c"
+sha256 = "e6d55b968c5181f820f514ffe989a9018b446ed0e211977868446dff96e93d58"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/pl.tsv"
@@ -152,7 +152,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Polish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "cb6fa7cef783ab1dfbff5695bfdb3a3c3b232021ca880d8a1e68518907abbb72"
+sha256 = "644e4a7bdfbeeae2249e49551ca141b1b579e9351e83908e41ad0f8b9055177f"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ru.tsv"
@@ -164,7 +164,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Russian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "0b279a3ff491d10ba490d15699fa9b4d7380197693d2f0117eaa7a62d55c8555"
+sha256 = "2973b3a0751843ec69dda396f0090261d0ea4cceeef3cf725334fafd04d78f9f"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/hu.tsv"
@@ -176,7 +176,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Hungarian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "5202228ebe22b3b05ea6d1ffc7626be4890650cad120e18b799b3cd41924b4e1"
+sha256 = "52eaf657df58af91ffbe24138b791346ab45e2c05f77dc7ce1ff10e1b6a334b4"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/bg.tsv"
@@ -188,7 +188,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Bulgarian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "3c75a52a45b0ea349a36eeecaf2d5748514e22a3ecf2bab916744fa3189e790c"
+sha256 = "d9e167d5bc54b2056c629ea700bbdf373c668caad31afa427fbc6dedd9e2a18a"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/kk.tsv"
@@ -200,7 +200,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Kazakh UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "f4c729cf50df0b07020e2d82664f8dbf5703e50c51b4118d4af2ac8c203111df"
+sha256 = "0c70677e49ee630a59dea05fd20a6247746fff92455b450352290922195947ae"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ja.tsv"
@@ -212,7 +212,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Japanese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "b6619ef54ae431ecde7395a00262de0964dc85130978ef6171a13dedb7159296"
+sha256 = "eb54852e5f108d74e53cb5ca4d67598683df8f7e6e2e3ee7ef71f5c6ad6d3af9"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/uk.tsv"
@@ -224,7 +224,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Ukrainian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "d84101ff9687b1f4f8bfe40918b1fb876fc7fe692364203a2bdafb21da012c46"
+sha256 = "2e4f09fa1367e150241694b6bc48c2ea24db36bb26771bc2c810f3fc80043f4c"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ar.tsv"
@@ -236,7 +236,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Arabic UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "fca4495a1e2c524d0bac97131f4323712b7382a648adc5f1273a8d63dc3cc663"
+sha256 = "f73fb0c2d726ae5cc0d08d3c18afc5f62fbcfc041db253c9f4675634ed9378f9"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ckb.tsv"
@@ -248,7 +248,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Central Kurdish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "58b86088481f9ce1d6658f657feb51a4c100831da7a7055969ec0cee027b2e49"
+sha256 = "300b80b65c946df88b1d76f76b6da9608f622af71d853c7c2f759aab7fef8386"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/tr.tsv"
@@ -260,7 +260,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Turkish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "de0861a5307c9b522e909fe1e40ff3b6aad4c26b2cecbe6900495dc2e32f3ae1"
+sha256 = "9d29818959b0ee5c0a9faf9c5ced3bed991f6e9a2c41729a11ef80ddfaeb118b"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/lt.tsv"
@@ -272,7 +272,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Lithuanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "1889b3139c5944774911835e3b2851c595461db1f1d51d4b380be5e62e366399"
+sha256 = "78cef659584e0fe10838fb4f93882d4098d8d1d1bc5f29399b7fe886ba06b028"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/hi.tsv"
@@ -284,7 +284,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Hindi UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "ada1b9ebc830b9c9db132fef2aca759899628d5a4af102c290c8c48d298e3044"
+sha256 = "552b64f502f0e0105af9f41ba39430c4c9fbd4ff3b7857ab83f8e1a4f0dbd290"
 [[asset]]
 path = "crates/ui-egui/src/i18n/id.tsv"
 title = "Indonesian interface translation catalog"
@@ -295,7 +295,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Indonesian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8ca6472f3605f6bb76883e5ad59429971db0c5c6b722fa16b371b815c77629fe"
+sha256 = "f02cb98d34b688c0990f31842f94c09f8a9616e3f633b6a1fda36391f0e2ed8c"
 [[asset]]
 path = "crates/ui-egui/src/i18n/ko.tsv"
 title = "Korean interface translation catalog"
@@ -306,7 +306,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Korean UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "b781bb487c0f858b33cd69a0fd972aecc59ecddc362bca132c3de0c0ddd7a102"
+sha256 = "978e4a6d855bf737b9bbd1f3bbe303acd1a776c64edbd8e02fc366b02c4bb1cd"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ro.tsv"
@@ -318,7 +318,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Romanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "392d3b43eca52aa421cecc581f99c55276ee43b80b8ac63935c0401417eefdc1"
+sha256 = "37b24a2f290c2fec26ea799ec53552f2f34f91fb2d8d768bd2a04f0b207d67aa"
 
 
 [[asset]]
@@ -331,7 +331,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Finnish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "f9142d77c6b6a6199efdd19168e679ba120e7d9e9b7c6a8b09a1ced265bc682f"
+sha256 = "d081f5a673b8dde84357e74f2201b9233b760d71d1608aa84d96aa44ff36a671"
 
 [[asset]]
 path = "assets/icons/accessibility.svg"
@@ -3454,7 +3454,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Vietnamese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "f790c2fa21cb62332ae29fbd661abce8ccd281d829cd26e4c93f39f4f75a0423"
+sha256 = "9884ff43aecae69949d2b970f57fce0c32d6df38112816b3a5e63a88f8535173"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/sl.tsv"
@@ -3466,7 +3466,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Slovene UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8159bbc716d467b07911a1f05b300c38113bfd438799a143d8f9412e2990bb03"
+sha256 = "9161ecb0756dc5eedd0e0dc502961e1a3760642dd4eff8395c570d5bc5a5ef18"
 
 [[asset]]
 
@@ -3490,7 +3490,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Norwegian Bokmål UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "2a77f2b569e6305600885e6e5709bca66931ce1945a44442394b0bb2a18b349f"
+sha256 = "1547907a3b9609f5e4c63da3d98e5f9c36428dc81fd7518c2730e29d6416696d"
 
 [[asset]]
 path = "assets/icons/superscript.svg"
@@ -3546,7 +3546,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Albanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "63838522bef37ab100cfbb3eafc95fdcaa35fc936b9b31bae3638170f4572964"
+sha256 = "e45f5914ec2f6d95353daf83da211b073532d4a583c27b8f2dde512d939803fc"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/th.tsv"
@@ -3558,7 +3558,7 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Thai UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "35eb097b6cc26bbc448018c6b05154b2b27efa8eed55e31658c2f40c28b8170e"
+sha256 = "7c091d9e0f5c183109cb85a93bc350a118fa1f097ec42b9611f38af9fef56a05"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ca.tsv"
@@ -3570,4 +3570,4 @@ licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Catalan UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "c803353dc1e20e0376a461b8df5cc0c46109396c8e72c76bcdbdd989ae11b0fc"
+sha256 = "5369dc58525544ef97ac6eeb3284957504f8be27956ccb57c1302684454e2106"

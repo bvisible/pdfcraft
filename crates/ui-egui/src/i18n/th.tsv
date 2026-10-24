@@ -2685,6 +2685,7 @@ theme	Appearance	ลักษณะที่ปรากฏ
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	Nora ยังไม่พร้อมใช้งานในเวอร์ชันนี้
 	Nora is waiting for you to finish what you are doing in the document.	Nora กำลังรอให้คุณทำงานที่กำลังทำอยู่ในเอกสารให้เสร็จก่อน
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	ตอบการ์ดนี้ในแชตของ Nora ใน Neoffice: NeoPDF ยังรับคำตอบนี้ไม่ได้
 	There is no document open for Nora to work in.	ไม่มีเอกสารที่เปิดอยู่ให้ Nora ทำงานด้วย
 	`{command}` is refused: Nora may not run it.	คำสั่ง `{command}` ถูกปฏิเสธ: Nora ไม่มีสิทธิ์รันคำสั่งนี้
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	คำสั่ง `{command}` ให้ Nora รันใน NeoPDF ไม่ได้: ใช้ได้เฉพาะผ่านหน้าจอโปรแกรมเท่านั้น

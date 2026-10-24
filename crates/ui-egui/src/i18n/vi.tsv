@@ -2784,6 +2784,7 @@ key	Space	Space
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	Nora chưa có trong phiên bản này.
 	Nora is waiting for you to finish what you are doing in the document.	Nora đang chờ bạn hoàn tất thao tác đang làm trong tài liệu.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	Hãy trả lời thẻ này trong khung trò chuyện của Nora trong Neoffice: NeoPDF chưa xử lý được nội dung này.
 	There is no document open for Nora to work in.	Không có tài liệu nào đang mở để Nora làm việc.
 	`{command}` is refused: Nora may not run it.	Lệnh `{command}` bị từ chối: Nora không được phép chạy lệnh này.
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Nora không thể chạy lệnh `{command}` trong NeoPDF: lệnh này chỉ hoạt động qua giao diện.

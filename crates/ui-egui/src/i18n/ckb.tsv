@@ -2717,6 +2717,7 @@ certificate	Version	وەشان
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	Nora لەم وەشانەدا هێشتا بەردەست نییە
 	Nora is waiting for you to finish what you are doing in the document.	Nora چاوەڕێی تەواوبوونی ئەو کارەیە کە لە بەڵگەنامەدا ئەنجامی دەدەیت.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	وەڵامی ئەم کارتە بدەنەوە لە چاتی Nora لە Neoffice: NeoPDF هێشتا ناتوانێت وەری بگرێت.
 	There is no document open for Nora to work in.	هیچ بەڵگەنامەیەکی کراوە نییە کە Nora تێیدا کار بکات.
 	`{command}` is refused: Nora may not run it.	`{command}` ڕەتکراوەتەوە: Nora مۆڵەتی جێبەجێکردنی نییە.
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	`{command}` لە NeoPDF لەلایەن Nora جێبەجێ ناکرێت: تەنها لە ڕووکارەوە کار دەکات.

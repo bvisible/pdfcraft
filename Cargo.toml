@@ -29,8 +29,10 @@ craft-docpath = { version = "0.1.0", git = "https://github.com/storytold/craft-l
 # holds the craft-libs revisions pinned above): the panel on egui 0.36 or 0.37, a slow turn no longer given up on the
 # clock alone, Nora's Markdown drawn, links and cards; the pane offers no link (`open_links` off) and refuses Print and
 # the exports for an e-mail draft (Nora's new functions in NeoPDF wait). Before: adbcef6 (17.10).
-craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "4f48d82591133e2ba10fc9850464fce6a8f046e4" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "4f48d82591133e2ba10fc9850464fce6a8f046e4" }
+# //// Neoffice — 1f01bcc (24.10.2026): a card that waits for the person says where to answer it, in place of buttons
+# that would do nothing here (`NoraPanel::cards_unanswered`); a request lost to a tab in the background can be resumed.
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "1f01bcc9d5f868014499b4e6b4e617bd9e228c06" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "1f01bcc9d5f868014499b4e6b4e617bd9e228c06" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.13.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.13.0" }

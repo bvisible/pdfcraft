@@ -2615,6 +2615,7 @@ animation effects	Off	Wyłączone
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	Nora nie jest jeszcze dostępna w tej wersji
 	Nora is waiting for you to finish what you are doing in the document.	Nora czeka na zakończenie bieżących czynności w dokumencie.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	Odpowiedz na tę kartę w czacie Nora w Neoffice: NeoPDF jeszcze tego nie obsługuje.
 	There is no document open for Nora to work in.	Nie ma otwartego dokumentu, w którym Nora może pracować.
 	`{command}` is refused: Nora may not run it.	Polecenie `{command}` zostało odrzucone: Nora nie może go uruchomić.
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	Polecenie `{command}` nie może zostać uruchomione przez asystenta Nora w NeoPDF: działa tylko przez interfejs.

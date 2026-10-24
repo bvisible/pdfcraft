@@ -2698,6 +2698,7 @@ key	Space	Mellomrom
 # //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
 	Nora isn't available in this version yet	Nora er ikke tilgjengelig i denne versjonen ennå
 	Nora is waiting for you to finish what you are doing in the document.	Nora venter på at du skal bli ferdig med det du holder på med i dokumentet.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	Svar på dette kortet i Noras chat i Neoffice: NeoPDF kan ikke håndtere det ennå.
 	There is no document open for Nora to work in.	Det er ikke noe åpent dokument for Nora å jobbe i.
 	`{command}` is refused: Nora may not run it.	`{command}` er avvist: Nora får ikke kjøre den.
 	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	`{command}` kan ikke kjøres av Nora i NeoPDF: den fungerer bare via grensesnittet.
