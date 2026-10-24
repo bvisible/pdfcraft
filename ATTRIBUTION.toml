@@ -2,13 +2,13 @@
 path = "crates/ui-egui/src/i18n/el.tsv"
 title = "Greek interface translation catalog"
 author = "Camthalion77 and contributors"
-source = "Contributor-original: clean-room translations of PdfCraft English UI labels"
+source = "Contributor-original: clean-room translations of PdfCraft English UI labels; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Greek UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "44480fe81c4e123eb7a5c5d17c3b24b8c1efa5809916db7b1e368dc9e71d3496"
+sha256 = "0bff7892a1a233b1408f560d82258ae3e0a423ee416259aa8978789265f04896"
 
 # ATTRIBUTION.toml: one entry per asset (AGENTS.md §1). The source of truth for provenance and licences.
 # ATTRIBUTION.md is generated from this file: `cargo xtask assets --write`. Checked by `cargo xtask assets` (part of `xtask ci`).
@@ -26,230 +26,312 @@ sha256 = "44480fe81c4e123eb7a5c5d17c3b24b8c1efa5809916db7b1e368dc9e71d3496"
 path = "crates/ui-egui/src/i18n/zh-hans.tsv"
 title = "Simplified Chinese interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Simplified Chinese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "5aaafea230c17829c17884ae7bce3b34eca288d7d1a9461df0ed02c89b5c08b9"
+sha256 = "a61ba990fa0458bf6fb17c0de0fac35b39056332d62ae0f8d5c77bb55ab23efc"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/zh-hant.tsv"
 title = "Traditional Chinese (Taiwan) interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Traditional Chinese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "48eba2c5325d328936785e79891759f19fc3c2dc8139b2759b5eb24cb08bd8c3"
+sha256 = "e1e47d84ea1459c45c969d14395991d73ac2fc5b7c2312eb077448026ea5add3"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/cs.tsv"
 title = "Czech interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 signature-check and standard-identification wordings are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Czech UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "3787544f5d09236970f8eb7c333dd8ab5ca744379e110a492f5d73e6225365c8"
+sha256 = "69ea59f08aff89f71874f91100cbbfee09384a8892c5f42b6eec2295f73f52fd"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/pt-br.tsv"
 title = "Brazilian Portuguese interface translation catalog"
 author = "André Cardoso (andrecards), PdfCraft contributors"
-source = "Clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources: the ~1,826-entry gist posted in issue #288 (https://gist.github.com/andrecards/ac388c25fba17312ce83207f8b7b467e), completed and reviewed by PdfCraft contributors"
+source = "Clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources: the ~1,826-entry gist posted in issue #288 (https://gist.github.com/andrecards/ac388c25fba17312ce83207f8b7b467e), completed and reviewed by PdfCraft contributors; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table limit messages are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Brazilian Portuguese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "ef82f525d7080d3b773d6e6205a567dc89e3188797befa9b8f88cd2f2e968f0c"
+sha256 = "cbceb25433e50c8849123c6b019f2c78edcf31f828ec1535287538bd4c92c6c9"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/es.tsv"
 title = "Spanish interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; the 2026-10-20 coverage additions are AI-assisted and not separately native-reviewed; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 signature-check wordings are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Spanish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "2164b0fa32f1da1aaf953f4cd112ce151534844001ccec7c26a6113e9cfa773e"
+sha256 = "35c68bcf1cd802272cb1b918c5bf015661086d726249afb3f9f771b090a3cf5b"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/fr.tsv"
 title = "French interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "French UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "76b910d6914dfa7bb327f29c2f572eed922cb78ae71c5e163185a2e9bb088230"
+sha256 = "82fa539c1b1c8d41ab740f47a02821449448805e9cd3db58d34a4fdf814e8d23"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/de.tsv"
 title = "German interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "German UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "39f03aa563e2d5e97a4b111737a452032e7d55fe78acb4601aa643c60440937c"
+sha256 = "f6a09a5dbfdefef70792ce19075594b1d29344203b42ea49d2910133b206b8f8"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/lo.tsv"
+title = "Lao interface translation catalog"
+author = "@bounkirdni-2025"
+source = "Contributor-original: clean-room translations of PdfCraft English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Lao UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "ef93e7fec472cb8a214ff5ca425b1a8a4a84708919dc0e5ee67047a1c08faee4"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/te.tsv"
 title = "Telugu interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Telugu UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8b8ba8166cd3539569b2ae5160f3877211eb26c5c7eecde57fb9af3557d4311e"
+sha256 = "ca213e5622e9faf3319182ba4ef31cb5b1905d46ef13ec1718710238032533b7"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/it.tsv"
 title = "Italian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Italian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8a9bfc78cf8d6b5575f71249a24083ee55fbbd7fa1c52289b2ecda7d92ebbb65"
+sha256 = "35ff5fef0a0af3c241e21a41d582b29e1fb1d1d0f6e4d9dab63c07ce8769914c"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/pl.tsv"
 title = "Polish interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 signature-check wordings are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Polish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "a3979aa3e61d10485232295e6ed8daa6c05c5d379116571a7fb8c041116c7f34"
+sha256 = "cb6fa7cef783ab1dfbff5695bfdb3a3c3b232021ca880d8a1e68518907abbb72"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ru.tsv"
 title = "Russian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Russian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8e761142f723e3942f55f9e25db0f24a55276e6ef80d464235afa67d8bda8969"
+sha256 = "0b279a3ff491d10ba490d15699fa9b4d7380197693d2f0117eaa7a62d55c8555"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/hu.tsv"
 title = "Hungarian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Hungarian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "71196b3449527e48bd0f79f53554a9c8eb0a4f3f460709806ddf80f0b28348c7"
+sha256 = "5202228ebe22b3b05ea6d1ffc7626be4890650cad120e18b799b3cd41924b4e1"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/bg.tsv"
 title = "Bulgarian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Bulgarian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "63b81eb6ee5b60f9b26d5cc9c14b33b0a7db8814dc5e0b70f016c2fc2c9b0b56"
+sha256 = "3c75a52a45b0ea349a36eeecaf2d5748514e22a3ecf2bab916744fa3189e790c"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/kk.tsv"
 title = "Kazakh interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of the English UI labels into Kazakh, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of the English UI labels into Kazakh, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Kazakh UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "f7352560ec8b0a421ba8cf88d10a0e2ca8c9b2959500f001ca3cee75a8971276"
+sha256 = "f4c729cf50df0b07020e2d82664f8dbf5703e50c51b4118d4af2ac8c203111df"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ja.tsv"
 title = "Japanese interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Japanese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "8aaf086f2ab54bd31d80759952b070fd29a0a5769bd08257fb977c426ad950d5"
+sha256 = "b6619ef54ae431ecde7395a00262de0964dc85130978ef6171a13dedb7159296"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/uk.tsv"
 title = "Ukrainian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Ukrainian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "73fae40eff4219d1a816cd8e2434a2f6cef6706a7514a645bf0627c8bbb0d56b"
+sha256 = "d84101ff9687b1f4f8bfe40918b1fb876fc7fe692364203a2bdafb21da012c46"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/ar.tsv"
 title = "Arabic interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Arabic UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "19228ef8fd3f12204baac927446cfbf98175c147d370141150639efb1d9de2a3"
+sha256 = "fca4495a1e2c524d0bac97131f4323712b7382a648adc5f1273a8d63dc3cc663"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/ckb.tsv"
+title = "Central Kurdish (Sorani) interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Central Kurdish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "58b86088481f9ce1d6658f657feb51a4c100831da7a7055969ec0cee027b2e49"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/tr.tsv"
 title = "Turkish interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Turkish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "015ec7e1d767a523141d055b85daed71f596bfd7c3046cd40da50254c7318d28"
+sha256 = "de0861a5307c9b522e909fe1e40ff3b6aad4c26b2cecbe6900495dc2e32f3ae1"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/lt.tsv"
 title = "Lithuanian interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels and user-facing messages; original catalog reviewed by a native Lithuanian-speaking contributor; 2026-10-15 coverage additions are AI-assisted and not separately native-reviewed"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels and user-facing messages; original catalog reviewed by a native Lithuanian-speaking contributor; 2026-10-15 coverage additions are AI-assisted and not separately native-reviewed; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Lithuanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "5449f574f7f472a926a0d2e18b35257b3fdd6411c77a243dca57bd3565650442"
+sha256 = "1889b3139c5944774911835e3b2851c595461db1f1d51d4b380be5e62e366399"
 
+[[asset]]
+path = "crates/ui-egui/src/i18n/hi.tsv"
+title = "Hindi interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Hindi UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "ada1b9ebc830b9c9db132fef2aca759899628d5a4af102c290c8c48d298e3044"
+[[asset]]
+path = "crates/ui-egui/src/i18n/id.tsv"
+title = "Indonesian interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Indonesian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "8ca6472f3605f6bb76883e5ad59429971db0c5c6b722fa16b371b815c77629fe"
+[[asset]]
+path = "crates/ui-egui/src/i18n/ko.tsv"
+title = "Korean interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Korean UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "b781bb487c0f858b33cd69a0fd972aecc59ecddc362bca132c3de0c0ddd7a102"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/ro.tsv"
+title = "Romanian interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels and user-facing messages; AI-assisted and not yet reviewed line by line by a native Romanian speaker; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Romanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "392d3b43eca52aa421cecc581f99c55276ee43b80b8ac63935c0401417eefdc1"
+
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/fi.tsv"
+title = "Finnish interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: AI-assisted (Claude Code) clean-room translations of PdfCraft's English UI labels and user-facing messages; not yet proofread by a native Finnish speaker; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Finnish UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "f9142d77c6b6a6199efdd19168e679ba120e7d9e9b7c6a8b09a1ced265bc682f"
 
 [[asset]]
 path = "assets/icons/accessibility.svg"
@@ -2445,14 +2527,13 @@ kind = "font"
 usage = "egui fallback fonts (eframe feature default_fonts)"
 sha256 = "f426bec371f484646d002717e2c555a95cd5145e635d83a48bbef83f3abf18ca"
 
-[[bundled]]
-crate = "hayro-cmap"
-version = "0.1.0"
-path = "assets/cmaps.brotli"
+[[asset]]
+path = "vendor/hayro-cmap/assets/cmaps.brotli"
 title = "Adobe CMap resources (predefined CJK CMaps)"
 author = "Adobe"
-source = "https://github.com/adobe-type-tools/cmap-resources (via hayro-cmap)"
+source = "https://github.com/adobe-type-tools/cmap-resources (via hayro-cmap 0.1.0 assets/)"
 licence = "BSD-3-Clause"
+licence_file = "vendor/hayro-cmap/assets/LICENSE.txt"
 kind = "data"
 adobe_data = true
 usage = "Character-code mapping tables required to read CJK PDFs. Non-visual data, allowed by AGENTS.md §1.1"
@@ -3223,7 +3304,7 @@ source = "Contributor-original: hand-written PDF objects, no third-party content
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "document"
-usage = "Form-filling UI tests (crates/ui-egui/tests/forms.rs, commands.rs)"
+usage = "Form-filling UI tests (crates/ui-egui/tests/it/forms.rs, commands.rs)"
 sha256 = "c6f8b656e225101129aa36bd5467adc8dba16730915f19caca17f6a546d0b040"
 
 [[asset]]
@@ -3256,7 +3337,7 @@ source = "Contributor-original: hand-written PDF objects; signature made with `o
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "document"
-usage = "Signature validation tests (crates/sign/tests/pdf.rs): a signature PdfCraft did not make"
+usage = "Signature validation tests (crates/sign/tests/it/pdf.rs): a signature PdfCraft did not make"
 sha256 = "8b91c3b4e39c4a31717a0dd0685bd7d0468671df32aee5b9818d44dc72c2bc3c"
 
 [[asset]]
@@ -3349,7 +3430,7 @@ source = "Contributor-original: hand-written PDF objects; signature made with `o
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "document"
-usage = "Signature validation tests (crates/sign/tests/pdf.rs): the legacy adbe.x509.rsa_sha1 format"
+usage = "Signature validation tests (crates/sign/tests/it/pdf.rs): the legacy adbe.x509.rsa_sha1 format"
 sha256 = "b77bfb21166f4bd043597e45a1ea28b9d9f4ba6df0142b3a0fc8b7f8e0fc111b"
 
 [[asset]]
@@ -3367,24 +3448,25 @@ sha256 = "d1a443233345724859de8e4fb48968ba91e885e12ddbd710701548bd91b39428"
 path = "crates/ui-egui/src/i18n/vi.tsv"
 title = "Vietnamese interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels; PhotoCraft and VectorCraft Vietnamese catalogs used only as translation memory when English source and semantic context matched; original catalog reviewed by a native Vietnamese-speaking contributor; 2026-10-15 coverage additions are AI-assisted and not separately native-reviewed"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels; PhotoCraft and VectorCraft Vietnamese catalogs used only as translation memory when English source and semantic context matched; original catalog reviewed by a native Vietnamese-speaking contributor; 2026-10-15 coverage additions are AI-assisted and not separately native-reviewed; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 signature-check wordings are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Vietnamese UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
-sha256 = "95b5fc6d10f7bc8371688772741870448de716fa2dd9af62fdfe4e009d269b45"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "f790c2fa21cb62332ae29fbd661abce8ccd281d829cd26e4c93f39f4f75a0423"
 
 [[asset]]
 path = "crates/ui-egui/src/i18n/sl.tsv"
 title = "Slovene interface translation catalog"
 author = "PdfCraft contributors"
-source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-18 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
 licence = "MIT OR Apache-2.0"
 licence_file = "LICENSE-MIT"
 kind = "translation"
 usage = "Slovene UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 # //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
-sha256 = "e7be844b5adf5b0186ac4d345e81b281fad057ddba35a73ddd147bbfce18eeff"
+sha256 = "8159bbc716d467b07911a1f05b300c38113bfd438799a143d8f9412e2990bb03"
 
 [[asset]]
 
@@ -3397,3 +3479,95 @@ licence_file = "vendor/vello_common/LICENSE-MIT"
 kind = "image"
 usage = "Reference picture of the vendored vello_common probe module, for people only; the build reads probe.rgba, not this file"
 sha256 = "78c59a0cfd2c829909d77006f94e34dac1ae5d1f90e7f10f72e84de541fef697"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/nb.tsv"
+title = "Norwegian Bokmål interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Norwegian Bokmål UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "2a77f2b569e6305600885e6e5709bca66931ce1945a44442394b0bb2a18b349f"
+
+[[asset]]
+path = "assets/icons/superscript.svg"
+title = "Lucide icon \"superscript\""
+author = "Lucide Contributors (portions Cole Bemis, Feather)"
+source = "https://github.com/lucide-icons/lucide (npm lucide-static 1.49.0, icons/superscript.svg)"
+licence = "ISC"
+licence_file = "assets/icons/LICENSE-lucide.txt"
+kind = "icon"
+usage = "UI icon, embedded via crates/ui-egui/src/icon_data.rs"
+sha256 = "34af289365aaa19295f874e4fda3b56196e203785d6fe1d9c3c929ae290518a0"
+
+[[asset]]
+path = "assets/icons/subscript.svg"
+title = "Lucide icon \"subscript\""
+author = "Lucide Contributors (portions Cole Bemis, Feather)"
+source = "https://github.com/lucide-icons/lucide (npm lucide-static 1.49.0, icons/subscript.svg)"
+licence = "ISC"
+licence_file = "assets/icons/LICENSE-lucide.txt"
+kind = "icon"
+usage = "UI icon, embedded via crates/ui-egui/src/icon_data.rs"
+sha256 = "06462f57e87a14e6496da9216eee9906b83ded0ff99b70498efa37ae88a5cba4"
+
+[[asset]]
+path = "assets/icons/pilcrow.svg"
+title = "Lucide icon \"pilcrow\""
+author = "Lucide Contributors (portions Cole Bemis, Feather)"
+source = "https://github.com/lucide-icons/lucide (npm lucide-static 1.49.0, icons/pilcrow.svg)"
+licence = "ISC"
+licence_file = "assets/icons/LICENSE-lucide.txt"
+kind = "icon"
+usage = "UI icon, embedded via crates/ui-egui/src/icon_data.rs"
+sha256 = "d344d9f9222f6c1b698c0c82a753a2212d9bd7785f06c00cd6e4910fe2fee8f8"
+
+[[asset]]
+path = "assets/icons/move-horizontal.svg"
+title = "Lucide icon \"move-horizontal\""
+author = "Lucide Contributors (portions Cole Bemis, Feather)"
+source = "https://github.com/lucide-icons/lucide (npm lucide-static 1.49.0, icons/move-horizontal.svg)"
+licence = "ISC"
+licence_file = "assets/icons/LICENSE-lucide.txt"
+kind = "icon"
+usage = "UI icon, embedded via crates/ui-egui/src/icon_data.rs"
+sha256 = "864ab2f19254e6ac7240bc6a98323197332e8f714d4d3f94831f41309e5ef2f7"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/sq.tsv"
+title = "Albanian interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 signature-appearance labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Albanian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "63838522bef37ab100cfbb3eafc95fdcaa35fc936b9b31bae3638170f4572964"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/th.tsv"
+title = "Thai interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Thai UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "35eb097b6cc26bbc448018c6b05154b2b27efa8eed55e31658c2f40c28b8170e"
+
+[[asset]]
+path = "crates/ui-egui/src/i18n/ca.tsv"
+title = "Catalan interface translation catalog"
+author = "PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, written from their meaning; no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Catalan UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+# //// Neoffice — the catalog holds the Nora pane's words too (see NEOFFICE_FORK_MARKERS.md), hence its new SHA-256.
+sha256 = "c803353dc1e20e0376a461b8df5cc0c46109396c8e72c76bcdbdd989ae11b0fc"

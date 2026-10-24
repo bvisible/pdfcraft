@@ -43,12 +43,17 @@ jobs:
         run: |
           echo "CRAFT_FONTS_DIR=$GITHUB_WORKSPACE/craft-fonts" >> "$GITHUB_ENV"
           echo "CRAFT_FONTS_REQUIRED=1" >> "$GITHUB_ENV"
-      - name: Linux build dependencies (winit, wgpu, rfd)
+      - name: Linux build dependencies (winit, wgpu, rfd) and the oracles (qpdf, Poppler)
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             pkg-config libxkbcommon-dev libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev \
-            libgtk-3-dev libfontconfig1-dev libfreetype-dev libgl1-mesa-dev mesa-vulkan-drivers
+            libgtk-3-dev libfontconfig1-dev libfreetype-dev libgl1-mesa-dev mesa-vulkan-drivers \
+            qpdf poppler-utils
+      # As upstream's CI since 0.9: the independent oracles (crates/oracle) check our output against qpdf and Poppler,
+      # and with this set a missing one fails the job instead of being skipped in silence.
+      - name: Require the oracles
+        run: echo "PDFCRAFT_ORACLES_REQUIRED=1" >> "$GITHUB_ENV"
       - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # v1
         with:
           toolchain: stable
