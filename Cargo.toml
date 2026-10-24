@@ -25,10 +25,12 @@ craft-docpath = { version = "0.1.0", git = "https://github.com/storytold/craft-l
 # WordCraft uses. Both depend on egui only (the same 0.36 as here), so upstream's craft-libs types are not duplicated. To
 # follow a newer craft-libs, move this revision; nothing else changes. With its version, as upstream pins craft-ui and
 # craft-print: cargo-deny counts a git dependency without one as a wildcard, and refuses it in a public crate.
-# //// Neoffice — revision adbcef6 (craft-libs version-15, 17.10.2026): the Stop, Undo offered only for what Nora
-# changed, replies that stay in view, and connection errors in the app's language (`NoraPanel::with_error_words`).
-craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "adbcef6c286b6bcd264cc91fbf50dc3f42d60e5a" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "adbcef6c286b6bcd264cc91fbf50dc3f42d60e5a" }
+# //// Neoffice — revision 4f48d825 (craft-libs version-15, 24.10.2026, after its merge of upstream main 7895f5e, which
+# holds the craft-libs revisions pinned above): the panel on egui 0.36 or 0.37, a slow turn no longer given up on the
+# clock alone, Nora's Markdown drawn, links and cards; the pane offers no link (`open_links` off) and refuses Print and
+# the exports for an e-mail draft (Nora's new functions in NeoPDF wait). Before: adbcef6 (17.10).
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "4f48d82591133e2ba10fc9850464fce6a8f046e4" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "4f48d82591133e2ba10fc9850464fce6a8f046e4" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.13.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.13.0" }

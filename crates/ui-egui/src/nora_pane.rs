@@ -485,6 +485,9 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
         ui.add_space(4.0);
     }
     for action in app.nora.panel.show(ui, &app.nora.session) {
+        if !kept(&action) {
+            continue;
+        }
         match &action {
             // Where the person is, as of the message: told to Nora with it, never read on every frame.
             PanelAction::Send(_) => {
@@ -588,6 +591,9 @@ fn perform(app: &mut PdfCraftApp, outputs: Vec<Output>, ctx: &egui::Context, bus
                     ctx.request_repaint();
                 }
                 Output::Changed => ctx.request_repaint(),
+                // A page of the instance to open: the panel offers no link nor card Open here (`open_links` is off), and
+                // NeoPDF's host has no way to open one yet.
+                Output::Open(_) => {}
             }
         }
         queue = next;
@@ -684,6 +690,20 @@ fn apply(app: &mut PdfCraftApp, kind: &DocActionKind) -> Result<Value, String> {
         DocActionKind::RenderPage { page, scale } => render_page(app, *page, *scale),
         DocActionKind::Save => save(app),
         DocActionKind::Undo => undo(app),
+        // Printing, and handing the document's PDF or file over for an e-mail draft (craft-nora's actions since
+        // 4945194): NeoPDF does not do them for Nora yet, its new Nora functions wait (24.10.2026). Refused, never run.
+        DocActionKind::Print | DocActionKind::ExportPdf | DocActionKind::ExportFile => {
+            Err(fmt(tl!("`{command}` is refused: Nora may not run it."), &[("command", not_yet(kind))]))
+        }
+    }
+}
+
+/// The name of an action of Nora's that NeoPDF does not play yet, as she sends it.
+fn not_yet(kind: &DocActionKind) -> &'static str {
+    match kind {
+        DocActionKind::Print => "print",
+        DocActionKind::ExportPdf => "export_pdf",
+        _ => "export_file",
     }
 }
 
@@ -1321,8 +1341,30 @@ fn undo(app: &mut PdfCraftApp) -> Result<Value, String> {
     Ok(json!({ "undone": change.steps }))
 }
 
-/// Hands one call to the host. Without a connection the call fails at once, as an unavailable server.
+/// What the pane lets the panel ask of the conversation: not a card's answer nor a link's click. The panel of craft-libs
+/// draws the answer buttons of a card that waits for the person (a letter's template to confirm, an appointment to add, a
+/// mailbox to choose) and its links; NeoPDF's new Nora functions wait (24.10.2026), so here a card is only read and a
+/// link only its words.
+fn kept(action: &PanelAction) -> bool {
+    !matches!(action, PanelAction::AnswerCard { .. } | PanelAction::ChooseOnCard { .. } | PanelAction::OpenLink(_))
+}
+
+/// The calls of the conversation the pane hands to the host: the thread, a message, the replies, Nora's actions and what
+/// they gave. Anything else (a card's answer) is answered here as refused, and never reaches the instance.
+const CALLS: &[&str] = &[
+    craft_nora::protocol::START_OR_RESUME_THREAD,
+    craft_nora::protocol::POST_MESSAGE,
+    craft_nora::protocol::GET_MESSAGES,
+    craft_nora::protocol::GET_ACTIONS,
+    craft_nora::protocol::RECEIVE_OBSERVATION,
+];
+
+/// Hands one call to the host. Without a connection the call fails at once, as an unavailable server; one that is no call
+/// of the conversation ([`CALLS`]) as a refused one.
 fn send(app: &mut PdfCraftApp, request: HttpRequest) -> Vec<Output> {
+    if !CALLS.contains(&request.path.as_str()) {
+        return app.nora.session.handle(Input::Http(HttpResponse { id: request.id, status: 403, body: String::new() }));
+    }
     match &app.nora_http {
         Some(http) => {
             http(request);
@@ -1373,6 +1415,8 @@ fn labels() -> NoraLabels {
         confirm_heading: tl!("Nora wants to:").to_string(),
         allow: tl!("Allow").to_string(),
         refuse: tl!("Refuse").to_string(),
+        // A card's Open: never drawn here (`open_links` stays off: NeoPDF's host opens no page of the instance yet).
+        open: tl!("Open").to_string(),
         describe,
     }
 }
@@ -1412,6 +1456,7 @@ fn describe(kind: &DocActionKind) -> String {
         DocActionKind::RenderPage { page, .. } => fmt(tl!("Look at page {page}"), &[("page", &page.to_string())]),
         DocActionKind::Save => tl!("Save the document").to_string(),
         DocActionKind::Undo => tl!("Undo the last change").to_string(),
+        DocActionKind::Print | DocActionKind::ExportPdf | DocActionKind::ExportFile => fmt(tl!("Run {command}"), &[("command", not_yet(kind))]),
     }
 }
 
@@ -2429,6 +2474,40 @@ mod tests {
         assert!(!h.state().nora.session.is_busy(), "her turn ended");
         assert!(h.query_by_label("Stopped.").is_some(), "the pane says Nora was stopped");
         assert!(h.query_by_label("Send").is_some(), "the next message can go");
+    }
+
+    /// A card's answer and a link's click never leave the pane: the panel's buttons for them are dropped, and a call that
+    /// is no call of the conversation is refused before the host sees it.
+    #[test]
+    fn a_card_s_answer_and_a_link_never_leave_the_pane() {
+        assert!(!kept(&PanelAction::AnswerCard { token: "t".into(), approve: true }));
+        assert!(!kept(&PanelAction::ChooseOnCard { token: "t".into(), choice: "Boîte".into() }));
+        assert!(!kept(&PanelAction::OpenLink("/drive/f/x".into())));
+        assert!(kept(&PanelAction::Send("Bonjour".into())) && kept(&PanelAction::Stop) && kept(&PanelAction::Undo));
+
+        let mut app = document();
+        let (outbox, _inbox) = connect(&mut app);
+        for path in [craft_nora::protocol::CONFIRM_TEMPLATE, craft_nora::protocol::ANSWER_IN_PANE, "/api/method/frappe.client.delete"] {
+            let request = HttpRequest { id: 7, path: path.into(), body: json!({}) };
+            let _ = send(&mut app, request);
+        }
+        assert!(take(&outbox).is_empty(), "nothing reached the host");
+        let request = HttpRequest { id: 8, path: craft_nora::protocol::GET_MESSAGES.into(), body: json!({}) };
+        let _ = send(&mut app, request);
+        assert_eq!(take(&outbox).len(), 1, "a call of the conversation goes");
+    }
+
+    /// Printing and handing the document over for an e-mail draft are refused in NeoPDF, never run: its new Nora functions
+    /// wait. Nothing changes in the document.
+    #[test]
+    fn printing_and_handing_the_document_over_are_refused() {
+        let mut app = document();
+        for (kind, name) in [(DocActionKind::Print, "print"), (DocActionKind::ExportPdf, "export_pdf"), (DocActionKind::ExportFile, "export_file")] {
+            let error = run(&mut app, kind.clone()).unwrap_err();
+            assert_eq!(error, format!("`{name}` is refused: Nora may not run it."));
+            assert_eq!(describe(&kind), format!("Run {name}"));
+        }
+        assert!(!doc(&app).dirty, "the document is as it was");
     }
 
     /// A call that got no answer at all is said in the interface language, not with the browser's English reason.

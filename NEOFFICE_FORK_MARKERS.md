@@ -100,7 +100,15 @@ carry a marker in place.
   well-formed notation, `checked_notation_js`) and `xtask/src/layers.rs` (the edge `ui-egui → automation` allowed, with its test)):
   Neoffice's assistant, the chat at the right of the window that NeoWrite
   (WordCraft) has, so that the same Nora works in every editor. It is built on `craft-nora` and `craft-nora-ui` from
-  Neoffice's craft-libs fork, at the revision WordCraft uses; to follow a newer one, move the revision in `Cargo.toml`.
+  Neoffice's craft-libs fork, at the revision `Cargo.toml` pins (`4f48d825` since 2026-10-24, after that fork's merge of
+  upstream's main); to follow a newer one, move the revision in `Cargo.toml`. What the newer panel brings that NeoPDF does
+  not do for Nora yet stays off: a card is only read (its answer buttons are dropped, `kept`) and a link only its words
+  (`open_links` off, `Output::Open` ignored); the pane hands the host only the five calls of the conversation (`CALLS`:
+  thread, message, replies, actions, observation), any other is refused before the host sees it (test
+  `a_card_s_answer_and_a_link_never_leave_the_pane`); the actions Print, ExportPdf and ExportFile are refused (test
+  `printing_and_handing_the_document_over_are_refused`). Since 4f48d825, after a turn the panel gave up on (no answer
+  in time), an open pane still reads the conversation every 15 s for up to 30 minutes, shows a late reply, and refuses
+  a late action (craft-nora's design).
   - **When it shows.** Off by default. Preferences ▸ Assistant, `ui.nora` (a toggle, in the command palette as "Nora
     assistant") or `--nora on|off` (`set_option`) shows it, and the setting is kept (`nora_pane`). The browser build opens
     it when the page asks for Nora (`?nora`, read by name with `URLSearchParams`) or makes Nora's calls itself
