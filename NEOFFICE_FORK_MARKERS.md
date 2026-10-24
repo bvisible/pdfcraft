@@ -106,7 +106,12 @@ carry a marker in place.
   (`open_links` off, `Output::Open` ignored); the pane hands the host only the five calls of the conversation (`CALLS`:
   thread, message, replies, actions, observation), any other is refused before the host sees it (test
   `a_card_s_answer_and_a_link_never_leave_the_pane`); the actions Print, ExportPdf and ExportFile are refused (test
-  `printing_and_handing_the_document_over_are_refused`). Since 4f48d825, after a turn the panel gave up on (no answer
+  `printing_and_handing_the_document_over_are_refused`). Since 620d408 (24.10), an action the server addresses to another
+  conversation (`for_thread`) or another document (`for_document`; NeoPDF names none, so only the thread counts) is refused,
+  never played, so NeoPDF open beside another editor plays only its own; the pane's tick comes before the answers and the
+  waiting actions of each frame (as NeoGrille's), and craft-libs's words for a request a tab in the background kept from
+  acting (`ResumeWords`) and for a reply that could not act in time (`CorrectionWords`) are the interface's (four strings
+  in the 33 catalogs, by Haiku). Since 4f48d825, after a turn the panel gave up on (no answer
   in time), an open pane still reads the conversation every 15 s for up to 30 minutes, shows a late reply, and refuses
   a late action (craft-nora's design).
   - **When it shows.** Off by default. Preferences ▸ Assistant, `ui.nora` (a toggle, in the command palette as "Nora

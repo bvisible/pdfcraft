@@ -31,8 +31,11 @@ craft-docpath = { version = "0.1.0", git = "https://github.com/storytold/craft-l
 # the exports for an e-mail draft (Nora's new functions in NeoPDF wait). Before: adbcef6 (17.10).
 # //// Neoffice — 1f01bcc (24.10.2026): a card that waits for the person says where to answer it, in place of buttons
 # that would do nothing here (`NoraPanel::cards_unanswered`); a request lost to a tab in the background can be resumed.
-craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "1f01bcc9d5f868014499b4e6b4e617bd9e228c06" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "1f01bcc9d5f868014499b4e6b4e617bd9e228c06" }
+# //// Neoffice — 620d408 (24.10.2026): an action the server addresses to another conversation or document than this
+# pane's is refused, never played; a reply written before Nora knew her change was refused is not shown as done
+# (`CorrectionWords`); work the server says goes on is read on.
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "620d40879c708193063fd53a7f86415c44339ce0" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "620d40879c708193063fd53a7f86415c44339ce0" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.13.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.13.0" }

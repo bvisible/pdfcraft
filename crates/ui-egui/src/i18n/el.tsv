@@ -2581,3 +2581,9 @@ animation effects	Off	Ανενεργά
 	Your session has expired. Sign in again.	Η συνεδρία σας έληξε. Συνδεθείτε ξανά.
 	The server could not answer (error {status}). Try again in a moment.	Ο διακομιστής δεν μπόρεσε να απαντήσει (σφάλμα {status}). Δοκιμάστε ξανά σε λίγο.
 	Nora's answer could not be read.	Η απάντηση του βοηθού Nora δεν μπόρεσε να διαβαστεί.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+	This tab was in the background: Nora could not act in the document.	Αυτή η καρτέλα ήταν σε δεύτερο πλάνο: ο βοηθός Nora δεν μπόρεσε να ενεργήσει στο έγγραφο.
+	Resume	Επανάληψη
+	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Δεν έγινε τίποτα στο έγγραφο: ο βοηθός Nora δεν μπόρεσε να ενεργήσει σε αυτό έγκαιρα. Ζητήστε ξανά, αν το χρειάζεστε ακόμη.
+	Not all of this was done: part of it could not run in the document in time.	Δεν έγιναν όλα: ένα μέρος δεν μπόρεσε να εκτελεστεί στο έγγραφο έγκαιρα.

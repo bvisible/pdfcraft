@@ -37,7 +37,7 @@ use craft_nora::{
     AppKind, CommandCall, CommandPolicy, Decision, DocActionKind, DocumentCall, DocumentInfo, HttpRequest, HttpResponse, Input, NoraError,
     NoraSession, Output, PageContext, Selection, SessionConfig,
 };
-use craft_nora_ui::{NoraLabels, NoraPanel, NoraStyle, PanelAction, drive};
+use craft_nora_ui::{CorrectionWords, NoraLabels, NoraPanel, NoraStyle, PanelAction, ResumeWords, drive};
 use egui::{Stroke, Ui};
 use pdfcraft_automation::{Automation, Content, ToolDef};
 use pdfcraft_engine::{DocId, Document, Edit, FieldValue, FormFieldKind, field_flags};
@@ -472,9 +472,14 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
     // The panel's text box (craft-nora-ui gives it this id): typing there is talking to Nora, not typing in the document.
     let nora_input = ui.id().with("nora").with("input");
     let busy = person_busy(app, &ctx, nora_input);
-    let mut outputs = incoming(app, busy);
-    outputs.extend(drive(&ctx, &mut app.nora.session));
+    // The frame's tick first, then the answers and the actions that waited: after a gap without frames (a tab in the
+    // background) the session knows it before it reads an answer that waited in the page, whose action it then refuses
+    // rather than plays late (as NeoGrille's pane does).
+    let mut outputs = drive(&ctx, &mut app.nora.session);
+    outputs.extend(incoming(app, busy));
     app.nora.panel.labels = labels();
+    app.nora.panel.resume_words = resume_words();
+    app.nora.panel.correction_words = correction_words();
     app.nora.panel.style = style(t);
     app.nora.panel.offline = app.nora_http.is_none().then(|| tl!("Nora isn't available in this version yet").to_string());
     // A card's answer is not carried here (`kept`): the card says so, in place of buttons that would do nothing.
@@ -1420,6 +1425,21 @@ fn labels() -> NoraLabels {
         // A card's Open: never drawn here (`open_links` stays off: NeoPDF's host opens no page of the instance yet).
         open: tl!("Open").to_string(),
         describe,
+    }
+}
+
+/// What the pane says of a request a tab in the background kept from acting, and its button to ask again, in the
+/// interface language.
+fn resume_words() -> ResumeWords {
+    ResumeWords { said: tl!("This tab was in the background: Nora could not act in the document.").to_string(), resume: tl!("Resume").to_string() }
+}
+
+/// What the pane says, in the interface language, of a reply of Nora's whose turn could not act in the document in time:
+/// never shown as done.
+fn correction_words() -> CorrectionWords {
+    CorrectionWords {
+        nothing_done: tl!("Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.").to_string(),
+        partly_done: tl!("Not all of this was done: part of it could not run in the document in time.").to_string(),
     }
 }
 
@@ -2510,6 +2530,18 @@ mod tests {
             assert_eq!(describe(&kind), format!("Run {name}"));
         }
         assert!(!doc(&app).dirty, "the document is as it was");
+    }
+
+    /// The words for a request a tab in the background kept from acting, and for a reply that could not act in time, are the
+    /// interface's: craft-libs's own are English.
+    #[test]
+    fn the_resume_and_correction_words_are_the_interface_s() {
+        crate::i18n::set_current(crate::i18n::lang_from_tag("fr").unwrap());
+        assert_eq!(resume_words().resume, "Reprendre");
+        assert!(correction_words().nothing_done.starts_with("Rien n'a été fait dans le document"), "{}", correction_words().nothing_done);
+        crate::i18n::set_current(crate::i18n::lang_from_tag("en").unwrap());
+        assert_eq!(resume_words().said, ResumeWords::default().said);
+        assert_eq!(correction_words().partly_done, CorrectionWords::default().partly_done);
     }
 
     /// A call that got no answer at all is said in the interface language, not with the browser's English reason.

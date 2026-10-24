@@ -2807,3 +2807,9 @@ certificate	SHA-256 digest	Impronta SHA-256
 	Your session has expired. Sign in again.	La sessione è scaduta. Acceda di nuovo.
 	The server could not answer (error {status}). Try again in a moment.	Il server non ha potuto rispondere (errore {status}). Riprovi tra poco.
 	Nora's answer could not be read.	Non è stato possibile leggere la risposta di Nora.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+	This tab was in the background: Nora could not act in the document.	Questa scheda era in secondo piano: Nora non ha potuto agire nel documento.
+	Resume	Riprendi
+	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Nel documento non è stato fatto nulla: Nora non ha potuto agire in tempo. Richiedi di nuovo se ti serve ancora.
+	Not all of this was done: part of it could not run in the document in time.	Non tutto è stato fatto: una parte non ha potuto essere eseguita nel documento in tempo.
