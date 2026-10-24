@@ -2528,7 +2528,8 @@ mod tests {
         let (outbox, inbox) = connect(&mut app);
         let mut h = window(app);
         let polls = start(&mut h, &outbox, &inbox, "Rotate the first page");
-        h.state_mut().palette_open = true;
+        // A bookmark being renamed: the person is busy in the document, with nothing drawn over the pane.
+        h.state_mut().bookmark_rename = Some((vec![0], "Draft".into()));
         h.run_steps(2);
         let told = act(
             &mut h,
@@ -2537,9 +2538,11 @@ mod tests {
             &polls,
             json!([{ "action": "doc_execute", "command": "page_rotate", "params": { "pages": [1], "degrees": 90 }, "callback_id": "c1" }]),
         );
-        assert!(!told.iter().any(|r| r.path.ends_with("receive_observation")), "held while the palette is open");
-        h.state_mut().palette_open = false;
+        assert!(!told.iter().any(|r| r.path.ends_with("receive_observation")), "held while the person renames a bookmark");
+        // Stopped while the action still waits for the person, who then finishes.
         h.get_by_label("Stop").click();
+        h.run_steps(4);
+        h.state_mut().bookmark_rename = None;
         h.run_steps(4);
         assert_eq!(rotation(h.state(), 0), 0, "never played after Stop");
         assert!(h.state().nora.waiting.is_empty());
