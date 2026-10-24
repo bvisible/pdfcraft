@@ -491,11 +491,14 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
         );
         ui.add_space(4.0);
     }
+    let mut stopped = false;
     for action in app.nora.panel.show(ui, &app.nora.session) {
         if !kept(&action) {
             continue;
         }
         match &action {
+            // What waits for the person to finish, or was released this frame, is the stopped turn's too.
+            PanelAction::Stop => stopped = true,
             // Where the person is, as of the message: told to Nora with it, never read on every frame.
             PanelAction::Send(_) => {
                 let context = context_of(app);
@@ -510,11 +513,31 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
         }
         outputs.extend(app.nora.session.handle(action.into_input()));
     }
+    if stopped {
+        outputs = refuse_held(app, outputs);
+    }
     perform(app, outputs, &ctx, busy);
     if !app.nora.waiting.is_empty() {
         // Checks again soon whether the person is done.
         ctx.request_repaint_after(Duration::from_millis(250));
     }
+}
+
+/// After Stop, Nora's actions this pane still holds (waiting for the person to finish, or released this frame) are
+/// answered as stopped and never played: the session ends the turn, but those are already the pane's.
+fn refuse_held(app: &mut PdfCraftApp, outputs: Vec<Output>) -> Vec<Output> {
+    let mut rest = Vec::new();
+    let mut held: Vec<DocumentCall> = std::mem::take(&mut app.nora.waiting);
+    for output in outputs {
+        match output {
+            Output::Document(call) => held.push(call),
+            other => rest.push(other),
+        }
+    }
+    for call in held {
+        rest.extend(app.nora.session.handle(Input::DocumentResult { id: call.id, result: Err(tl!("Stopped.").to_string()) }));
+    }
+    rest
 }
 
 /// What the conversation has for this frame: the actions that waited for the person, once they are done, then what
@@ -2496,6 +2519,31 @@ mod tests {
         assert!(!h.state().nora.session.is_busy(), "her turn ended");
         assert!(h.query_by_label("Stopped.").is_some(), "the pane says Nora was stopped");
         assert!(h.query_by_label("Send").is_some(), "the next message can go");
+    }
+
+    /// Stop also ends what the pane holds: an action that waited for the person to finish is never played after it.
+    #[test]
+    fn stop_refuses_what_waits_for_the_person() {
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        let mut h = window(app);
+        let polls = start(&mut h, &outbox, &inbox, "Rotate the first page");
+        h.state_mut().palette_open = true;
+        h.run_steps(2);
+        let told = act(
+            &mut h,
+            &outbox,
+            &inbox,
+            &polls,
+            json!([{ "action": "doc_execute", "command": "page_rotate", "params": { "pages": [1], "degrees": 90 }, "callback_id": "c1" }]),
+        );
+        assert!(!told.iter().any(|r| r.path.ends_with("receive_observation")), "held while the palette is open");
+        h.state_mut().palette_open = false;
+        h.get_by_label("Stop").click();
+        h.run_steps(4);
+        assert_eq!(rotation(h.state(), 0), 0, "never played after Stop");
+        assert!(h.state().nora.waiting.is_empty());
+        assert_eq!(observation(&take(&outbox), "c1")["ok"], false, "Nora is told it did not run");
     }
 
     /// A card's answer and a link's click never leave the pane: the panel's buttons for them are dropped, and a call that

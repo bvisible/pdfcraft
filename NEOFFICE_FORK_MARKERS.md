@@ -111,7 +111,7 @@ carry a marker in place.
   never played, so NeoPDF open beside another editor plays only its own; the pane's tick comes before the answers and the
   waiting actions of each frame (as NeoGrille's), and craft-libs's words for a request a tab in the background kept from
   acting (`ResumeWords`) and for a reply that could not act in time (`CorrectionWords`) are the interface's (four strings
-  in the 33 catalogs, by Haiku). Since 4f48d825, after a turn the panel gave up on (no answer
+  in the 33 catalogs, by Haiku); Stop also answers as stopped the actions the pane still holds (`refuse_held`). Since 4f48d825, after a turn the panel gave up on (no answer
   in time), an open pane still reads the conversation every 15 s for up to 30 minutes, shows a late reply, and refuses
   a late action (craft-nora's design).
   - **When it shows.** Off by default. Preferences ▸ Assistant, `ui.nora` (a toggle, in the command palette as "Nora
