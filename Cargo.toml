@@ -34,8 +34,8 @@ craft-docpath = { version = "0.1.0", git = "https://github.com/storytold/craft-l
 # //// Neoffice — 620d408 (24.10.2026): an action the server addresses to another conversation or document than this
 # pane's is refused, never played; a reply written before Nora knew her change was refused is not shown as done
 # (`CorrectionWords`); work the server says goes on is read on.
-craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "620d40879c708193063fd53a7f86415c44339ce0" }
-craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "620d40879c708193063fd53a7f86415c44339ce0" }
+craft-nora = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "e1d72467769be1086d1227070fc12b610146baba" }
+craft-nora-ui = { git = "https://github.com/bvisible/craft-libs", version = "0.1.0", rev = "e1d72467769be1086d1227070fc12b610146baba" }
 # internal
 pdfcraft-geom = { path = "crates/geom", version = "0.13.0" }
 pdfcraft-filters = { path = "crates/filters", version = "0.13.0" }

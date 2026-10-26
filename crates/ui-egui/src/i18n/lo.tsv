@@ -2495,3 +2495,6 @@ animation effects	Off	ປິດ
 	Resume	ສືບຕໍ່
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	ບໍ່ມີສິ່ງໃດຖືກດຳເນີນການໃນເອກະສານ: Nora ບໍ່ສາມາດດຳເນີນການໄດ້ທັນເວລາ. ຖາມອີກຄັ້ງຖ້າທ່ານຍັງຕ້ອງການ.
 	Not all of this was done: part of it could not run in the document in time.	ບໍ່ໄດ້ດຳເນີນການທັງໝົດ: ບາງສ່ວນບໍ່ສາມາດເຮັດວຽກໃນເອກະສານທັນເວລາ.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	ເປີດ Nora

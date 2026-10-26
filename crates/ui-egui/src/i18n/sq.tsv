@@ -2566,3 +2566,6 @@ animation effects	Off	Joaktiv
 	Resume	Rifillo
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Asgjë nuk u krye në dokument: Nora nuk mundi të veprojë në të në kohë. Kërko përsëri nëse ende e ke nevojë.
 	Not all of this was done: part of it could not run in the document in time.	Jo gjithçka u krye: një pjesë e saj nuk mundi të ekzekutohej në dokument në kohë.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Hap Nora

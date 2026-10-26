@@ -2813,3 +2813,6 @@ certificate	SHA-256 digest	Impronta SHA-256
 	Resume	Riprendi
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Nel documento non è stato fatto nulla: Nora non ha potuto agire in tempo. Richiedi di nuovo se ti serve ancora.
 	Not all of this was done: part of it could not run in the document in time.	Non tutto è stato fatto: una parte non ha potuto essere eseguita nel documento in tempo.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Apri Nora

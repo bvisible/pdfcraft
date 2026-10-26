@@ -2586,3 +2586,6 @@ animation effects	Off	Izklopljeni
 	Resume	Nadaljuj
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	V dokumentu ni bilo nič narejeno: Nora ni mogla pravočasno ukrepati. Vprašajte znova, če še potrebujete.
 	Not all of this was done: part of it could not run in the document in time.	Ni bilo vse narejeno: del tega v dokumentu ni mogel teči pravočasno.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Odpri Nora

@@ -2840,3 +2840,6 @@ theme	Appearance	Aspect
 	Resume	Reia
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Nu s-a făcut nimic în document: Nora nu a putut acționa în el la timp. Cere din nou dacă mai ai nevoie.
 	Not all of this was done: part of it could not run in the document in time.	Nu s-a făcut totul: o parte nu a putut rula în document la timp.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Deschide Nora

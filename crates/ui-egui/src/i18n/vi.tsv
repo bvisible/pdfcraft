@@ -2846,3 +2846,6 @@ key	Space	Space
 	Resume	Tiếp tục
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Chưa có gì được thực hiện trong tài liệu: Nora không thể thao tác kịp thời. Hãy yêu cầu lại nếu bạn vẫn cần.
 	Not all of this was done: part of it could not run in the document in time.	Không phải tất cả đều được thực hiện: một phần không thể chạy trong tài liệu kịp thời.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Mở Nora

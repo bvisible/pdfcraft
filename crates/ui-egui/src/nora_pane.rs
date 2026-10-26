@@ -37,7 +37,7 @@ use craft_nora::{
     AppKind, CommandCall, CommandPolicy, Decision, DocActionKind, DocumentCall, DocumentInfo, HttpRequest, HttpResponse, Input, NoraError,
     NoraSession, Output, PageContext, Selection, SessionConfig,
 };
-use craft_nora_ui::{CorrectionWords, NoraLabels, NoraPanel, NoraStyle, PanelAction, ResumeWords, drive};
+use craft_nora_ui::{CorrectionWords, LauncherWords, NoraLabels, NoraPanel, NoraStyle, PaneMemory, PanelAction, ResumeWords, drive};
 use egui::{Stroke, Ui};
 use pdfcraft_automation::{Automation, Content, ToolDef};
 use pdfcraft_engine::{DocId, Document, Edit, FieldValue, FormFieldKind, field_flags};
@@ -430,6 +430,32 @@ impl Default for NoraState {
     }
 }
 
+/// The name the pane's state is remembered under in the browser (craft-nora-ui `PaneMemory`).
+const MEMORY: &str = "pdfcraft";
+
+/// Opens the pane where the page offers Nora, unless the person closed it on an earlier visit (remembered in the browser,
+/// open when nothing is).
+pub fn open_as_remembered(app: &mut PdfCraftApp) {
+    app.nora_pane = PaneMemory::new(MEMORY).open();
+}
+
+/// While the pane is closed where Nora is offered: a rail at the right edge of the window, outermost, with Nora's sphere
+/// (craft-nora-ui `launcher`), which opens the pane again on the same conversation.
+pub(crate) fn rail(app: &mut PdfCraftApp, ui: &mut Ui) {
+    if app.nora_http.is_none() {
+        return;
+    }
+    let t = Tokens::get(ui.ctx());
+    let words = LauncherWords { open: tl!("Open Nora").to_string() };
+    let frame = egui::Frame::NONE.fill(t.panel).inner_margin(egui::Margin::symmetric(0, 12)).stroke(Stroke::new(1.0, t.divider));
+    let response = craft_nora_ui::launcher::rail(ui, frame, &words);
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &words.open));
+    if response.clicked() {
+        app.nora_pane = true;
+        PaneMemory::new(MEMORY).remember(true);
+    }
+}
+
 /// The pane at the right of the window: a title row like the other panels' ("Nora" and a close button), then the
 /// conversation.
 pub(crate) fn pane(app: &mut PdfCraftApp, ui: &mut Ui) {
@@ -447,6 +473,7 @@ pub(crate) fn pane(app: &mut PdfCraftApp, ui: &mut Ui) {
         .show(ui, |ui| {
             if header(ui, &t) {
                 app.nora_pane = false;
+                PaneMemory::new(MEMORY).remember(false);
                 return;
             }
             show(app, ui, &t);
@@ -1708,6 +1735,31 @@ mod tests {
         h.run_steps(4);
         assert!(!h.state().nora_pane);
         assert!(h.query_by_label("Nora isn't available in this version yet").is_none(), "closed, it draws nothing");
+    }
+
+    /// Closed by its cross, the pane leaves a rail with Nora's sphere at the right edge of the window where Nora is offered;
+    /// its click opens the pane again on the same conversation. Outside a browser nothing is remembered.
+    #[test]
+    fn a_closed_pane_leaves_a_rail_that_opens_it_again() {
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        let mut h = window(app);
+        start(&mut h, &outbox, &inbox, "Bonjour");
+        assert_eq!(h.state().nora.session.thread_id(), Some("t1"));
+        assert!(h.query_by_label("Open Nora").is_none(), "no rail while the pane is open");
+        let close = h.get_all_by_label("Close panel").max_by(|a, b| a.rect().center().x.total_cmp(&b.rect().center().x)).unwrap();
+        close.click();
+        h.run_steps(4);
+        assert!(!h.state().nora_pane);
+        let rail = h.get_by_label("Open Nora").rect();
+        assert!(rail.min.x >= 1400.0 - craft_nora_ui::launcher::RAIL_WIDTH, "outermost at the right: {rail:?}");
+        h.get_by_label("Open Nora").click();
+        h.run_steps(4);
+        assert!(h.state().nora_pane, "open again");
+        assert_eq!(h.state().nora.session.thread_id(), Some("t1"), "on the same conversation");
+        assert!(h.query_by_label("Open Nora").is_none());
+        open_as_remembered(h.state_mut());
+        assert!(h.state().nora_pane, "nothing remembered outside a browser: open");
     }
 
     /// A message typed in the pane leaves as the first call of the conversation, carrying where the person is; the host's

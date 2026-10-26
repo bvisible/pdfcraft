@@ -2579,3 +2579,6 @@ animation effects	Off	Өшірулі
 	Resume	Жалғастыру
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Құжатта ештеңе орындалмады: Nora уақтылы әрекет ете алмады. Әлі қажет болса, қайта сұраңыз.
 	Not all of this was done: part of it could not run in the document in time.	Бәрі орындалмады: оның бір бөлігі уақтылы құжатта іске қосыла алмады.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Nora ашу

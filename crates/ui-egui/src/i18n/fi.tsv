@@ -2849,3 +2849,6 @@ theme	Appearance	Teema
 	Resume	Jatka
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Asiakirjassa ei tehty mitään: Nora ei ehtinyt toimia siinä ajoissa. Pyydä uudelleen, jos tarvitset sitä vielä.
 	Not all of this was done: part of it could not run in the document in time.	Kaikkea ei tehty: osa siitä ei ehtinyt toteutua asiakirjassa ajoissa.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Avaa Nora

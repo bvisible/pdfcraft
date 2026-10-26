@@ -2747,3 +2747,6 @@ theme	Appearance	ลักษณะที่ปรากฏ
 	Resume	ทำต่อ
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	ยังไม่ได้ดำเนินการใดๆ ในเอกสาร: Nora ไม่สามารถดำเนินการได้ทันเวลา ลองขอใหม่อีกครั้งหากยังต้องการ
 	Not all of this was done: part of it could not run in the document in time.	ยังไม่ได้ดำเนินการครบทุกอย่าง: บางส่วนไม่สามารถทำงานในเอกสารได้ทันเวลา
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	เปิด Nora

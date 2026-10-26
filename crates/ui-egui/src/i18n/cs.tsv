@@ -2888,3 +2888,6 @@ certificate	Version	Verze
 	Resume	Obnovit
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	V dokumentu se nic neprovedlo: Nora v něm nemohla včas nic provést. Pokud to ještě potřebujete, zadejte požadavek znovu.
 	Not all of this was done: part of it could not run in the document in time.	Ne všechno se provedlo: část se v dokumentu včas nepodařilo spustit.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Otevřít Nora

@@ -2582,3 +2582,6 @@ animation effects	Off	Aus
 	Resume	Fortsetzen
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Im Dokument wurde nichts ausgeführt: Nora konnte rechtzeitig nicht darin handeln. Frag noch einmal, falls du es noch brauchst.
 	Not all of this was done: part of it could not run in the document in time.	Nicht alles wurde ausgeführt: ein Teil davon konnte im Dokument rechtzeitig nicht laufen.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Nora öffnen

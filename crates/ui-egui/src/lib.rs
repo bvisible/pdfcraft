@@ -111,6 +111,8 @@ pub mod motion;
 // where its calls may go in a browser (the rules the web build applies, tested natively).
 pub mod nora_origin;
 mod nora_pane;
+// //// Neoffice — the web build opens the pane as the person left it (remembered in the browser).
+pub use nora_pane::open_as_remembered as open_nora_pane_as_remembered;
 mod page_selection_ui;
 mod pageboxes;
 mod palette;
@@ -3520,6 +3522,9 @@ impl eframe::App for PdfCraftApp {
         // host that offers Nora shows it.
         if self.nora_pane {
             nora_pane::pane(self, ui);
+        } else {
+            // //// Neoffice — closed by its cross, a rail with Nora's sphere opens it again (`nora_pane::rail`).
+            nora_pane::rail(self, ui);
         }
         if self.active.is_some() {
             chrome::right_rail(self, ui);

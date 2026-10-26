@@ -2816,3 +2816,6 @@ theme	Appearance	모양
 	Resume	재개
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	문서에서 아무 작업도 실행되지 않았습니다. Nora가 제때 작업할 수 없었습니다. 여전히 필요하면 다시 요청하세요.
 	Not all of this was done: part of it could not run in the document in time.	모든 작업이 실행된 것은 아닙니다. 일부는 제때 문서에서 실행되지 못했습니다.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Nora 열기

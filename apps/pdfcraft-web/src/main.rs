@@ -37,11 +37,12 @@ fn main() {
                         app.restore(&json);
                     }
                     // //// Neoffice — a page that asks for Nora (`?nora`, read by name) gets the Nora pane, connected with the
-                    // page's own session, and open whatever the settings saved; a host that makes the calls itself
+                    // page's own session, and open whatever the settings saved, unless the person closed it on an earlier
+                    // visit (remembered in the browser, nora_pane::open_as_remembered); a host that makes the calls itself
                     // (`window.pdfcraftNoraCall`, Neodesk) turns it on the same way.
                     if let Some(origin) = nora::requested().or_else(|| nora::offered().then(String::new)) {
                         nora::connect(&mut app, origin, cc.egui_ctx.clone());
-                        app.nora_pane = true;
+                        pdfcraft_ui_egui::open_nora_pane_as_remembered(&mut app);
                     }
                     // `?file=<url>` opens a PDF from a URL (same-origin or CORS-enabled).
                     if let Some(url) = query_param("file") {

@@ -2847,3 +2847,6 @@ certificate	Version	Version
 	Resume	Reprendre
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Rien n'a été fait dans le document : Nora n'a pas pu agir à temps. Redemandez-le si vous en avez encore besoin.
 	Not all of this was done: part of it could not run in the document in time.	Tout n'a pas été fait : une partie n'a pas pu être exécutée dans le document à temps.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Ouvrir Nora

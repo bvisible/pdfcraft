@@ -2677,3 +2677,6 @@ animation effects	Off	Wyłączone
 	Resume	Wznów
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Nic nie zostało zrobione w dokumencie: Nora nie zdążyła tam nic wykonać. Jeśli nadal tego potrzebujesz, zapytaj ponownie.
 	Not all of this was done: part of it could not run in the document in time.	Nie wszystko zostało wykonane: część tych działań nie mogła zostać uruchomiona w dokumencie na czas.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
+	Open Nora	Otwórz Nora
