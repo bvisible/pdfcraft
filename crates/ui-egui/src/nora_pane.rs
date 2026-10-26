@@ -1752,7 +1752,8 @@ mod tests {
         h.run_steps(4);
         assert!(!h.state().nora_pane);
         let rail = h.get_by_label("Open Nora").rect();
-        assert!(rail.min.x >= 1400.0 - craft_nora_ui::launcher::RAIL_WIDTH, "outermost at the right: {rail:?}");
+        // Outermost at the right (the test window keeps a margin of its own).
+        assert!(rail.min.x >= 1400.0 - craft_nora_ui::launcher::RAIL_WIDTH - 16.0, "outermost at the right: {rail:?}");
         h.get_by_label("Open Nora").click();
         h.run_steps(4);
         assert!(h.state().nora_pane, "open again");
