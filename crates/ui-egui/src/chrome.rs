@@ -320,6 +320,7 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                     if icons::button(ui, "circle-help", button, false, tl!("Keyboard shortcuts")).clicked() {
                         app.dialog = Some(Dialog::Shortcuts);
                     }
+                    crate::nora_pane::top_button(app, ui); // //// Neoffice — Nora's button, where the page offers her (nora_pane.rs) ////
                     // One click to the community, from anywhere in the app.
                     // //// Neoffice — not when a hosting page hides the community links.
                     if !app.hide_community

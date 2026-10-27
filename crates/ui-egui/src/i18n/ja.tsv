@@ -2582,5 +2582,6 @@ animation effects	Off	オフ
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	文書内では何も実行されませんでした。Nora は時間内に操作できませんでした。必要であれば、もう一度依頼してください。
 	Not all of this was done: part of it could not run in the document in time.	一部だけが実行されました。残りは時間内に文書内で実行できませんでした。
 
-# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
-	Open Nora	Nora を開く
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+	Ask Nora	Noraに質問
+	Nora, the Neoffice assistant	Nora、Neoffice のアシスタント

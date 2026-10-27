@@ -3522,9 +3522,6 @@ impl eframe::App for PdfCraftApp {
         // host that offers Nora shows it.
         if self.nora_pane {
             nora_pane::pane(self, ui);
-        } else {
-            // //// Neoffice — closed by its cross, a rail with Nora's sphere opens it again (`nora_pane::rail`).
-            nora_pane::rail(self, ui);
         }
         if self.active.is_some() {
             chrome::right_rail(self, ui);

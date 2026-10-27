@@ -2545,5 +2545,6 @@ animation effects	Off	Изключени
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	В документа не е извършено нищо: Nora не можа да действа в него навреме. Попитайте отново, ако все още ви трябва.
 	Not all of this was done: part of it could not run in the document in time.	Не всичко беше извършено: част от него не можа да се изпълни в документа навреме.
 
-# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
-	Open Nora	Отваряне на Nora
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+	Ask Nora	Попитайте Nora
+	Nora, the Neoffice assistant	Nora, асистентката на Neoffice

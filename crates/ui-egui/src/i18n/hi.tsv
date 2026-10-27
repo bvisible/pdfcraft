@@ -2817,5 +2817,6 @@ theme	Appearance	स्वरूप
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	दस्तावेज़ में कुछ भी नहीं किया गया: Nora समय पर कार्रवाई नहीं कर सकी। अगर अब भी आपको इसकी ज़रूरत है, तो फिर से पूछें।
 	Not all of this was done: part of it could not run in the document in time.	यह सब पूरा नहीं हुआ: इसका एक हिस्सा समय पर दस्तावेज़ में नहीं चल सका।
 
-# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
-	Open Nora	Nora खोलें
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+	Ask Nora	Nora से पूछें
+	Nora, the Neoffice assistant	Nora, Neoffice की सहायिका

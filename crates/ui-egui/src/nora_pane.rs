@@ -439,20 +439,20 @@ pub fn open_as_remembered(app: &mut PdfCraftApp) {
     app.nora_pane = PaneMemory::new(MEMORY).open();
 }
 
-/// While the pane is closed where Nora is offered: a rail at the right edge of the window, outermost, with Nora's sphere
-/// (craft-nora-ui `launcher`), which opens the pane again on the same conversation.
-pub(crate) fn rail(app: &mut PdfCraftApp, ui: &mut Ui) {
+/// Nora's button in the top bar, at the right with its icons, whatever tool is in view, where the page offers Nora
+/// (craft-nora-ui `launcher::button`, NeoMail's « Ask Nora »): a click opens or closes the pane on the same conversation,
+/// and the person's choice is remembered in the browser. Lit while the pane is open.
+pub(crate) fn top_button(app: &mut PdfCraftApp, ui: &mut Ui) {
     if app.nora_http.is_none() {
         return;
     }
-    let t = Tokens::get(ui.ctx());
-    let words = LauncherWords { open: tl!("Open Nora").to_string() };
-    let frame = egui::Frame::NONE.fill(t.panel).inner_margin(egui::Margin::symmetric(0, 12)).stroke(Stroke::new(1.0, t.divider));
-    let response = craft_nora_ui::launcher::rail(ui, frame, &words);
-    response.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &words.open));
+    let words = LauncherWords { label: tl!("Ask Nora").to_string(), tip: tl!("Nora, the Neoffice assistant").to_string() };
+    let open = app.nora_pane;
+    let response = craft_nora_ui::launcher::button(ui, &words, open);
+    response.widget_info(|| egui::WidgetInfo::selected(egui::WidgetType::Button, true, open, &words.label));
     if response.clicked() {
-        app.nora_pane = true;
-        PaneMemory::new(MEMORY).remember(true);
+        app.nora_pane = !open;
+        PaneMemory::new(MEMORY).remember(!open);
     }
 }
 
@@ -1737,30 +1737,29 @@ mod tests {
         assert!(h.query_by_label("Nora isn't available in this version yet").is_none(), "closed, it draws nothing");
     }
 
-    /// Closed by its cross, the pane leaves a rail with Nora's sphere at the right edge of the window where Nora is offered;
-    /// its click opens the pane again on the same conversation. Outside a browser nothing is remembered.
+    /// Nora's button in the top bar closes the pane and opens it again, on the same conversation; outside a browser
+    /// nothing is remembered.
     #[test]
-    fn a_closed_pane_leaves_a_rail_that_opens_it_again() {
+    fn nora_s_button_in_the_top_bar_closes_and_opens_the_pane() {
         let mut app = document();
         let (outbox, inbox) = connect(&mut app);
         let mut h = window(app);
         start(&mut h, &outbox, &inbox, "Bonjour");
         assert_eq!(h.state().nora.session.thread_id(), Some("t1"));
-        assert!(h.query_by_label("Open Nora").is_none(), "no rail while the pane is open");
-        let close = h.get_all_by_label("Close panel").max_by(|a, b| a.rect().center().x.total_cmp(&b.rect().center().x)).unwrap();
-        close.click();
+        let button = h.get_by_label("Ask Nora").rect();
+        assert!(button.max.y < 60.0, "in the top bar (the test window keeps a margin of its own): {button:?}");
+        h.get_by_label("Ask Nora").click();
         h.run_steps(4);
-        assert!(!h.state().nora_pane);
-        let rail = h.get_by_label("Open Nora").rect();
-        // Outermost at the right (the test window keeps a margin of its own).
-        assert!(rail.min.x >= 1400.0 - craft_nora_ui::launcher::RAIL_WIDTH - 16.0, "outermost at the right: {rail:?}");
-        h.get_by_label("Open Nora").click();
+        assert!(!h.state().nora_pane, "closed");
+        h.get_by_label("Ask Nora").click();
         h.run_steps(4);
         assert!(h.state().nora_pane, "open again");
         assert_eq!(h.state().nora.session.thread_id(), Some("t1"), "on the same conversation");
-        assert!(h.query_by_label("Open Nora").is_none());
         open_as_remembered(h.state_mut());
         assert!(h.state().nora_pane, "nothing remembered outside a browser: open");
+        // Where Nora isn't offered: no button.
+        let h = window(document());
+        assert!(h.query_by_label("Ask Nora").is_none());
     }
 
     /// A message typed in the pane leaves as the first call of the conversation, carrying where the person is; the host's

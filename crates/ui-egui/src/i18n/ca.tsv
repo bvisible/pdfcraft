@@ -2841,5 +2841,6 @@ theme	Appearance	Aspecte
 	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	No s'ha fet res al document: Nora no ha pogut actuar-hi a temps. Torna a preguntar si encara ho necessites.
 	Not all of this was done: part of it could not run in the document in time.	No s'ha fet tot: una part no s'ha pogut executar al document a temps.
 
-# //// Neoffice — the Nora assistant pane (nora_pane.rs): the button of the rail that opens it again once it is closed (craft-libs launcher).
-	Open Nora	Obre Nora
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+	Ask Nora	Demanar a Nora
+	Nora, the Neoffice assistant	Nora, l'assistenta de Neoffice
