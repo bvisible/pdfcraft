@@ -33,11 +33,13 @@ jobs:
       CARGO_PROFILE_TEST_DEBUG: line-tables-only
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Check out craft-fonts at the commit upstream's own CI uses (Japanese fonts)
+      # Upstream's CI moved to this commit at 0.15 (with egui 0.37; craft-common-actions' gate, `craft-fonts-ref` in its ci.yml): the build script
+      # of pdfcraft-fonts then also requires the Simplified Chinese manifest, which the earlier commit (3d9ab3a1) does not have.
+      - name: Check out craft-fonts at the commit upstream's own CI uses (Japanese and Chinese fonts)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: storytold/craft-fonts
-          ref: 3d9ab3a132ed0eff457e424226a435a901da30d3
+          ref: b076417b5880bd4154bd22f00695b1d28c6bea83
           path: craft-fonts
       - name: Configure craft-fonts
         run: |

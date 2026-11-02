@@ -42,14 +42,19 @@ pub(crate) fn ink(t: &Tokens) -> Color32 {
 }
 
 /// Paints the button, `size` square, with the name as its hover text. Nothing is drawn when no
-/// name is known. Like WordCraft's, the button has no accessible label of its own.
+/// name is known. Like WordCraft's, the button has no accessible label of its own: the name is drawn by `on_hover_ui`, not
+/// `on_hover_text`, which egui 0.37 also takes for the widget's name (a label an editor's own tests, looking for the
+/// comment author on the page, would find).
 pub fn button(ui: &mut Ui, name: &str, size: f32) {
     let Some(name) = known_name(name) else { return };
     let t = Tokens::get(ui.ctx());
     let (r, resp) = ui.allocate_exact_size(vec2(size, size), Sense::click());
     ui.painter().circle_filled(r.center(), size / 2.0 - 1.0, t.accent);
     ui.painter().text(r.center(), Align2::CENTER_CENTER, initials(name), theme::semibold(10.5), ink(&t));
-    resp.on_hover_text(name);
+    resp.on_hover_ui(|ui| {
+        ui.set_max_width(ui.spacing().tooltip_width);
+        ui.label(name);
+    });
 }
 
 #[cfg(test)]

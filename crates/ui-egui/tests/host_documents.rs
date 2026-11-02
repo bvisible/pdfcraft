@@ -162,3 +162,100 @@ fn a_document_made_from_the_page_s_one_is_refused_when_the_host_opens_the_docume
     let said = hosted.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
     assert!(said.contains("hosts the editor"), "the person is told: {said:?}");
 }
+
+/// Every command id in the window's menu bar (the one definition the native macOS bar and the in-window bar are laid out from).
+fn menu_commands(app: &PdfCraftApp) -> Vec<String> {
+    app.menu_bar(&egui::Context::default()).items().iter().map(|item| item.command.id.clone()).collect()
+}
+
+/// The titles of the submenus of the menu bar, at any depth.
+fn menu_titles(app: &PdfCraftApp) -> Vec<String> {
+    fn walk(nodes: &[craft_menu::Node], out: &mut Vec<String>) {
+        for node in nodes {
+            if let craft_menu::Node::Submenu { label, children, .. } = node {
+                out.push(label.clone());
+                walk(children, out);
+            }
+        }
+    }
+    let bar = app.menu_bar(&egui::Context::default());
+    let mut titles = Vec::new();
+    for menu in &bar.menus {
+        walk(&menu.children, &mut titles);
+    }
+    titles
+}
+
+/// The window's menus (upstream 0.17) offer nothing that opens or creates a document, nothing that only answers "the page
+/// opens the documents", for a host that opens the documents; elsewhere they list all of it.
+#[test]
+fn the_menu_bar_offers_no_command_that_opens_or_creates_a_document_to_a_host_that_opens_the_documents() {
+    const OPENING: [&str; 15] = [
+        "file.open",
+        "file.open_recent",
+        "file.clear_recent",
+        "file.pin_folder",
+        "create.blank",
+        "create.file",
+        "create.multiple",
+        "create.multiple_separate",
+        "create.images",
+        "create.clipboard",
+        "page.combine",
+        "comment.summarize",
+        "doc.compare",
+        "file.close",
+        "file.close_all",
+    ];
+    let shown = harness(false);
+    let there = menu_commands(shown.state());
+    for id in OPENING {
+        // The recent files are a submenu whose items carry an index, and "no recent files" stands for them before any;
+        // Summarize comments and Compare files are in the menus only through View ▸ Tools.
+        if matches!(id, "file.open_recent" | "file.clear_recent" | "comment.summarize" | "doc.compare") {
+            continue;
+        }
+        assert!(there.iter().any(|c| c == id), "{id} is in the menus of a window that opens its documents");
+    }
+    assert!(menu_titles(shown.state()).iter().any(|t| t == "Create"), "the Create submenu");
+
+    let hosted = harness(true);
+    let here = menu_commands(hosted.state());
+    for id in OPENING {
+        assert!(!here.iter().any(|c| c == id), "{id} is in the menus of a window the page opens the documents of");
+    }
+    let titles = menu_titles(hosted.state());
+    for title in ["Create", "Open Recent"] {
+        assert!(!titles.iter().any(|t| t == title), "the {title} submenu");
+    }
+    // The menus are otherwise where they were: saving, printing, the view and the pages.
+    for id in ["file.save", "file.save_as", "print.dialog", "view.palette", "page.rotate", "edit.find"] {
+        assert!(here.iter().any(|c| c == id), "{id} stays");
+    }
+}
+
+/// View ▸ Tools lists the groups of the All tools list, which has no Create, Combine or Compare for such a host; nor does
+/// View ▸ Side panels offer the Compare panel.
+#[test]
+fn the_menu_bar_lists_no_tool_that_opens_another_document_to_a_host_that_opens_the_documents() {
+    let shown = harness(false);
+    let titles = menu_titles(shown.state());
+    let group = |name: &str| pdfcraft_engine::catalog::group(name).map(|g| g.label.to_owned()).unwrap_or_default();
+    // Create and Combine files have no group of their own there when every command of theirs is in the File menu already.
+    assert!(titles.iter().any(|t| *t == group("compare")), "the Compare tool group is in View ▸ Tools");
+    assert!(menu_commands(shown.state()).iter().any(|c| c == "doc.compare"), "and its command");
+    let hosted = harness(true);
+    let titles = menu_titles(hosted.state());
+    for id in ["create", "combine", "compare"] {
+        assert!(!titles.iter().any(|t| *t == group(id)), "the {id} tool group is in View ▸ Tools of a hosted window");
+    }
+    // The Compare panel is a side panel of View ▸ Side panels, a command with the panel's name as its parameter.
+    let compare_panel = |app: &PdfCraftApp| {
+        app.menu_bar(&egui::Context::default())
+            .items()
+            .iter()
+            .any(|item| item.command.id == "view.panel" && item.command.params.get("panel").and_then(|p| p.as_str()) == Some("compare"))
+    };
+    assert!(compare_panel(shown.state()), "the Compare panel is in View ▸ Side panels elsewhere");
+    assert!(!compare_panel(hosted.state()), "and not in the window the page opens the documents of");
+}

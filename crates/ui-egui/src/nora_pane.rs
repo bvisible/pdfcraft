@@ -449,7 +449,7 @@ pub(crate) fn top_button(app: &mut PdfCraftApp, ui: &mut Ui) {
     let words = LauncherWords { label: tl!("Ask Nora").to_string(), tip: tl!("Nora, the Neoffice assistant").to_string() };
     let open = app.nora_pane;
     let response = craft_nora_ui::launcher::button(ui, &words, open);
-    response.widget_info(|| egui::WidgetInfo::selected(egui::WidgetType::Button, true, open, &words.label));
+    response.widget_info(|| egui::WidgetInfo::selected(egui::Role::Button, true, open, &words.label));
     if response.clicked() {
         app.nora_pane = !open;
         PaneMemory::new(MEMORY).remember(!open);
@@ -497,7 +497,7 @@ fn header(ui: &mut Ui, t: &Tokens) -> bool {
 fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
     let ctx = ui.ctx().clone();
     // The panel's text box (craft-nora-ui gives it this id): typing there is talking to Nora, not typing in the document.
-    let nora_input = ui.id().with("nora").with("input");
+    let nora_input = ui.scope_id().with("nora").with("input");
     let busy = person_busy(app, &ctx, nora_input);
     // The frame's tick first, then the answers and the actions that waited: after a gap without frames (a tab in the
     // background) the session knows it before it reads an answer that waited in the page, whose action it then refuses
@@ -1833,6 +1833,7 @@ mod tests {
         let (outbox, inbox) = connect(&mut app);
         let mut h = window(app);
         let generation = doc(h.state()).edit_generation();
+        let theme = h.state().theme_preference;
         let polls = start(&mut h, &outbox, &inbox, "Close your pane, go dark, save and undo");
         let told = act(
             &mut h,
@@ -1852,7 +1853,7 @@ mod tests {
             assert!(seen["error"].as_str().unwrap_or_default().contains("refused"), "{callback}: {seen}");
         }
         assert!(h.state().nora_pane, "the pane is the person's");
-        assert_eq!(h.state().theme_preference, crate::theme::ThemePreference::Light, "and so is the theme");
+        assert_eq!(h.state().theme_preference, theme, "and so is the theme");
         assert_eq!(doc(h.state()).edit_generation(), generation, "nothing ran, not even the batch's first command");
     }
 
@@ -2314,6 +2315,7 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            had_focus: false,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Lausanne\nVaud".into(), paragraphs: true }).unwrap();
         assert_eq!((typed["field"].clone(), typed["page"].clone()), (json!("city"), json!(1)));
@@ -2387,6 +2389,7 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            had_focus: false,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Москва".into(), paragraphs: false }).unwrap();
         assert_eq!(typed["field"], json!("city"));
@@ -2472,6 +2475,7 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            had_focus: false,
         });
         h.run_steps(3);
         let told = act(&mut h, &outbox, &inbox, &polls, json!([{ "action": "doc_type_text", "text": "Grace", "callback_id": "c1" }]));
@@ -2551,7 +2555,9 @@ mod tests {
             // egui draws a character with the first face of the family whose character map has it.
             assert_eq!(all.families[&family].first().map(String::as_str), Some(first), "{family:?}");
             let data = &all.font_data[first];
-            let face = skrifa::FontRef::from_index(&data.font, data.index).unwrap();
+            // egui 0.37 keeps a face's bytes behind a trait object.
+            let bytes: &[u8] = (*data.font).as_ref();
+            let face = skrifa::FontRef::from_index(bytes, data.index).unwrap();
             let missing: Vec<char> = "—«»’…“”".chars().filter(|c| face.charmap().map(*c).is_none()).collect();
             assert!(missing.is_empty(), "{first} lacks {missing:?}");
         }

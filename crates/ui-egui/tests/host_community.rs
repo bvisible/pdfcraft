@@ -51,7 +51,30 @@ fn the_update_check_is_hidden_when_the_host_hides_the_community_links() {
     assert!(!hidden.state_mut().execute("help.check_updates"), "help.check_updates ran");
     assert!(hidden.state().last_opened_url.is_none(), "upstream's releases page");
 
+    // Elsewhere it runs: the native app opens its Updates dialog, the browser build upstream's releases page.
     let mut shown = harness(false);
     assert!(shown.state_mut().execute("help.check_updates"));
-    assert!(shown.state().last_opened_url.is_some(), "elsewhere, without an update source, the releases page opens");
+    assert_eq!(shown.state().last_opened_url.is_some(), cfg!(target_arch = "wasm32"), "the releases page opens in the browser build only");
+}
+
+/// The window's menu bar (upstream 0.17) has a Help menu with upstream's links; a hosting page has its own community, so
+/// those links are not in its menus, nor is the update check. The shortcuts, the About item and the rest of Help stay.
+#[test]
+fn the_help_menu_lists_no_link_of_upstream_when_the_host_hides_the_community_links() {
+    let commands =
+        |app: &PdfCraftApp| -> Vec<String> { app.menu_bar(&egui::Context::default()).items().iter().map(|item| item.command.id.clone()).collect() };
+    const UPSTREAM: [&str; 5] = ["help.discord", "help.app_page", "help.github", "help.website", "help.check_updates"];
+    let shown = harness(false);
+    let there = commands(shown.state());
+    for id in UPSTREAM {
+        assert!(there.iter().any(|c| c == id), "{id} is in the Help menu elsewhere");
+    }
+    let hidden = harness(true);
+    let here = commands(hidden.state());
+    for id in UPSTREAM {
+        assert!(!here.iter().any(|c| c == id), "{id} is in the Help menu of a hosted window");
+    }
+    for id in ["help.shortcuts", "help.about"] {
+        assert!(here.iter().any(|c| c == id), "{id} stays");
+    }
 }
