@@ -106,7 +106,7 @@ carry a marker in place.
 - **The Nora assistant pane** (new files `crates/ui-egui/src/nora_pane.rs`, with its tests, `crates/ui-egui/src/nora_origin.rs`
   and `apps/pdfcraft-web/src/nora.rs`; marked changes in the workspace `Cargo.toml`, `crates/ui-egui/Cargo.toml` and
   `apps/pdfcraft-web/Cargo.toml`, `deny.toml` (the fork's git source allowed), `crates/ui-egui/src/lib.rs` (the modules, the fields
-  `nora_pane`, `nora_http`, `nora_inbox` and `nora`), `hooks.rs` (`NoraHttpFn`, `NoraInbox`), `app.rs` (their defaults, the pane in `ui`),
+  `nora_pane`, `nora_http`, `nora_inbox`, `nora_dictation` and `nora`), `hooks.rs` (`NoraHttpFn`, `NoraInbox`), `app.rs` (their defaults, the pane in `ui`, the hidden-window pump in `logic`),
   `app/prefs.rs` (the setting kept in `persist`/`restore`), `app/control.rs` (`set_option("nora")`), `commands.rs` (`ui.nora`), `workflows/js_ui.rs`
   (Preferences ▸ Assistant), `chrome.rs` (Nora's button), `apps/pdfcraft-web/src/main.rs`, and in three
   crates below the shell: `crates/engine/src/commands.rs` (the registry command `ui.nora`, "Nora assistant", in the palette
@@ -192,6 +192,15 @@ carry a marker in place.
     answers `"changed": false`.
   - **The words** go through the interface's catalogs: every new string is in all 34 of them (translated by a model,
     French reusing the wording of WordCraft's pane; the 12 catalogs upstream added in 0.11 to 0.13 and Persian, which 0.17 added, by Haiku on 2026-10-24 and 2026-11-02). "Nora" is a name and stays untranslated.
+  - **The pane of 2026-11-05** (craft-libs `7bc770d`): the panel is the Neoffice design system's (paper, ink, Karla and Forum,
+    Lucide icons, Nora's sphere) and draws its own head with the new-conversation and close buttons, so `pane` has no fill, no margin and
+    no title row (the old `style()` is gone: the interface passes no colour). What Nora is doing is said in words (reading the PDF, looking
+    through it, thinking, finishing up), an empty page greets with three ready requests, and the person can dictate: `nora_dictation`
+    (an app field, off by default and in the desktop build) is set by the web build from `window.pdfcraftNoraDictation === true`, on the
+    page or the page that frames the editor, and only then does the pane offer its microphone and let the call `nora.api.stt.transcribe`
+    through to the host (beyond `CALLS`); the session is told the interface's language for it. Nora's queue is read on while the window is
+    hidden (`pump_hidden`, called from `logic`; what the person left under way in the document, or a dialog, still holds her actions back).
+    The cards stay unanswered (`cards_unanswered`). The new strings are in `fr.tsv` only: the other catalogs show them in English.
 
 - **Our product's name in our builds** (new file `crates/ui-egui/src/brand.rs`): `brand::name()` is
   `NEOFFICE_PRODUCT_NAME` when the build sets it (only the build step of `neoffice-web.yml`: `NeoPDF`), upstream's name

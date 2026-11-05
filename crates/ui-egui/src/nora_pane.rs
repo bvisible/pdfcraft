@@ -12,6 +12,11 @@
 //! ([`PdfCraftApp::nora_http`]) and delivers the answers ([`PdfCraftApp::nora_inbox`]). Without a connection the pane
 //! says that Nora isn't available and offers no text box.
 //!
+//! The panel is the Neoffice design system's and draws everything of the pane (its canvas, its head with Nora's sphere and
+//! name, the new-conversation and close buttons, what Nora is doing in words, the microphone): the editor passes it words,
+//! never colours. The microphone is on offer only where the host carries a dictation to the server
+//! ([`PdfCraftApp::nora_dictation`]), and Nora's queue is read on while the window is hidden ([`pump_hidden`]).
+//!
 //! What Nora asks for in the document (the `doc_*` actions) is played in the document of the active tab:
 //! - **Observe**: the text of its pages, the visible ones first, then the others in order, cut at a length that fits
 //!   her; the page count, the current page and the selected text.
@@ -37,7 +42,9 @@ use craft_nora::{
     AppKind, CommandCall, CommandPolicy, Decision, DocActionKind, DocumentCall, DocumentInfo, HttpRequest, HttpResponse, Input, NoraError,
     NoraSession, Output, PageContext, Selection, SessionConfig,
 };
-use craft_nora_ui::{CorrectionWords, LauncherWords, NoraLabels, NoraPanel, NoraStyle, PaneMemory, PanelAction, ResumeWords, drive};
+use craft_nora_ui::{
+    ActivityWords, CorrectionWords, LauncherWords, NoraLabels, NoraPanel, PaneMemory, PaneWords, PanelAction, ResumeWords, VoiceWords, drive,
+};
 use egui::{Stroke, Ui};
 use pdfcraft_automation::{Automation, Content, ToolDef};
 use pdfcraft_engine::{DocId, Document, Edit, FieldValue, FormFieldKind, field_flags};
@@ -45,8 +52,8 @@ use pdfcraft_render::{PageRenderer, PageText, RenderConfig, RenderRequest, Reque
 use serde_json::{Map, Value, json};
 
 use crate::PdfCraftApp;
-use crate::i18n::fmt;
-use crate::theme::{self, Tokens};
+use crate::i18n::{self, fmt};
+use crate::theme::Tokens;
 
 /// The most characters of the selection told to Nora with a message; she reads the document herself when she needs more.
 const MAX_SELECTION_CHARS: usize = 2_000;
@@ -420,13 +427,10 @@ impl Default for NoraState {
     fn default() -> Self {
         let context = PageContext::editor(AppKind::Pdf, DocumentInfo::named(""));
         let config = SessionConfig { policy: POLICY.clone(), ..SessionConfig::default() };
-        NoraState {
-            session: NoraSession::new(config, context),
-            panel: NoraPanel::new().with_error_words(error_words),
-            changes: Vec::new(),
-            waiting: Vec::new(),
-            automation: Automation::new(),
-        }
+        // The panel draws its own head and close button (the pane's frame is empty: `pane`).
+        let mut panel = NoraPanel::new().with_error_words(error_words);
+        panel.closable = true;
+        NoraState { session: NoraSession::new(config, context), panel, changes: Vec::new(), waiting: Vec::new(), automation: Automation::new() }
     }
 }
 
@@ -456,45 +460,64 @@ pub(crate) fn top_button(app: &mut PdfCraftApp, ui: &mut Ui) {
     }
 }
 
-/// The pane at the right of the window: a title row like the other panels' ("Nora" and a close button), then the
-/// conversation.
+/// Nora's pump while the window is hidden: with the window behind another (or the tab in the background) the browser draws
+/// no frame and eframe runs only `logic`, so the pane's own pump (`conversation`) never runs and Nora's actions wait in the
+/// queue, the server asking again every fifteen seconds. Called from `PdfCraftApp::logic`, it reads her queue, plays her
+/// actions and sends the answers while nothing is drawn; where a frame is drawn (`pane`) nothing changes.
+///
+/// Nobody is at the window, so the pointer and the text boxes (state left over from the last frame drawn) hold nothing
+/// back; what the person left under way in the document, or a dialog or the palette left open, still does.
+pub(crate) fn pump_hidden(app: &mut PdfCraftApp, ctx: &egui::Context) {
+    // A closed pane is not pumped where it is drawn either (`pane`): the conversation waits for the person to open it again.
+    if !app.nora_pane || app.nora_http.is_none() || !app.nora.session.is_busy() || ctx.input(|input| input.viewport().visible()) != Some(false) {
+        return;
+    }
+    let busy = app.modal_open() || app.palette_open || working_in_document(app);
+    let mut outputs = drive(ctx, &mut app.nora.session);
+    outputs.extend(incoming(app, busy));
+    perform(app, outputs, ctx, busy);
+    if !app.nora.waiting.is_empty() {
+        ctx.request_repaint_after(Duration::from_millis(250));
+    }
+}
+
+/// The pane at the right of the window. The panel draws all of it (its canvas, its head with Nora's sphere and name, the
+/// new-conversation and close buttons, the conversation), so the frame has no fill and no margin, only the line that parts
+/// it from the document; the close button is the panel's, taken here after it is drawn.
 pub(crate) fn pane(app: &mut PdfCraftApp, ui: &mut Ui) {
     let t = Tokens::get(ui.ctx());
     egui::Panel::right("nora_pane")
         .resizable(true)
-        .default_size(330.0)
-        .size_range(260.0..=560.0)
-        .frame(
-            egui::Frame::NONE
-                .fill(t.panel)
-                .inner_margin(egui::Margin { left: 14, right: 12, top: 12, bottom: 8 })
-                .stroke(Stroke::new(1.0, t.divider)),
-        )
-        .show(ui, |ui| {
-            if header(ui, &t) {
-                app.nora_pane = false;
-                PaneMemory::new(MEMORY).remember(false);
-                return;
-            }
-            show(app, ui, &t);
-        });
+        .default_size(340.0)
+        .size_range(280.0..=560.0)
+        .frame(egui::Frame::NONE.stroke(Stroke::new(1.0, t.divider)))
+        .show(ui, |ui| show(app, ui, &t));
+    if app.nora.panel.take_close_request() {
+        app.nora_pane = false;
+        PaneMemory::new(MEMORY).remember(false);
+    }
 }
 
-/// The title row: the pane's name, and a close button. True when the button was clicked.
-fn header(ui: &mut Ui, t: &Tokens) -> bool {
-    let mut close = false;
-    ui.horizontal(|ui| {
-        let title_width = (ui.available_width() - 26.0 - ui.spacing().item_spacing.x).max(1.0);
-        // Nora is a name, the same in every language.
-        ui.add_sized([title_width, 26.0], egui::Label::new(egui::RichText::new("Nora").font(theme::semibold(15.5)).color(t.text)).truncate());
-        close = crate::icons::button(ui, "x", 26.0, false, tl!("Close panel")).clicked();
-    });
-    ui.add_space(2.0);
-    close
-}
-
-/// Draws the conversation (inside the pane's frame) and moves it along.
+/// Draws the pane's contents: the editor's note on why Nora's actions wait, when they do, under the panel, which fills
+/// the rest of the pane.
 fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
+    if !app.nora.waiting.is_empty() {
+        // The panel's canvas is the Neoffice design system's, so this strip is the editor's own, parted from it by a line.
+        egui::Panel::bottom("nora_pane_waiting").frame(egui::Frame::NONE.fill(t.panel).inner_margin(egui::Margin::symmetric(12, 8))).show(ui, |ui| {
+            ui.add(
+                egui::Label::new(
+                    egui::RichText::new(tl!("Nora is waiting for you to finish what you are doing in the document.")).color(t.text_muted),
+                )
+                .wrap(),
+            );
+        });
+    }
+    // The panel's own `Ui`, inside the strip's room: the id of its text box (below) is worked out from it.
+    egui::CentralPanel::no_frame().show(ui, |ui| conversation(app, ui));
+}
+
+/// Draws the conversation (inside the pane) and moves it along.
+fn conversation(app: &mut PdfCraftApp, ui: &mut Ui) {
     let ctx = ui.ctx().clone();
     // The panel's text box (craft-nora-ui gives it this id): typing there is talking to Nora, not typing in the document.
     let nora_input = ui.scope_id().with("nora").with("input");
@@ -505,19 +528,17 @@ fn show(app: &mut PdfCraftApp, ui: &mut Ui, t: &Tokens) {
     let mut outputs = drive(&ctx, &mut app.nora.session);
     outputs.extend(incoming(app, busy));
     app.nora.panel.labels = labels();
+    app.nora.panel.pane_words = pane_words();
+    app.nora.panel.activity_words = activity_words();
+    app.nora.panel.voice_words = voice_words();
     app.nora.panel.resume_words = resume_words();
     app.nora.panel.correction_words = correction_words();
-    app.nora.panel.style = style(t);
+    // The microphone only where the host carries the recording to the server, and in the interface's language.
+    app.nora.panel.dictation = app.nora_dictation;
+    app.nora.session.set_language(i18n::current().code().split('-').next().unwrap_or("fr"));
     app.nora.panel.offline = app.nora_http.is_none().then(|| tl!("Nora isn't available in this version yet").to_string());
     // A card's answer is not carried here (`kept`): the card says so, in place of buttons that would do nothing.
     app.nora.panel.cards_unanswered = Some(tl!("Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.").to_string());
-    if !app.nora.waiting.is_empty() {
-        ui.add(
-            egui::Label::new(egui::RichText::new(tl!("Nora is waiting for you to finish what you are doing in the document.")).color(t.text_muted))
-                .wrap(),
-        );
-        ui.add_space(4.0);
-    }
     let mut stopped = false;
     for action in app.nora.panel.show(ui, &app.nora.session) {
         if !kept(&action) {
@@ -1417,9 +1438,11 @@ const CALLS: &[&str] = &[
 ];
 
 /// Hands one call to the host. Without a connection the call fails at once, as an unavailable server; one that is no call
-/// of the conversation ([`CALLS`]) as a refused one.
+/// of the conversation ([`CALLS`]) as a refused one. The dictation's call (`STT_TRANSCRIBE`) goes only where the host said
+/// it carries one (`nora_dictation`), the only place the pane offers its microphone.
 fn send(app: &mut PdfCraftApp, request: HttpRequest) -> Vec<Output> {
-    if !CALLS.contains(&request.path.as_str()) {
+    let dictation = app.nora_dictation && request.path == craft_nora::protocol::STT_TRANSCRIBE;
+    if !dictation && !CALLS.contains(&request.path.as_str()) {
         return app.nora.session.handle(Input::Http(HttpResponse { id: request.id, status: 403, body: String::new() }));
     }
     match &app.nora_http {
@@ -1444,22 +1467,11 @@ fn context_of(app: &PdfCraftApp) -> PageContext {
     PageContext::editor(AppKind::Pdf, DocumentInfo { name: doc.name.clone(), id: None, pages, selection })
 }
 
-/// The pane's bubbles in PdfCraft's colours, light or dark: the person's messages on the accent, in the ink that reads
-/// on it (the account button's), Nora's on the hover grey.
-fn style(t: &Tokens) -> NoraStyle {
-    NoraStyle {
-        user_fill: Some(t.accent),
-        user_text: Some(crate::account::ink(t)),
-        nora_fill: Some(t.hover),
-        nora_text: Some(t.text),
-        ..NoraStyle::default()
-    }
-}
-
-/// The words of the pane in the interface language. The pane's title row is PdfCraft's own, so the panel's is left empty.
+/// The words of the pane in the interface language. The panel draws its own head (Nora's sphere and her name), so the title
+/// is her name, which is the same in every language.
 fn labels() -> NoraLabels {
     NoraLabels {
-        title: String::new(),
+        title: "Nora".to_string(),
         new_conversation: tl!("New conversation").to_string(),
         undo: tl!("Undo").to_string(),
         undo_hint: tl!("Undo the last change Nora made to the document").to_string(),
@@ -1475,6 +1487,46 @@ fn labels() -> NoraLabels {
         // A card's Open: never drawn here (`open_links` stays off: NeoPDF's host opens no page of the instance yet).
         open: tl!("Open").to_string(),
         describe,
+    }
+}
+
+/// The close button, the greeting and the ready requests of an empty page, in the interface language.
+fn pane_words() -> PaneWords {
+    PaneWords {
+        close: tl!("Close panel").to_string(),
+        undo_change: tl!("Undo this change").to_string(),
+        greeting: tl!("How can I help?").to_string(),
+        suggestions: vec![
+            tl!("Summarise this PDF").to_string(),
+            tl!("List the key dates and amounts").to_string(),
+            tl!("What is this document about?").to_string(),
+        ],
+    }
+}
+
+/// What the line under the conversation says of what Nora is doing, in the interface language. Nora does not edit the PDF
+/// itself (saving it is the person's to allow), so what she does besides reading is said as looking through it.
+fn activity_words() -> ActivityWords {
+    ActivityWords {
+        thinking: tl!("Nora is thinking…").to_string(),
+        reading: tl!("Nora is reading the PDF…").to_string(),
+        writing: tl!("Nora is looking through the PDF…").to_string(),
+        handing: tl!("Nora is finishing up…").to_string(),
+        seconds: tl!("s").to_string(),
+    }
+}
+
+/// The microphone's words, in the interface language.
+fn voice_words() -> VoiceWords {
+    VoiceWords {
+        dictate: tl!("Dictate").to_string(),
+        stop: tl!("Stop and keep what you said").to_string(),
+        cancel: tl!("Cancel").to_string(),
+        transcribing: tl!("Writing down what you said…").to_string(),
+        nothing_heard: tl!("I did not hear anything. Try again, a little closer to the microphone.").to_string(),
+        denied: tl!("The microphone is blocked. Allow it for this page, then try again.").to_string(),
+        no_microphone: tl!("No microphone found on this computer.").to_string(),
+        failed: tl!("The dictation did not work. Try again, or type your request.").to_string(),
     }
 }
 
@@ -2546,7 +2598,7 @@ mod tests {
     fn the_latin_face_draws_the_punctuation_of_nora_s_words() {
         use egui::FontFamily;
         use skrifa::MetadataProvider as _;
-        let all = theme::font_definitions();
+        let all = crate::theme::font_definitions();
         for (family, first) in [
             (FontFamily::Proportional, "Inter"),
             (FontFamily::Name("medium".into()), "Inter-Medium"),
@@ -2713,5 +2765,234 @@ mod tests {
             let left = text(&mut h);
             assert_eq!(left.as_str().is_some_and(|t| t.contains("Hello")), !applied, "{click}: {left}");
         }
+    }
+
+    /// The words of what Nora is doing, of the empty page and of the microphone are the interface's, and say PDF.
+    #[test]
+    fn the_new_word_lists_are_the_interface_s_and_say_pdf() {
+        let (activity, default) = (activity_words(), ActivityWords::default());
+        assert_eq!((&activity.thinking, &activity.handing, &activity.seconds), (&default.thinking, &default.handing, &default.seconds));
+        assert_eq!((activity.reading.as_str(), activity.writing.as_str()), ("Nora is reading the PDF…", "Nora is looking through the PDF…"));
+        let pane = pane_words();
+        assert_eq!((pane.close.as_str(), pane.undo_change.as_str(), pane.greeting.as_str()), ("Close panel", "Undo this change", "How can I help?"));
+        assert_eq!(pane.suggestions, ["Summarise this PDF", "List the key dates and amounts", "What is this document about?"]);
+        assert_eq!(format!("{:?}", voice_words()), format!("{:?}", VoiceWords::default()), "English is the panel's own");
+
+        crate::i18n::set_current(crate::i18n::lang_from_tag("fr").unwrap());
+        let (activity, pane, voice) = (activity_words(), pane_words(), voice_words());
+        crate::i18n::set_current(crate::i18n::Lang::EN);
+        let said = [activity.thinking, activity.reading, activity.writing, activity.handing];
+        assert_eq!(said, ["Nora réfléchit…", "Nora lit le PDF…", "Nora parcourt le PDF…", "Nora termine…"]);
+        assert_eq!((pane.undo_change.as_str(), pane.greeting.as_str()), ("Annuler cette modification", "Comment puis-je vous aider ?"));
+        assert_eq!(pane.suggestions, ["Résumer ce PDF", "Lister les dates et montants clés", "De quoi parle ce document ?"]);
+        let voice =
+            [voice.dictate, voice.stop, voice.cancel, voice.transcribing, voice.nothing_heard, voice.denied, voice.no_microphone, voice.failed];
+        assert_eq!(
+            voice,
+            [
+                "Dicter",
+                "Arrêter et garder ce que vous avez dit",
+                "Annuler",
+                "Nora écrit ce que vous avez dit…",
+                "Je n'ai rien entendu. Réessayez, un peu plus près du micro.",
+                "Le micro est bloqué. Autorisez-le pour cette page, puis réessayez.",
+                "Aucun micro n'a été trouvé sur cet ordinateur.",
+                "La dictée n'a pas fonctionné. Réessayez ou écrivez votre demande.",
+            ]
+        );
+    }
+
+    /// The panel draws its own head and close button; the pane's frame has none, and the close is taken after the panel is drawn.
+    #[test]
+    fn the_panel_draws_the_head_and_the_close_button() {
+        let mut app = document();
+        let (_outbox, _inbox) = connect(&mut app);
+        let mut h = window(app);
+        assert!(h.state().nora.panel.closable, "the panel carries the close button");
+        assert_eq!(h.query_all_by_label("Nora").count(), 1, "her name at the head of the panel, once");
+        assert!(h.query_by_label("New conversation").is_some());
+        // The window has other panels with a close button of that name: the pane's is the rightmost.
+        let close = h.get_all_by_label("Close panel").max_by(|a, b| a.rect().center().x.total_cmp(&b.rect().center().x)).unwrap();
+        close.click();
+        h.run_steps(4);
+        assert!(!h.state().nora_pane, "closed by the panel's button");
+        assert!(h.query_by_label("New conversation").is_none(), "nothing of the pane is drawn any more");
+        assert!(!h.state_mut().nora.panel.take_close_request(), "the request was taken");
+    }
+
+    /// An empty page greets, and offers three requests that are ready: one click sends it as if it had been typed.
+    #[test]
+    fn an_empty_page_greets_and_offers_three_ready_requests() {
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        let mut h = window(app);
+        assert!(h.query_by_label("How can I help?").is_some());
+        for request in ["Summarise this PDF", "List the key dates and amounts", "What is this document about?"] {
+            assert!(h.query_by_label(request).is_some(), "{request}");
+        }
+        h.get_by_label("List the key dates and amounts").click();
+        h.run_steps(4);
+        let calls = take(&outbox);
+        assert_eq!(calls.len(), 1, "{calls:?}");
+        assert_eq!(calls[0].body["message"], "List the key dates and amounts");
+        answer(&inbox, &calls[0], json!({ "thread_id": "t1" }));
+        h.run_steps(4);
+        assert!(h.query_by_label("How can I help?").is_none(), "the greeting leaves once she is asked");
+
+        // The same page in French.
+        let mut app = document();
+        app.set_option("language", "fr").unwrap();
+        let (_outbox, _inbox) = connect(&mut app);
+        let h = window(app);
+        for word in ["Comment puis-je vous aider ?", "Résumer ce PDF", "Lister les dates et montants clés", "De quoi parle ce document ?"] {
+            assert!(h.query_by_label(word).is_some(), "{word}");
+        }
+    }
+
+    /// While she works the pane says what she is doing, in words (and no longer "Nora is working…"); the button that takes a
+    /// change back is under it, and exists only once she changed something.
+    #[test]
+    fn what_nora_is_doing_is_said_in_words_and_undo_exists_once_she_changed_something() {
+        for (language, thinking, undo) in [("en", "Nora is thinking…", "Undo this change"), ("fr", "Nora réfléchit…", "Annuler cette modification")]
+        {
+            let mut app = document();
+            app.set_option("language", language).unwrap();
+            let (outbox, inbox) = connect(&mut app);
+            let mut h = window(app);
+            // (`start`, with the send button's name in the interface language.)
+            h.state_mut().nora.panel.set_draft("Rotate the first page");
+            h.run_steps(2);
+            h.get_by_label(if language == "fr" { "Envoyer" } else { "Send" }).click();
+            h.run_steps(4);
+            let first = take(&outbox);
+            answer(&inbox, &first[0], json!({ "thread_id": "t1" }));
+            h.run_steps(6);
+            let polls = take(&outbox);
+            assert!(h.query_by_label(thinking).is_some(), "{language}: she is thinking");
+            assert!(h.query_by_label("Nora is working…").is_none(), "{language}");
+            assert!(h.query_by_label(undo).is_none(), "{language}: nothing to take back yet");
+            let actions = polls.iter().find(|r| r.path.ends_with("get_browser_actions")).expect("the actions are read");
+            let messages = polls.iter().find(|r| r.path.ends_with("get_messages")).expect("the replies are read");
+            answer(&inbox, messages, json!({ "messages": [] }));
+            let rotation_of_page_one =
+                json!([{ "action": "doc_execute", "command": "page_rotate", "params": { "pages": [1], "degrees": 90 }, "callback_id": "c1" }]);
+            answer(&inbox, actions, json!({ "actions": rotation_of_page_one }));
+            h.run_steps(2);
+            // The turn ends with her reply: the change can be taken back.
+            for _ in 0..40 {
+                for read in take(&outbox) {
+                    if read.path.ends_with("get_messages") {
+                        answer(&inbox, &read, json!({ "messages": [{ "role": "assistant", "text": "Done.", "ts": 4_102_444_800.0 }] }));
+                    } else if read.path.ends_with("get_browser_actions") {
+                        answer(&inbox, &read, json!({ "actions": [] }));
+                    }
+                }
+                h.run_steps(2);
+                if h.query_by_label(undo).is_some() {
+                    break;
+                }
+            }
+            assert_eq!(rotation(h.state(), 0), 90, "{language}: she turned the page");
+            assert!(h.query_by_label(undo).is_some(), "{language}: the button under the change");
+        }
+    }
+
+    /// The microphone is offered only where the host says it carries a dictation to the server (`nora_dictation`), and never
+    /// in a native build, which cannot record. The dictation's call reaches the host only then, and the session is told the
+    /// interface's language to transcribe in.
+    #[test]
+    fn the_microphone_is_offered_only_where_the_host_says_so() {
+        assert!(!PdfCraftApp::new().nora_dictation, "the default build asks for nothing");
+        for host_says in [false, true] {
+            for (language, code) in [("en", "en"), ("fr", "fr")] {
+                let mut app = document();
+                app.set_option("language", language).unwrap();
+                let (outbox, _inbox) = connect(&mut app);
+                app.nora_dictation = host_says;
+                let mut h = window(app);
+                assert_eq!(h.state().nora.panel.dictation, host_says, "the panel is told what the host said");
+                assert!(!h.state().nora.panel.can_dictate(), "no microphone to open outside a browser");
+                assert!(h.query_by_label("Dictate").is_none() && h.query_by_label("Dicter").is_none());
+                let sent = h.state_mut().nora.session.handle(Input::Transcribe { audio_base64: "AAAA".into(), mime: "audio/webm".into() });
+                let ctx = h.ctx.clone();
+                perform(h.state_mut(), sent, &ctx, false);
+                let calls = take(&outbox);
+                let call = calls.iter().find(|r| r.path.ends_with("stt.transcribe"));
+                assert_eq!(call.is_some(), host_says, "{language}: the recording is carried only where the host said so");
+                if let Some(call) = call {
+                    assert_eq!(call.body["language"], code, "{language}: in the interface's language");
+                }
+            }
+        }
+    }
+
+    /// With the window hidden (behind another, or the tab in the background) the browser draws no frame and eframe runs
+    /// `logic` only: Nora's answers are still read, her actions played and their results sent. A window that is drawn is
+    /// left to its frames, as is a pane that is closed or a build without a connection.
+    #[test]
+    fn nora_goes_on_while_the_window_is_hidden() {
+        let hidden = || {
+            let mut raw = egui::RawInput::default();
+            raw.viewports.insert(
+                egui::ViewportId::ROOT,
+                egui::ViewportInfo { minimized: Some(true), occluded: Some(true), native_pixels_per_point: Some(1.0), ..Default::default() },
+            );
+            raw
+        };
+        let waiting = |inbox: &NoraInbox| inbox.lock().unwrap_or_else(|e| e.into_inner()).len();
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        let ctx = egui::Context::default();
+        let sent = app.nora.session.handle(Input::Send("Rotate the first page".into()));
+        perform(&mut app, sent, &ctx, false);
+        let first = take(&outbox);
+        assert_eq!(first.len(), 1, "{first:?}");
+        assert!(app.nora.session.is_busy());
+        answer(&inbox, &first[0], json!({ "thread_id": "t1" }));
+
+        // Drawn (or not known to be hidden): the frames do it, `pump_hidden` leaves the answer where it is.
+        let _ = ctx.run_logic(&egui::RawInput::default(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!(waiting(&inbox), 1, "a window that is drawn is pumped by its frames");
+        assert!(take(&outbox).is_empty());
+        // Pane closed: the conversation is the person's to close, nothing runs behind their back.
+        app.nora_pane = false;
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!(waiting(&inbox), 1, "a closed pane is not pumped");
+        app.nora_pane = true;
+
+        // Hidden: the answer is read, and at the next tick she is asked for her replies and her actions.
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!(waiting(&inbox), 0, "the answer was read");
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        let polls = take(&outbox);
+        let actions = polls.iter().find(|r| r.path.ends_with("get_browser_actions")).expect("her actions are read while hidden");
+        let messages = polls.iter().find(|r| r.path.ends_with("get_messages")).expect("her replies are read while hidden");
+        // An action that arrives meanwhile is played in the document, and its result goes back to her.
+        answer(&inbox, messages, json!({ "messages": [] }));
+        answer(
+            &inbox,
+            actions,
+            json!({ "actions": [{ "action": "doc_execute", "command": "page_rotate", "params": { "pages": [1], "degrees": 90 }, "callback_id": "c1" }] }),
+        );
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!(rotation(&app, 0), 90, "her action was played while the window was hidden");
+        let told = take(&outbox);
+        assert_eq!(observation(&told, "c1")["ok"], true, "she gets the result");
+
+        // A dialog the person left open holds her actions back, hidden or not.
+        app.dialog = Some(Dialog::Preferences);
+        let sent = app.nora.session.handle(Input::Send("Rotate it again".into()));
+        perform(&mut app, sent, &ctx, false);
+        let outputs = vec![Output::Document(DocumentCall { id: 99, kind: rotate(1) })];
+        perform(&mut app, outputs, &ctx, true);
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!((app.nora.waiting.len(), rotation(&app, 0)), (1, 90), "held while the dialog is open");
+        app.dialog = None;
+        let _ = ctx.run_logic(&hidden(), |ctx| pump_hidden(&mut app, ctx));
+        assert_eq!((app.nora.waiting.len(), rotation(&app, 0)), (0, 180), "played once it is closed");
+
+        // Without a connection there is nothing to pump.
+        let mut offline = document();
+        pump_hidden(&mut offline, &ctx);
     }
 }

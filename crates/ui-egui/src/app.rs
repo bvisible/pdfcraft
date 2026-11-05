@@ -174,6 +174,8 @@ impl PdfCraftApp {
             nora_pane: false,
             nora_http: None,
             nora_inbox: None,
+            // //// Neoffice — no microphone until the host says it carries a dictation (`nora_dictation`).
+            nora_dictation: false,
             nora: Default::default(),
             close_request: None,
             save_prompt_button: Default::default(),
@@ -449,6 +451,9 @@ impl eframe::App for PdfCraftApp {
         // Notices raised outside `ui` (opened files, OS events, the control channel) translate too.
         let lang = i18n::Lang::from_pref(&self.language);
         i18n::set_current(lang);
+        // //// Neoffice — Nora goes on reading her actions when the window is hidden (no frame is drawn then, the pane's own
+        // pump never runs): see `nora_pane::pump_hidden`.
+        nora_pane::pump_hidden(self, ctx);
         #[cfg(not(target_arch = "wasm32"))]
         {
             if let Some(worker) = &self.open_worker {

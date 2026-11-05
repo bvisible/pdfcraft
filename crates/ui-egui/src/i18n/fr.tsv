@@ -2914,6 +2914,23 @@ certificate	Version	Version
 	Ask Nora…	Demander à Nora…
 	Send	Envoyer
 	Nora is working…	Nora travaille…
+# //// Neoffice — the Nora pane of 05.11.2026 (craft-libs 7bc770d): what Nora is doing, the ready requests, the microphone.
+	Nora is thinking…	Nora réfléchit…
+	Nora is reading the PDF…	Nora lit le PDF…
+	Nora is looking through the PDF…	Nora parcourt le PDF…
+	Nora is finishing up…	Nora termine…
+	How can I help?	Comment puis-je vous aider ?
+	Undo this change	Annuler cette modification
+	Summarise this PDF	Résumer ce PDF
+	List the key dates and amounts	Lister les dates et montants clés
+	What is this document about?	De quoi parle ce document ?
+	Dictate	Dicter
+	Stop and keep what you said	Arrêter et garder ce que vous avez dit
+	Writing down what you said…	Nora écrit ce que vous avez dit…
+	I did not hear anything. Try again, a little closer to the microphone.	Je n'ai rien entendu. Réessayez, un peu plus près du micro.
+	The microphone is blocked. Allow it for this page, then try again.	Le micro est bloqué. Autorisez-le pour cette page, puis réessayez.
+	No microphone found on this computer.	Aucun micro n'a été trouvé sur cet ordinateur.
+	The dictation did not work. Try again, or type your request.	La dictée n'a pas fonctionné. Réessayez ou écrivez votre demande.
 	Ask Nora to read, summarize, fill in or annotate your document.	Demandez à Nora de lire, résumer, remplir ou annoter votre document.
 	Nora wants to:	Nora souhaite :
 	Refuse	Refuser

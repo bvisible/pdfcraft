@@ -472,6 +472,9 @@ pub struct PdfCraftApp {
     pub nora_http: Option<NoraHttpFn>,
     /// The answers to the calls of [`Self::nora_http`].
     pub nora_inbox: Option<NoraInbox>,
+    // //// Neoffice — the host carries a dictation to the server (`nora.api.stt.transcribe`, with the person's credentials):
+    // the pane then offers its microphone, where the browser can record. Off for every other build.
+    pub nora_dictation: bool,
     /// The conversation with Nora, and what she changed in the documents.
     pub(crate) nora: nora_pane::NoraState,
     /// A pending "save changes?" question (closing a dirty tab or quitting).
