@@ -80,16 +80,19 @@ jobs:
         run: packaging/web/package.sh
       # //// Neoffice — the zip must hold the translations our customers read: French, German, Spanish and Italian (a row of
       # each language's craft-i18n PdfCraft catalog, and one of our own rows, `i18n/neoffice/<code>.rs`: both are in the wasm
-      # as the text of their strings). A build whose languages were dropped would still start, in English.
+      # as the text of their strings). A build whose languages were dropped would still start, in English. And the answer to a save is ours (`host.rs`): its message
+      # name is in the wasm, or a refused save would show as stored.
       - name: The interface languages are in the build
         run: |
           set -euo pipefail
           work=$(mktemp -d)
           unzip -q dist/release/pdfcraft-web-*.zip -d "$work"
-          wasm=$(find "$work" -name '*.wasm' | head -n 1)
+          # Two wasm files since 0.20: the editor and the OCR worker. The words are in the editor's, the larger.
+          wasm=$(find "$work" -name '*.wasm' -exec ls -S {} + | head -n 1)
           test -n "$wasm"
           for word in "Aplatir les champs de formulaire" "Formularfelder reduzieren" "Acoplar campos de formulario" "Appiattisci campi modulo" \
-                      "Demander à Nora" "Frag Nora" "Pregunta a Nora" "Chiedi a Nora"; do
+                      "Demander à Nora" "Frag Nora" "Pregunta a Nora" "Chiedi a Nora" \
+                      "pdfcraft:saved"; do
             grep -q -a -F "$word" "$wasm" || { echo "::error::'$word' is not in $wasm: a language of the interface is missing"; exit 1; }
             echo "found: $word"
           done
