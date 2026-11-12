@@ -11,6 +11,9 @@ workspace = true
 
 [dependencies]
 pdfcraft-ui-egui = { workspace = true }
+# //// Neoffice — upstream's host bridge (`craft-web-host`, since 0.19) is not used: this fork keeps its own `?host=parent` bridge in
+# `src/main.rs` (`host`), because the answer to a save (`pdfcraft:saved { name, ok, error }`) is ours and the crate's bridge drops it (its
+# `saved` needs an `id`), which would show a refused save as stored. Take it back when the crate carries that answer.
 eframe = { workspace = true, features = ["default_fonts", "glow", "persistence", "accesskit"] }
 egui = { workspace = true, features = ["default_fonts", "monochrome_emoji_fonts"] }
 

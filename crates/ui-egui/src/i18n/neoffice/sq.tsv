@@ -1,0 +1,69 @@
+# //// Neoffice — the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+	Nora isn't available in this version yet	Nora nuk është ende e disponueshme në këtë version
+	Nora is waiting for you to finish what you are doing in the document.	Nora po pret që të përfundohet ajo që po bëhet në dokument.
+	Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.	Përgjigjuni këtij kartoni në bisedën e Nora në Neoffice: NeoPDF ende nuk e pranon.
+	There is no document open for Nora to work in.	Nuk ka asnjë dokument të hapur ku Nora të mund të punojë.
+	`{command}` is refused: Nora may not run it.	`{command}` refuzohet: Nora nuk ka leje ta ekzekutojë.
+	`{command}` can't be run by Nora in NeoPDF: it works only through the interface.	`{command}` nuk mund të ekzekutohet nga Nora në NeoPDF: funksionon vetëm përmes ndërfaqes.
+	`{command}` is played by several tools ({tools}): name the one to run.	`{command}` është ofruar nga disa mjete ({tools}): cakto cilin duhet ekzekutuar.
+	`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.	`{command}` nuk është një komandë e NeoPDF: command_list liston ato që Nora mund t'i ekzekutojë.
+	`{command}` is refused: its parameters are nested too deeply.	`{command}` refuzohet: parametrat e saj janë futur shumë thellë.
+	`{command}` is refused: `{key}` would reach a file of the computer.	`{command}` refuzohet: `{key}` do të arrinte te një skedar i kompjuterit.
+	`{command}` is refused: `{key}` is a password, which only you enter.	`{command}` refuzohet: `{key}` është fjalëkalim, që futet vetëm me dorë.
+	The parameters of `{command}` must be an object.	Parametrat e `{command}` duhet të jenë një objekt.
+	Nora works in the document open in this window: `doc` names another one.	Nora punon në dokumentin e hapur në këtë dritare: `doc` tregon një dokument tjetër.
+	`{command}` failed unexpectedly ({error}); the document was not changed.	`{command}` dështoi papritur ({error}); dokumenti nuk u ndryshua.
+	Commands in one batch: {count} at most.	Komandat në një grup: të shumtën {count}.
+	`{command}` failed: {error}	`{command}` dështoi: {error}
+	Occurrences of “{text}” in the document: {count} (not {occurrence}).	Përsëritjet e “{text}” në dokument: {count} (jo {occurrence}).
+	“{text}” is not in the first {pages} pages of the document.	“{text}” nuk gjendet në {pages} faqet e para të dokumentit.
+	“{text}” is not in the document.	“{text}” nuk gjendet në dokument.
+	There is no text to type.	Nuk ka tekst për t'u shkruar.
+	There is no page {page}: the last page is {count}.	Nuk ekziston faqja {page}: faqja e fundit është {count}.
+	{name} was not saved: {why}	{name} nuk u ruajt: {why}
+	Nora has nothing left to undo.	Nora nuk ka më asgjë për të zhbërë.
+	The document has changed since Nora's last change: use Undo in the editor instead.	Dokumenti ka ndryshuar që nga ndryshimi i fundit i bërë nga Nora: përdor në vend të kësaj Zhbëj në redaktues.
+	Undo failed at step {step} of {count}: {error}	Zhbërja dështoi në hapin {step} nga {count}: {error}
+	New conversation	Bisedë e re
+	Undo the last change Nora made to the document	Zhbëj ndryshimin e fundit që Nora ka bërë në dokument
+	Ask Nora…	Pyet Nora…
+	Send	Dërgo
+	Nora is working…	Nora po punon…
+	Ask Nora to read, summarize, fill in or annotate your document.	Kërkoji Nora të lexojë, përmbledhë, plotësojë ose shënojë dokumentin tënd.
+	Nora wants to:	Nora dëshiron të:
+	Refuse	Refuzo
+	Read the document	Lexo dokumentin
+	Run {command}	Ekzekuto {command}
+	Run several commands ({count})	Ekzekuto disa komanda ({count})
+	Select “{text}”	Zgjidh “{text}”
+	Type “{text}”	Shkruaj “{text}”
+	Look at page {page}	Shiko faqen {page}
+	Save the document	Ruaj dokumentin
+	Undo the last change	Zhbëj ndryshimin e fundit
+	Assistant	Asistenti
+	Show the Nora assistant pane (experimental)	Shfaq panelin e asistentit Nora (eksperimental)
+	Nora assistant	Asistenti Nora
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+	`{command}` is refused: your signature and initials are yours to add.	`{command}` refuzohet: nënshkrimin dhe inicialet i shton vetëm përdoruesi.
+	`{command}` is refused: this document's security forbids copying its text.	`{command}` refuzohet: siguria e këtij dokumenti ndalon kopjimin e tekstit të tij.
+	Nora's change is too old to be taken back whole: use Undo in the editor instead.	Ndryshimi i bërë nga Nora është shumë i vjetër për t'u zhbërë plotësisht: përdor në vend të kësaj Zhbëj në redaktues.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+	Stop	Ndalo
+	Stopped.	Ndalur.
+	Nora did not answer in time.	Nora nuk u përgjigj në kohë.
+	Nora could not be reached. Check the connection and try again.	Nuk u arrit të lidhet me Nora. Kontrollo lidhjen dhe provo përsëri.
+	Your session has expired. Sign in again.	Sesioni yt ka skaduar. Hyr përsëri.
+	The server could not answer (error {status}). Try again in a moment.	Serveri nuk mundi të përgjigjet (gabim {status}). Provo përsëri pas pak.
+	Nora's answer could not be read.	Përgjigja e dhënë nga Nora nuk mundi të lexohet.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+	This tab was in the background: Nora could not act in the document.	Ky skedë ishte në sfond: Nora nuk mundi të veprojë në dokument.
+	Resume	Rifillo
+	Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.	Asgjë nuk u krye në dokument: Nora nuk mundi të veprojë në të në kohë. Kërko përsëri nëse ende e ke nevojë.
+	Not all of this was done: part of it could not run in the document in time.	Jo gjithçka u krye: një pjesë e saj nuk mundi të ekzekutohej në dokument në kohë.
+
+# //// Neoffice — the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+	Ask Nora	Pyet Norën
+	Nora, the Neoffice assistant	Nora, asistentja e Neoffice
