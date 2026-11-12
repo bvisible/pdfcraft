@@ -2067,6 +2067,37 @@ mod tests {
         ] {
             assert!(names.contains(&name), "{name} is refused until it is reviewed");
         }
+        // //// Neoffice — and the 25 that PdfCraft 0.18 to 0.21 brought (bookmarks and comments copied between documents, 3D models,
+        // Bates numbering over files, OCR review, the printer's marks, copied objects…): none looked at, so all refused.
+        for name in [
+            "accessibility_layout_table_to_blocks",
+            "attachment_edit",
+            "bookmark_copy",
+            "bookmark_export",
+            "bookmark_import",
+            "comment_popup",
+            "comments_copy",
+            "comments_paste",
+            "doc_bates_multi",
+            "doc_convert_colours",
+            "doc_fix_hairlines",
+            "doc_printer_marks",
+            "form_focus",
+            "js_event",
+            "model_add",
+            "model_render",
+            "object_copy",
+            "object_paste",
+            "ocr_dictionary",
+            "ocr_review_apply",
+            "ocr_words",
+            "page_enhance_scan",
+            "printer_papers",
+            "text_prepare",
+            "text_replace",
+        ] {
+            assert!(names.contains(&name), "{name} is refused until it is reviewed");
+        }
         // Tools looked at still run: one of each kind.
         assert!(tool_for("page_rotate").is_ok() && tool_for("page.rotate").is_ok() && tool_for("comment_add").is_ok());
     }
@@ -2367,6 +2398,8 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            list: Default::default(),
+            obj: None,
             had_focus: false,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Lausanne\nVaud".into(), paragraphs: true }).unwrap();
@@ -2441,6 +2474,8 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            list: Default::default(),
+            obj: None,
             had_focus: false,
         });
         let typed = run(&mut app, DocActionKind::TypeText { text: "Москва".into(), paragraphs: false }).unwrap();
@@ -2527,6 +2562,8 @@ mod tests {
             calendar_rect: None,
             press: None,
             calendar_text: None,
+            list: Default::default(),
+            obj: None,
             had_focus: false,
         });
         h.run_steps(3);

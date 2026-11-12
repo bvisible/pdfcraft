@@ -11,16 +11,17 @@ workspace = true
 
 [dependencies]
 pdfcraft-ui-egui = { workspace = true }
+# The page command API (storytold/craft-libs#413): window.pdfcraft over the UI control channel.
+craft-web-api = { git = "https://github.com/storytold/craft-libs", rev = "fd5e2feff6ea25bed371a99cc732b3968d621505", version = "0.1.0" }
 # //// Neoffice — upstream's host bridge (`craft-web-host`, since 0.19) is not used: this fork keeps its own `?host=parent` bridge in
-# `src/main.rs` (`host`), because the answer to a save (`pdfcraft:saved { name, ok, error }`) is ours and the crate's bridge drops it (its
+# `src/host.rs`, because the answer to a save (`pdfcraft:saved { name, ok, error }`) is ours and the crate's bridge drops it (its
 # `saved` needs an `id`), which would show a refused save as stored. Take it back when the crate carries that answer.
 eframe = { workspace = true, features = ["default_fonts", "glow", "persistence", "accesskit"] }
 egui = { workspace = true, features = ["default_fonts", "monochrome_emoji_fonts"] }
+serde_json = { workspace = true }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen-futures = "0.4"
 # //// Neoffice — Headers, Request, RequestInit and RequestCredentials are for the Nora pane's `fetch` (src/nora.rs).
 web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlCanvasElement", "HtmlElement", "Location", "Url", "UrlSearchParams", "Response", "Event", "MessageEvent", "EventTarget", "Headers", "Request", "RequestInit", "RequestCredentials"] }
 js-sys = "0.3"
-# //// Neoffice — the Nora pane's answer to a call the network didn't answer (src/nora.rs).
-serde_json = { workspace = true }

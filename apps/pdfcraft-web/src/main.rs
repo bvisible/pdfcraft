@@ -12,6 +12,9 @@
 #[cfg(target_arch = "wasm32")]
 mod nora;
 
+#[cfg(any(target_arch = "wasm32", test))]
+mod api;
+
 #[cfg(target_arch = "wasm32")]
 fn main() {
     use pdfcraft_ui_egui::PdfCraftApp;
@@ -62,7 +65,7 @@ fn main() {
                         });
                     }
                     // eframe never raises a close request on a browser reload or tab close, so `guard_quit` never
-                    // prompts; ask the browser to confirm instead while a document has unsaved work (#812).
+                    // prompts; ask the browser to confirm instead while a document has unsaved work or an OCR review is open (#812).
                     warn_before_unload(app.unsaved_flag.clone());
                     // `?host=parent`: a same-origin page embedding PdfCraft in an iframe (such
                     // as the Nextcloud app) passes files in and takes saves back (`host` below).
@@ -91,12 +94,25 @@ fn main() {
                             &"PdfCraft: ?host=parent needs a framing page on the same origin; saves download instead".into(),
                         );
                     }
+                    // `?control`: `window.pdfcraft`, the page's command API (`api`). Opt-in: the control
+                    // channel keeps the accessibility tree of every frame.
+                    if query_param("control").is_some() {
+                        // //// Neoffice — never in a page that hosts the editor (`host_allows_page_api`): the page's one document is the
+                        // host's to open, save and close, and this API runs any command and reads the screen. A hosting page gets no
+                        // `window.pdfcraft`, and `attach_control` leaves the channel unserved there as well (test `host_page_api.rs`).
+                        if app.host_allows_page_api() {
+                            api::install(app.attach_control(&cc.egui_ctx));
+                        } else {
+                            eframe::web_sys::console::warn_1(&"PdfCraft: ?control is ignored: a page hosts the editor".into());
+                        }
+                    }
                     Ok(Box::new(app))
                 }),
             )
             .await;
         if let Err(e) = started {
             eframe::web_sys::console::error_1(&e);
+            // //// Neoffice — our bridge (`host.rs`), as above.
             if query_param("host").as_deref() == Some("parent")
                 && let Some(bridge) = host::Bridge::new()
             {
@@ -104,14 +120,6 @@ fn main() {
             }
         }
     });
-}
-
-/// The app's canvas: the one element `index.html` and every embedding page must provide, with
-/// the id the app looks up.
-#[cfg(target_arch = "wasm32")]
-fn app_canvas() -> Option<web_sys::HtmlCanvasElement> {
-    use eframe::wasm_bindgen::JsCast;
-    web_sys::window()?.document()?.get_element_by_id("pdfcraft").and_then(|e| e.dyn_into::<web_sys::HtmlCanvasElement>().ok())
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -145,6 +153,14 @@ async fn fetch_bytes(url: &str) -> Result<Vec<u8>, String> {
     }
     let buf = wasm_bindgen_futures::JsFuture::from(resp.array_buffer().map_err(|e| format!("{e:?}"))?).await.map_err(|e| format!("{e:?}"))?;
     Ok(js_sys::Uint8Array::new(&buf).to_vec())
+}
+
+/// The app's canvas: the one element `index.html` and every embedding page must provide, with
+/// the id the app looks up.
+#[cfg(target_arch = "wasm32")]
+fn app_canvas() -> Option<web_sys::HtmlCanvasElement> {
+    use eframe::wasm_bindgen::JsCast;
+    web_sys::window()?.document()?.get_element_by_id("pdfcraft").and_then(|e| e.dyn_into::<web_sys::HtmlCanvasElement>().ok())
 }
 
 // //// Neoffice — the `?host=parent` bridge is ours, in `host.rs`: upstream's (`craft-web-host`) has no `pdfcraft:saved { name, ok, error }`.

@@ -1,0 +1,122 @@
+// //// Neoffice — added file (no upstream equivalent)
+//! Ukrainian words of the Nora assistant pane, its switch in Preferences and its command: English source, then translation
+//! (written by a language model for the fork, not separately native-reviewed). Read by `super::plain`.
+
+pub(super) const ROWS: &[(&str, &str)] = &[
+    // the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+    ("Nora isn't available in this version yet", "Nora ще недоступна в цій версії"),
+    ("Nora is waiting for you to finish what you are doing in the document.", "Nora чекає, поки ви завершите те, що робите в документі."),
+    (
+        "Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.",
+        "Відповідайте на цю картку в чаті Nora у Neoffice: NeoPDF поки що не вміє її обробляти.",
+    ),
+    ("There is no document open for Nora to work in.", "Немає відкритого документа, з яким може працювати Nora."),
+    ("`{command}` is refused: Nora may not run it.", "Команда `{command}` відхилена: Nora не має права її виконувати."),
+    (
+        "`{command}` can't be run by Nora in NeoPDF: it works only through the interface.",
+        "Команда `{command}` не може бути виконана Nora в NeoPDF: вона працює лише через інтерфейс.",
+    ),
+    (
+        "`{command}` is played by several tools ({tools}): name the one to run.",
+        "Команда `{command}` обробляється кількома інструментами ({tools}): вкажіть, який із них запустити.",
+    ),
+    (
+        "`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.",
+        "Команди `{command}` немає в NeoPDF: command_list перелічує команди, які Nora може виконати.",
+    ),
+    ("`{command}` is refused: its parameters are nested too deeply.", "Команда `{command}` відхилена: її параметри вкладені занадто глибоко."),
+    (
+        "`{command}` is refused: `{key}` would reach a file of the computer.",
+        "Команда `{command}` відхилена: через `{key}` було б отримано доступ до файлу на комп’ютері.",
+    ),
+    (
+        "`{command}` is refused: `{key}` is a password, which only you enter.",
+        "Команда `{command}` відхилена: `{key}` — це пароль, який вводите лише ви.",
+    ),
+    ("The parameters of `{command}` must be an object.", "Параметри команди `{command}` мають бути об’єктом."),
+    (
+        "Nora works in the document open in this window: `doc` names another one.",
+        "Nora працює з документом, відкритим у цьому вікні: `doc` вказує на інший документ.",
+    ),
+    (
+        "`{command}` failed unexpectedly ({error}); the document was not changed.",
+        "Команда `{command}` несподівано завершилася помилкою ({error}); документ не змінено.",
+    ),
+    ("Commands in one batch: {count} at most.", "Команд в одному пакеті: не більше {count}."),
+    ("`{command}` failed: {error}", "Команду `{command}` не виконано: {error}"),
+    ("Occurrences of “{text}” in the document: {count} (not {occurrence}).", "Входження «{text}» у документі: {count} (а не {occurrence})."),
+    ("“{text}” is not in the first {pages} pages of the document.", "У перших {pages} сторінках документа немає «{text}»."),
+    ("“{text}” is not in the document.", "У документі немає «{text}»."),
+    ("There is no text to type.", "Немає тексту для введення."),
+    ("There is no page {page}: the last page is {count}.", "Сторінки {page} немає. Остання сторінка: {count}."),
+    ("{name} was not saved: {why}", "Файл {name} не збережено: {why}"),
+    ("Nora has nothing left to undo.", "У Nora більше нічого скасовувати."),
+    (
+        "The document has changed since Nora's last change: use Undo in the editor instead.",
+        "Документ змінився після останньої зміни Nora: натомість скористайтеся «Скасувати» в редакторі.",
+    ),
+    ("Undo failed at step {step} of {count}: {error}", "Скасування не вдалося на кроці {step} із {count}: {error}"),
+    ("New conversation", "Новий діалог"),
+    ("Undo the last change Nora made to the document", "Скасувати останню зміну, зроблену Nora у документі"),
+    ("Ask Nora…", "Запитайте Nora…"),
+    ("Send", "Надіслати"),
+    ("Nora is working…", "Nora працює…"),
+    (
+        "Ask Nora to read, summarize, fill in or annotate your document.",
+        "Попросіть Nora прочитати, підсумувати, заповнити або позначити ваш документ.",
+    ),
+    ("Nora wants to:", "Nora хоче:"),
+    ("Refuse", "Відмовити"),
+    ("Read the document", "Прочитати документ"),
+    ("Run {command}", "Виконати {command}"),
+    ("Run several commands ({count})", "Виконати кілька команд ({count})"),
+    ("Select “{text}”", "Вибрати «{text}»"),
+    ("Type “{text}”", "Ввести «{text}»"),
+    ("Look at page {page}", "Переглянути сторінку {page}"),
+    ("Save the document", "Зберегти документ"),
+    ("Undo the last change", "Скасувати останню зміну"),
+    ("Assistant", "Помічник"),
+    ("Show the Nora assistant pane (experimental)", "Показати панель помічника Nora (експериментально)"),
+    ("Nora assistant", "Помічник Nora"),
+    // the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+    (
+        "`{command}` is refused: your signature and initials are yours to add.",
+        "Команда `{command}` відхилена: свій підпис і свої ініціали можете додати лише ви самі.",
+    ),
+    (
+        "`{command}` is refused: this document's security forbids copying its text.",
+        "Команда `{command}` відхилена: налаштування захисту цього документа забороняють копіювання його тексту.",
+    ),
+    (
+        "Nora's change is too old to be taken back whole: use Undo in the editor instead.",
+        "Зміна Nora надто давня, щоб скасувати її цілком: натомість скористайтеся «Скасувати» в редакторі.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+    ("Stop", "Зупинити"),
+    ("Stopped.", "Зупинено."),
+    ("Nora did not answer in time.", "Nora не відповіла вчасно."),
+    ("Nora could not be reached. Check the connection and try again.", "Не вдалося з’єднатися з Nora. Перевірте з’єднання та спробуйте ще раз."),
+    ("Your session has expired. Sign in again.", "Ваш сеанс завершився. Увійдіть знову."),
+    (
+        "The server could not answer (error {status}). Try again in a moment.",
+        "Сервер не зміг відповісти (помилка {status}). Спробуйте ще раз трохи пізніше.",
+    ),
+    ("Nora's answer could not be read.", "Не вдалося прочитати відповідь Nora."),
+    // the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+    (
+        "This tab was in the background: Nora could not act in the document.",
+        "Ця вкладка була у фоновому режимі: Nora не змогла виконати дію в документі.",
+    ),
+    ("Resume", "Відновити"),
+    (
+        "Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.",
+        "У документі нічого не зроблено: Nora не змогла виконати дії вчасно. Попросіть ще раз, якщо це все ще потрібно.",
+    ),
+    (
+        "Not all of this was done: part of it could not run in the document in time.",
+        "Виконано не все: частину не вдалося запустити в документі вчасно.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+    ("Ask Nora", "Запитати Nora"),
+    ("Nora, the Neoffice assistant", "Nora, асистентка Neoffice"),
+];

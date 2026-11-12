@@ -1,0 +1,116 @@
+// //// Neoffice — added file (no upstream equivalent)
+//! Central Kurdish words of the Nora assistant pane, its switch in Preferences and its command: English source, then translation
+//! (written by a language model for the fork, not separately native-reviewed). Read by `super::plain`.
+
+pub(super) const ROWS: &[(&str, &str)] = &[
+    // the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+    ("Nora isn't available in this version yet", "Nora لەم وەشانەدا هێشتا بەردەست نییە"),
+    ("Nora is waiting for you to finish what you are doing in the document.", "Nora چاوەڕێی تەواوبوونی ئەو کارەیە کە لە بەڵگەنامەدا ئەنجامی دەدەیت."),
+    (
+        "Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.",
+        "وەڵامی ئەم کارتە بدەنەوە لە چاتی Nora لە Neoffice: NeoPDF هێشتا ناتوانێت وەری بگرێت.",
+    ),
+    ("There is no document open for Nora to work in.", "هیچ بەڵگەنامەیەکی کراوە نییە کە Nora تێیدا کار بکات."),
+    ("`{command}` is refused: Nora may not run it.", "`{command}` ڕەتکراوەتەوە: Nora مۆڵەتی جێبەجێکردنی نییە."),
+    (
+        "`{command}` can't be run by Nora in NeoPDF: it works only through the interface.",
+        "`{command}` لە NeoPDF لەلایەن Nora جێبەجێ ناکرێت: تەنها لە ڕووکارەوە کار دەکات.",
+    ),
+    (
+        "`{command}` is played by several tools ({tools}): name the one to run.",
+        "`{command}` لەلایەن چەند ئامرازێکەوە ({tools}) پێشکەش کراوە: ئەوەی جێبەجێی دەکرێت دیاری بکە.",
+    ),
+    (
+        "`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.",
+        "`{command}` فەرمانێکی NeoPDF نییە: command_list ئەو فەرمانانە دەخاتەڕوو کە Nora دەتوانێت جێبەجێیان بکات.",
+    ),
+    ("`{command}` is refused: its parameters are nested too deeply.", "`{command}` ڕەتکراوەتەوە: پارامیتەرەکانی زۆر قووڵ هەڵچنراون."),
+    ("`{command}` is refused: `{key}` would reach a file of the computer.", "`{command}` ڕەتکراوەتەوە: `{key}` دەگاتە فایلێک لەسەر کۆمپیوتەرەکە."),
+    (
+        "`{command}` is refused: `{key}` is a password, which only you enter.",
+        "`{command}` ڕەتکراوەتەوە: `{key}` وشەی نهێنییە و تەنها تۆ داخڵی دەکەیت.",
+    ),
+    ("The parameters of `{command}` must be an object.", "پارامیتەرەکانی `{command}` دەبێت ئۆبجێکت بن."),
+    (
+        "Nora works in the document open in this window: `doc` names another one.",
+        "Nora لە بەڵگەنامەی کراوەی ئەم پەنجەرەیەدا کار دەکات: `doc` ناوی بەڵگەنامەیەکی تر دەهێنێت.",
+    ),
+    (
+        "`{command}` failed unexpectedly ({error}); the document was not changed.",
+        "`{command}` بە شێوەیەکی چاوەڕواننەکراو شکستی هێنا ({error})؛ بەڵگەنامەکە نەگۆڕدرا.",
+    ),
+    ("Commands in one batch: {count} at most.", "فەرمانەکان لە یەک دەستەدا: زۆرترین {count}."),
+    ("`{command}` failed: {error}", "`{command}` شکستی هێنا: {error}"),
+    (
+        "Occurrences of “{text}” in the document: {count} (not {occurrence}).",
+        "ژمارەی دووبارەبوونەوەی «{text}» لە بەڵگەنامەکەدا: {count} (نەک {occurrence}).",
+    ),
+    ("“{text}” is not in the first {pages} pages of the document.", "«{text}» لە {pages} پەڕەی یەکەمی بەڵگەنامەکەدا نییە."),
+    ("“{text}” is not in the document.", "«{text}» لە بەڵگەنامەکەدا نییە."),
+    ("There is no text to type.", "هیچ دەقێک نییە بۆ تایپکردن."),
+    ("There is no page {page}: the last page is {count}.", "پەڕەی {page} نییە: دوایین پەڕە پەڕەی {count}ە."),
+    ("{name} was not saved: {why}", "{name} پاشەکەوت نەکرا: {why}"),
+    ("Nora has nothing left to undo.", "Nora هیچ شتێکی نەماوە بۆ پاشگەزبوونەوە."),
+    (
+        "The document has changed since Nora's last change: use Undo in the editor instead.",
+        "بەڵگەنامەکە لە دوایین گۆڕانکاری Nora گۆڕاوە: لە جیاتی ئەوە پاشگەزبوونەوە بەکاربهێنە لە دەستکاریکەر.",
+    ),
+    ("Undo failed at step {step} of {count}: {error}", "پاشگەزبوونەوە لە هەنگاوی {step} لە {count} شکستی هێنا: {error}"),
+    ("New conversation", "گفتوگۆی نوێ"),
+    ("Undo the last change Nora made to the document", "پاشگەزبوونەوەی دوایین گۆڕانکاری کە Nora لە بەڵگەنامەکەدا کردی"),
+    ("Ask Nora…", "پرسیار لە Nora…"),
+    ("Send", "ناردن"),
+    ("Nora is working…", "Nora کار دەکات…"),
+    (
+        "Ask Nora to read, summarize, fill in or annotate your document.",
+        "داوا لە Nora بکە بەڵگەنامەکەت بخوێنێتەوە، کورتەی بکات، پڕی بکاتەوە یان تێبینی بۆ بنووسێت.",
+    ),
+    ("Nora wants to:", "Nora دەیەوێت:"),
+    ("Refuse", "ڕەتکردنەوە"),
+    ("Read the document", "خوێندنەوەی بەڵگەنامە"),
+    ("Run {command}", "جێبەجێکردنی {command}"),
+    ("Run several commands ({count})", "چەند فەرمان جێبەجێ بکە ({count})"),
+    ("Select “{text}”", "هەڵبژاردنی «{text}»"),
+    ("Type “{text}”", "تایپکردنی «{text}»"),
+    ("Look at page {page}", "سەیرکردنی پەڕەی {page}"),
+    ("Save the document", "پاشەکەوتکردنی بەڵگەنامە"),
+    ("Undo the last change", "پاشگەزبوونەوەی دوایین گۆڕانکاری"),
+    ("Assistant", "یاریدەدەر"),
+    ("Show the Nora assistant pane (experimental)", "پانێڵی یاریدەدەری Nora نیشان بدە (ئەزموونی)"),
+    ("Nora assistant", "یاریدەدەری Nora"),
+    // the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+    ("`{command}` is refused: your signature and initials are yours to add.", "`{command}` ڕەتکراوەتەوە: واژۆ و سەرەتاکانت تەنها تۆ زیاد دەکەیت."),
+    (
+        "`{command}` is refused: this document's security forbids copying its text.",
+        "`{command}` ڕەتکراوەتەوە: پاراستنی ئەم بەڵگەنامەیە ڕێگە نادات دەقەکەی کۆپی بکرێت.",
+    ),
+    (
+        "Nora's change is too old to be taken back whole: use Undo in the editor instead.",
+        "گۆڕانکارییەکەی Nora زۆر کۆنە کە بە تەواوی پاشگەزبکرێتەوە: لە جیاتی ئەوە پاشگەزبوونەوە بەکاربهێنە لە دەستکاریکەر.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+    ("Stop", "وەستاندن"),
+    ("Stopped.", "وەستا."),
+    ("Nora did not answer in time.", "Nora لە کاتی خۆیدا وەڵامی نەدایەوە."),
+    ("Nora could not be reached. Check the connection and try again.", "پەیوەندی بە Nora نەکرا. پەیوەندییەکە بپشکنە و دووبارە هەوڵ بدەوە."),
+    ("Your session has expired. Sign in again.", "ماوەی دانیشتنەکەت تەواو بووە. جارێکی تر بچۆ ژوورەوە."),
+    (
+        "The server could not answer (error {status}). Try again in a moment.",
+        "سێرڤەر وەڵامی نەدایەوە (هەڵە {status}). چەند ساتێکی تر دووبارە هەوڵ بدەوە.",
+    ),
+    ("Nora's answer could not be read.", "وەڵامی Nora نەخوێندرایەوە."),
+    // the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+    ("This tab was in the background: Nora could not act in the document.", "ئەم بازدەرە لە پاشبنەمادا بوو: Nora نەیتوانی کار لە بەڵگەنامەکە بکات."),
+    ("Resume", "درێژەپێدان"),
+    (
+        "Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.",
+        "هیچ کارێک لە بەڵگەنامەکەدا ئەنجام نەدرا: Nora نەیتوانی لە کاتی خۆیدا کار تێیدا بکات. ئەگەر هێشتا پێویستت پێیەتی، دووبارە داوا بکە.",
+    ),
+    (
+        "Not all of this was done: part of it could not run in the document in time.",
+        "هەموو ئەمە ئەنجام نەدرا: بەشێک لێی لە کاتی خۆیدا لە بەڵگەنامەکە نەیتوانی جێبەجێ بکرێت.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+    ("Ask Nora", "پرسیار لە Nora"),
+    ("Nora, the Neoffice assistant", "Nora، یاریدەدەری Neoffice"),
+];

@@ -6,7 +6,12 @@ impl PdfCraftApp {
     /// sends requests to this app; [`control::serve`] exposes it on loopback.
     pub fn attach_control(&mut self, ctx: &egui::Context) -> control::ControlClient {
         let (control, client) = control::attach(ctx);
-        self.control = Some(control);
+        // //// Neoffice — a page that hosts the editor gets no control channel: the client returned is not served (its calls
+        // answer "the app dropped the request"), whoever asks, so `window.pdfcraft` or any other client can neither run
+        // commands nor read the screen there (`host_allows_page_api`, test `host_page_api.rs`).
+        if self.host_allows_page_api() {
+            self.control = Some(control);
+        }
         client
     }
 
@@ -116,6 +121,7 @@ impl PdfCraftApp {
                     "header-footer" => Some(Dialog::Marks(pdfcraft_engine::MarkKind::HeaderFooter)),
                     "watermark" => Some(Dialog::Marks(pdfcraft_engine::MarkKind::Watermark)),
                     "background" => Some(Dialog::Marks(pdfcraft_engine::MarkKind::Background)),
+                    "printer-marks" => Some(Dialog::PrinterMarks),
                     "export-image" => Some(Dialog::Export(export_ui::ExportKind::Image)),
                     "word-count" => Some(Dialog::WordCount),
                     "export-text" => Some(Dialog::Export(export_ui::ExportKind::Text)),
@@ -142,6 +148,13 @@ impl PdfCraftApp {
                         self.execute("page.number");
                         Some(Dialog::NumberPages)
                     }
+                    "convert-colours" => Some(Dialog::ConvertColours),
+                    "fix-hairlines" => {
+                        // Through the command, so it is refused with no document or none that
+                        // can be modified, as the menu is.
+                        self.execute("prepress.hairlines");
+                        return Ok(());
+                    }
                     "page-properties" => {
                         // Same path as the panel, so the selected pages and their order are seeded.
                         self.execute("page.properties");
@@ -153,6 +166,7 @@ impl PdfCraftApp {
                 if let Some(Dialog::Marks(kind)) = self.dialog {
                     self.marks_draft.opened(kind);
                 }
+                dialogs::discard_inactive_password_drafts(self);
             }
             ("tools", _) if value == "full" => self.expand_all_tools(),
             ("tools", _) => {
@@ -351,6 +365,7 @@ impl PdfCraftApp {
                 };
             }
             ("author", _) => self.comment_prefs.author = value.to_string(),
+            ("folder-collapsed", _) => self.set_folder_collapsed(value)?,
             ("comment-tool-pinned", _) => {
                 self.comment_prefs.pinned = match value {
                     "true" => true,
@@ -363,6 +378,13 @@ impl PdfCraftApp {
                     "true" => true,
                     "false" => false,
                     _ => return Err("hide-empty-highlight-hover must be true or false".into()),
+                };
+            }
+            ("text-links", _) => {
+                self.text_links = match value {
+                    "true" => true,
+                    "false" => false,
+                    _ => return Err("text-links must be true or false".into()),
                 };
             }
             // //// Neoffice — `--nora on|off` (and `ui.set`): show or hide the Nora assistant pane; `ui.nora` toggles it.

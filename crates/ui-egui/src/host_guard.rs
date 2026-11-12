@@ -59,6 +59,14 @@ impl PdfCraftApp {
         }
     }
 
+    // The page API of upstream's web build (`window.pdfcraft`, opt-in with `?control`) and the control channel under it
+    // run any registry command by id and read the screen, which would hand a script the page's one document and all the
+    // commands that open, create and close others. A page that hosts the editor (`host_owns_documents`) has its own bridge
+    // (`pdfcraft:*` messages) and no use for it: refused there, whatever the address says.
+    pub fn host_allows_page_api(&self) -> bool {
+        !self.host_owns_documents
+    }
+
     // "Create a PDF", "Combine files" and "Compare files" only open or create other documents; a page that opens the
     // documents has none of them among its tools.
     pub(crate) fn host_hides_tool(&self, id: &str) -> bool {

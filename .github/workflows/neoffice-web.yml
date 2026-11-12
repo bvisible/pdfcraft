@@ -79,8 +79,8 @@ jobs:
           NEOFFICE_PRODUCT_NAME: NeoPDF
         run: packaging/web/package.sh
       # //// Neoffice — the zip must hold the translations our customers read: French, German, Spanish and Italian (a row of
-      # each language's craft-i18n PdfCraft catalog, and one of our own rows, `i18n/neoffice/<code>.tsv`: both are in the wasm
-      # as the catalogs' own text). A build whose languages were dropped would still start, in English.
+      # each language's craft-i18n PdfCraft catalog, and one of our own rows, `i18n/neoffice/<code>.rs`: both are in the wasm
+      # as the text of their strings). A build whose languages were dropped would still start, in English.
       - name: The interface languages are in the build
         run: |
           set -euo pipefail

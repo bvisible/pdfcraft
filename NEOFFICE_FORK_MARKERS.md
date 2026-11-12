@@ -10,17 +10,28 @@ At the next upstream merge, `grep -rn "////"` in the source plus this file give 
 picture of what is ours and why.
 
 - **Upstream**: `storytold/pdfcraft`, branch `main`.
-- **Base of the divergence**: `7d78f3e1` (`7d78f3e14474b978be014715e0cc64895d77025a`), the tag `v0.17.0`, merged on 2026-11-02 (in two steps,
-  after the tag `v0.14.0`, `5a78b223`, the same day). Before: `53199fb4`, the tag `v0.13.0`, merged on 2026-10-24 (after the tag
-  `v0.11.0`, `3e306453`, the same day). `version-15` was cut on 2026-10-13 at the tag `v0.7.1` (`7163ba3d`).
-  Move it at each upstream merge. The check works it out itself (the common ancestor with
-  upstream's `main`), so this line is for the reader.
-- **What the 0.14 to 0.17 merge had to carry over by hand**: upstream split `ui-egui/src/lib.rs` (into `app.rs`, `app/*.rs`,
+- **Base of the divergence**: `b503b2e6` (`b503b2e62dfeec5598f344e4e287d9c9cbdb34fa`), the tag `v0.21.1`, merged on 2026-11-12 (in two steps,
+  after the tag `v0.19.0`, `8c572792`, the same day). Before: `7d78f3e1`, the tag `v0.17.0`, merged on 2026-11-02 (after the tag `v0.14.0`,
+  `5a78b223`), and `53199fb4`, the tag `v0.13.0`, on 2026-10-24. `version-15` was cut on 2026-10-13 at the tag `v0.7.1` (`7163ba3d`).
+  Move it at each upstream merge. The check works it out itself (the common ancestor with upstream's `main`), so this line is for the
+  reader. **Upstream's tags since 0.18 are cut off `main`** (a release branch with its own version commits, merged back into `main`
+  only in part): the common ancestor with `main` is then the last `main` commit the tag took in (`1d2af990` for 0.21.1), and the
+  version bumps of the release commits count as changes the check wants marked: `Cargo.toml` (`[workspace.package]` and the block of
+  internal crates) carries a marker for them.
+- **What the 0.17 to 0.21 merge had to carry over by hand**: the interface translations left the repository (0.19: `craft-i18n`, embedded
+  from `CRAFT_I18N_DIR` at `craft-i18n.rev`), so our Nora words, which were appended to upstream's 34 catalogs, have a place of their own
+  (`i18n/neoffice.rs` and a table per language in `i18n/neoffice/`, below); the web build's host bridge moved to the `craft-web-host` crate, whose answer to a save has no place for
+  `pdfcraft:saved { name, ok, error }`, so the bridge we had is kept in `apps/pdfcraft-web/src/host.rs`; Preferences became cards (the
+  Assistant switch is the card 7 of `dialogs/preferences.rs`); the tab strip, the mode bar and the tab menu were rebuilt for split view
+  (`chrome.rs`, `panes.rs`: Close Tab and the close button of a view stay hidden for a page's document); the hotbar, the whole registry
+  in a strip (`hotbar.rs`: what a hosting page hides is off the bar and out of its picker); a portfolio's first document opens by itself
+  (`app/files.rs`: not for a hosting page); the page API `window.pdfcraft` (0.21: not served to a hosting page, `host_page_api.rs`).
+  Upstream also took our `Document::undo_depth` as its own (0.21), so ours is gone. And at 0.17: upstream split `ui-egui/src/lib.rs` (into `app.rs`, `app/*.rs`,
   `state.rs`, `hooks.rs`, `persist/`, `panels/`, `tools/`, `workflows/`, `dialogs/`, `menus.rs`…), `engine/src/lib.rs` (into
   `session/*.rs`, `document.rs`, `history.rs`…) and `forms/src/af.rs` (into `af/script.rs`, `af/calc.rs`…), moved `i18n/mod.rs` to
   `i18n.rs`, and replaced the menus of the window by one definition for the native macOS menu bar and a bar drawn in the window
   (`menus.rs`, on craft-menu), so each guard below sits where upstream's code now is, and the added helpers sit in new files of our
-  own (`host_guard.rs`, `session/checkpoint.rs`) that a later split cannot move under us.
+  own (`host_guard.rs`, `session/checkpoint.rs`, `i18n/neoffice.rs`, `apps/pdfcraft-web/src/host.rs`) that a later split cannot move under us.
 
 ## What the fork adds
 
@@ -37,7 +48,17 @@ carry a marker in place.
   job on a GitHub runner (by hand, or on a push that touches code), because the maintainer's Mac has
   too little disk to run it for every change. It checks out craft-fonts at the commit upstream's own CI uses (`craft-fonts-ref` of its
   `ci.yml`: `b076417b` since 0.15, which the build script of pdfcraft-fonts needs for its required Simplified Chinese manifest); move it
-  with upstream's.
+  with upstream's. Since 0.19 it also checks out `craft-i18n` at the commit of `craft-i18n.rev` (the interface translations left the
+  repository: without that checkout the interface is English only; `CRAFT_I18N_DIR` and `CRAFT_I18N_REQUIRED=1`), as upstream's gate does
+  with its own shared action, which this fork's Actions settings don't allow. `neoffice-web.yml` does the same, and fails when French,
+  German, Spanish and Italian (a row of upstream's catalog and one of ours in each) are not in the wasm.
+- **The host bridge of the browser build is ours** (`apps/pdfcraft-web/src/host.rs`, an added file; `main.rs` declares it and calls it where
+  upstream calls its own). From 0.19 upstream's bridge is the `craft-web-host` crate's (the same contract for every Craft app,
+  `data-host="page"` as a second transport); its answer to a save carries an `id` and has no place for our `pdfcraft:saved { name, ok,
+  error }`, which the crate would drop, so a save the page refused would show as stored. We keep the bridge of 0.17 (the messages the
+  pages that host the editor speak: `pdfcraft:ready`, `open`, `save`, `dirty`, `failed`, and our `saved`), and `craft-web-host` is not a
+  dependency (`apps/pdfcraft-web/Cargo.toml`, marked); `craft-web-api`, for `window.pdfcraft`, is (below). Take upstream's bridge back
+  when the crate carries `{ name, ok, error }`.
 - **The answer to a save, in the host bridge of the browser build** (`?host=parent`: the
   `postMessage` contract of a same-origin page that frames the editor, `pdfcraft:ready`, `open`,
   `save`, `dirty` and `failed`, which WordCraft, GridCraft and DeckCraft speak too, so that one host
@@ -58,6 +79,20 @@ carry a marker in place.
   `unsaved_file`, which Undo and Redo read to work out whether the document is saved, so that Redo back to the state the page
   could not store leaves it unsaved), `apps/pdfcraft-web/src/main.rs` (reads the message). Drop it when upstream ships its own
   answer to a save, keeping `pdfcraft:saved`.
+- **No page API in a hosting page** (`PdfCraftApp::host_allows_page_api`, in `host_guard.rs`; marked lines in `apps/pdfcraft-web/src/main.rs`
+  and `crates/ui-egui/src/app/control.rs`; new test file `crates/ui-egui/tests/host_page_api.rs`): upstream's web build offers `window.pdfcraft`
+  (0.21, opt-in with `?control`), the page's command API over the UI control channel, which runs any registry command by id and reads the
+  screen. A page that hosts the editor (`host_owns_documents`, set by `?host=parent`) gets none: `main.rs` does not install it, and
+  `attach_control` does not serve the channel (its client's calls answer "the app has closed"), so neither `window.pdfcraft` nor any other
+  client can run the commands that open, create or close documents there. A page that is not a host has upstream's, opt-in as before.
+- **Split view and the portfolio's first document**: split view (0.20, View ▸ Split, a tab's right-click Split right/down) shows the page's
+  document in two panes, as two views of one document: no other document and no other window, so it stays; its second view has no close
+  button and `request_close_tab` refuses it, as it does the first (`chrome.rs`, `editing/close.rs`), and View ▸ Split ends it. A PDF
+  portfolio opens the document its `/D` names in a tab of its own by itself (0.20): not in a hosting page (`open_portfolio_initial` in
+  `app/files.rs`). Test file `crates/ui-egui/tests/host_views.rs`.
+- **The hotbar** (0.19, a strip of shortcuts to the whole command registry, with a picker that lists it all): a hosting page's hotbar shows
+  none of the commands `host_hides` names and its picker lists none (marked lines in `hotbar.rs`, with two tests there): they would only
+  tell the person that the page opens the documents.
 - **`?author=` always wins** (`apps/pdfcraft-web/src/main.rs`). Upstream used it only while the
   comment author was still the web default, "Guest". The browser saves that name with the other
   settings, so the first name a host passed stuck: the next user of the same browser, or the same
@@ -111,7 +146,7 @@ carry a marker in place.
   (Preferences ▸ Assistant), `chrome.rs` (Nora's button), `apps/pdfcraft-web/src/main.rs`, and in three
   crates below the shell: `crates/engine/src/commands.rs` (the registry command `ui.nora`, "Nora assistant", in the palette
   and out of the menus), `crates/engine/src/session/checkpoint.rs` (`Session::checkpoint`, `Session::restore`, `Checkpoint`, tested in
-  `tests.rs`) and `document.rs` (`Document::undo_depth`), `crates/automation/src/lib.rs` (`Automation::session_mut`; `text_lines` is refused in a document that forbids copying its
+  `tests.rs`) and `document.rs` (`Document::undo_depth`, which upstream has had as its own since 0.21: ours is gone), `crates/automation/src/lib.rs` (`Automation::session_mut`; `text_lines` is refused in a document that forbids copying its
   text since upstream 0.12, as ours was, and one marked line of `crates/automation/tests/it/automation.rs` keeps it in upstream's
   list of the tools that refuse it),
   `crates/forms/src/af/script.rs` and `af/tests.rs` (`calculate_js`: a `*/` in a calculation's notation can no longer end its script comment and
@@ -164,7 +199,7 @@ carry a marker in place.
     upstream merge brings is refused until someone has looked at it and moved it there; PdfCraft 0.8 to 0.13 brought 14, all
     refused, among them `doc_batch`, `xfa_to_static`, `layer_set` and the accessibility auto-tagging, and 0.14 to 0.17 brought 8 more, all
     refused: `attachment_add`, `attachment_delete`, `bookmark_set_style`, `bookmark_from_text_styles`, `text_styles`, `text_script`,
-    `content_copy` and `doc_backdrops`; test `the_tools_nobody_reviewed_are_refused`); any command with a
+    `content_copy` and `doc_backdrops`, and 0.18 to 0.21.1 brought 25 more, all refused: `bookmark_copy`, `bookmark_export`, `bookmark_import`, `comments_copy`, `comments_paste`, `object_copy`, `object_paste`, `doc_bates_multi`, `model_add`, `model_render`, `ocr_dictionary`, `ocr_review_apply`, `ocr_words`, `page_enhance_scan`, `attachment_edit`, `comment_popup`, `doc_convert_colours`, `doc_fix_hairlines`, `doc_printer_marks`, `printer_papers`, `text_prepare`, `text_replace`, `form_focus`, `js_event` and `accessibility_layout_table_to_blocks`; test `the_tools_nobody_reviewed_are_refused`); any command with a
     parameter that names a file (`paths`, `file`, `files`, `filename`, `folder`, `directory`, `out`, `out_dir`, `output`…,
     and `path` and `image` when they hold text: a bookmark's `path` is a list of numbers) or a password (a name holding
     `password` or `passphrase`), at any depth and in any case; and, in a document that forbids copying its text, every
@@ -190,8 +225,9 @@ carry a marker in place.
     between them, and only when the editor still keeps all its undo steps (`Document::undo_depth`). Otherwise it is
     refused and Nora's earlier changes are forgotten. An action that changed nothing
     answers `"changed": false`.
-  - **The words** go through the interface's catalogs: every new string is in all 34 of them (translated by a model,
-    French reusing the wording of WordCraft's pane; the 12 catalogs upstream added in 0.11 to 0.13 and Persian, which 0.17 added, by Haiku on 2026-10-24 and 2026-11-02). "Nora" is a name and stays untranslated.
+  - **The words** go through the interface's translations: every new string is in all 34 of our tables (`i18n/neoffice/<code>.rs`, tables read by
+    `i18n/neoffice.rs` when craft-i18n has no row for a string; a row upstream's catalog gains wins; translated by a model,
+    French reusing the wording of WordCraft's pane; the 12 catalogs upstream added in 0.11 to 0.13 and Persian, which 0.17 added, by Haiku on 2026-10-24 and 2026-11-02). "Nora" is a name and stays untranslated. A language upstream adds to `LANGUAGES` needs its table here too (`i18n/neoffice.rs` has a test that says so), or its Nora words show in English.
   - **The pane of 2026-11-05** (craft-libs `7bc770d`): the panel is the Neoffice design system's (paper, ink, Karla and Forum,
     Lucide icons, Nora's sphere) and draws its own head with the new-conversation and close buttons, so `pane` has no fill, no margin and
     no title row (the old `style()` is gone: the interface passes no colour). What Nora is doing is said in words (reading the PDF, looking
@@ -200,7 +236,7 @@ carry a marker in place.
     page or the page that frames the editor, and only then does the pane offer its microphone and let the call `nora.api.stt.transcribe`
     through to the host (beyond `CALLS`); the session is told the interface's language for it. Nora's queue is read on while the window is
     hidden (`pump_hidden`, called from `logic`; what the person left under way in the document, or a dialog, still holds her actions back).
-    The cards stay unanswered (`cards_unanswered`). The new strings are in `fr.tsv` only: the other catalogs show them in English.
+    The cards stay unanswered (`cards_unanswered`). The new strings are in the French file only: the other languages show them in English.
 
 - **Our product's name in our builds** (new file `crates/ui-egui/src/brand.rs`): `brand::name()` is
   `NEOFFICE_PRODUCT_NAME` when the build sets it (only the build step of `neoffice-web.yml`: `NeoPDF`), upstream's name
@@ -217,5 +253,4 @@ carry a marker in place.
 
 | File | Why it is ours |
 |---|---|
-| `Cargo.lock` | Upstream's file, plus the Nora pane's dependencies: `craft-nora` and `craft-nora-ui` from `bvisible/craft-libs` (git, at the revision `Cargo.toml` pins), and the new edges of `pdfcraft-ui-egui` (to them and to `pdfcraft-automation`) and of `pdfcraft-web` (to `serde_json`). At an upstream merge, take upstream's lock and let cargo add these back (`cargo metadata` resolves without building). `cargo deny` refuses `rustls` below 0.23.46 (RUSTSEC-2026-0349) and `rustls-webpki` below 0.103.16 (RUSTSEC-2026-0382): upstream's lock has both since 0.11; if a later one goes below, `cargo update -p rustls` / `-p rustls-webpki`. `crypto-bigint` 0.7.6 and `ctutils` 0.4.5 (RUSTSEC-2026-0387 and RUSTSEC-2026-0385, operations meant to be constant-time that were not; they reach `rsa` and the elliptic curves of `pdfcraft-sign`) were ours from 2026-10-24 and are upstream's own since 0.14; after a merge, `cargo update -p crypto-bigint -p ctutils` if upstream's lock is below again. |
-| `crates/ui-egui/src/i18n/neoffice/ar.tsv`, `crates/ui-egui/src/i18n/neoffice/bg.tsv`, `crates/ui-egui/src/i18n/neoffice/ca.tsv`, `crates/ui-egui/src/i18n/neoffice/ckb.tsv`, `crates/ui-egui/src/i18n/neoffice/cs.tsv`, `crates/ui-egui/src/i18n/neoffice/de.tsv`, `crates/ui-egui/src/i18n/neoffice/el.tsv`, `crates/ui-egui/src/i18n/neoffice/es.tsv`, `crates/ui-egui/src/i18n/neoffice/fa.tsv`, `crates/ui-egui/src/i18n/neoffice/fi.tsv`, `crates/ui-egui/src/i18n/neoffice/fr.tsv`, `crates/ui-egui/src/i18n/neoffice/hi.tsv`, `crates/ui-egui/src/i18n/neoffice/hu.tsv`, `crates/ui-egui/src/i18n/neoffice/id.tsv`, `crates/ui-egui/src/i18n/neoffice/it.tsv`, `crates/ui-egui/src/i18n/neoffice/ja.tsv`, `crates/ui-egui/src/i18n/neoffice/kk.tsv`, `crates/ui-egui/src/i18n/neoffice/ko.tsv`, `crates/ui-egui/src/i18n/neoffice/lo.tsv`, `crates/ui-egui/src/i18n/neoffice/lt.tsv`, `crates/ui-egui/src/i18n/neoffice/nb.tsv`, `crates/ui-egui/src/i18n/neoffice/pl.tsv`, `crates/ui-egui/src/i18n/neoffice/pt-br.tsv`, `crates/ui-egui/src/i18n/neoffice/ro.tsv`, `crates/ui-egui/src/i18n/neoffice/ru.tsv`, `crates/ui-egui/src/i18n/neoffice/sl.tsv`, `crates/ui-egui/src/i18n/neoffice/sq.tsv`, `crates/ui-egui/src/i18n/neoffice/te.tsv`, `crates/ui-egui/src/i18n/neoffice/th.tsv`, `crates/ui-egui/src/i18n/neoffice/tr.tsv`, `crates/ui-egui/src/i18n/neoffice/uk.tsv`, `crates/ui-egui/src/i18n/neoffice/vi.tsv`, `crates/ui-egui/src/i18n/neoffice/zh-hans.tsv`, `crates/ui-egui/src/i18n/neoffice/zh-hant.tsv` | Our own interface words, in the 34 languages: the Nora pane, its switch in Preferences and its command, the rows that were appended to upstream's catalogs under a `# //// Neoffice` comment line until 0.17. Upstream moved its catalogs out of the repository in 0.19 (`craft-i18n`), so these have a file of their own, read by `crates/ui-egui/src/i18n/neoffice.rs` (added file) when the catalogs hold no row for a string. They take comments (the files keep their `# //// Neoffice` lines), but the marker check counts `.tsv` files as having none. A language upstream adds needs its file here too, or its Nora words show in English (`fa.tsv` was added in 0.17). |
+| `Cargo.lock` | Upstream's file, plus the Nora pane's dependencies: `craft-nora` and `craft-nora-ui` from `bvisible/craft-libs` (git, at the revision `Cargo.toml` pins), and the new edges of `pdfcraft-ui-egui` (to them and to `pdfcraft-automation`); upstream's lock has no `craft-web-host` for us to drop, since 0.19 it is the web build's bridge crate, which this fork does not use (`pdfcraft-web` has `craft-web-api` and `serde_json` of upstream's). At an upstream merge, take upstream's lock and let cargo add these back (`cargo metadata` resolves without building). `cargo deny` refuses `rustls` below 0.23.46 (RUSTSEC-2026-0349) and `rustls-webpki` below 0.103.16 (RUSTSEC-2026-0382): upstream's lock has both since 0.11; if a later one goes below, `cargo update -p rustls` / `-p rustls-webpki`. `crypto-bigint` 0.7.6 and `ctutils` 0.4.5 (RUSTSEC-2026-0387 and RUSTSEC-2026-0385, operations meant to be constant-time that were not; they reach `rsa` and the elliptic curves of `pdfcraft-sign`) were ours from 2026-10-24 and are upstream's own since 0.14; after a merge, `cargo update -p crypto-bigint -p ctutils` if upstream's lock is below again. |

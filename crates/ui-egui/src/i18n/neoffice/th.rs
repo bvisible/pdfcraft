@@ -1,0 +1,92 @@
+// //// Neoffice — added file (no upstream equivalent)
+//! Thai words of the Nora assistant pane, its switch in Preferences and its command: English source, then translation
+//! (written by a language model for the fork, not separately native-reviewed). Read by `super::plain`.
+
+pub(super) const ROWS: &[(&str, &str)] = &[
+    // the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+    ("Nora isn't available in this version yet", "Nora ยังไม่พร้อมใช้งานในเวอร์ชันนี้"),
+    ("Nora is waiting for you to finish what you are doing in the document.", "Nora กำลังรอให้คุณทำงานที่กำลังทำอยู่ในเอกสารให้เสร็จก่อน"),
+    ("Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.", "ตอบการ์ดนี้ในแชตของ Nora ใน Neoffice: NeoPDF ยังรับคำตอบนี้ไม่ได้"),
+    ("There is no document open for Nora to work in.", "ไม่มีเอกสารที่เปิดอยู่ให้ Nora ทำงานด้วย"),
+    ("`{command}` is refused: Nora may not run it.", "คำสั่ง `{command}` ถูกปฏิเสธ: Nora ไม่มีสิทธิ์รันคำสั่งนี้"),
+    (
+        "`{command}` can't be run by Nora in NeoPDF: it works only through the interface.",
+        "คำสั่ง `{command}` ให้ Nora รันใน NeoPDF ไม่ได้: ใช้ได้เฉพาะผ่านหน้าจอโปรแกรมเท่านั้น",
+    ),
+    (
+        "`{command}` is played by several tools ({tools}): name the one to run.",
+        "คำสั่ง `{command}` มีให้จากหลายเครื่องมือ ({tools}): โปรดระบุเครื่องมือที่ต้องการใช้รัน",
+    ),
+    (
+        "`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.",
+        "`{command}` ไม่ใช่คำสั่งของ NeoPDF: command_list แสดงรายการคำสั่งที่ Nora รันได้",
+    ),
+    ("`{command}` is refused: its parameters are nested too deeply.", "คำสั่ง `{command}` ถูกปฏิเสธ: พารามิเตอร์ของคำสั่งซ้อนกันลึกเกินไป"),
+    ("`{command}` is refused: `{key}` would reach a file of the computer.", "คำสั่ง `{command}` ถูกปฏิเสธ: `{key}` จะเข้าถึงไฟล์ในคอมพิวเตอร์"),
+    ("`{command}` is refused: `{key}` is a password, which only you enter.", "คำสั่ง `{command}` ถูกปฏิเสธ: `{key}` เป็นรหัสผ่าน ซึ่งมีแต่คุณเท่านั้นที่กรอกได้"),
+    ("The parameters of `{command}` must be an object.", "พารามิเตอร์ของ `{command}` ต้องเป็นออบเจ็กต์"),
+    ("Nora works in the document open in this window: `doc` names another one.", "Nora ทำงานกับเอกสารที่เปิดอยู่ในหน้าต่างนี้ แต่ `doc` ระบุเอกสารอื่น"),
+    ("`{command}` failed unexpectedly ({error}); the document was not changed.", "คำสั่ง `{command}` ล้มเหลวโดยไม่คาดคิด ({error}) เอกสารไม่ได้ถูกเปลี่ยนแปลง"),
+    ("Commands in one batch: {count} at most.", "จำนวนคำสั่งในชุดเดียวกันต้องไม่เกิน {count} คำสั่ง"),
+    ("`{command}` failed: {error}", "คำสั่ง `{command}` ล้มเหลว: {error}"),
+    ("Occurrences of “{text}” in the document: {count} (not {occurrence}).", "พบ “{text}” ในเอกสาร {count} ครั้ง (ไม่ใช่ {occurrence})"),
+    ("“{text}” is not in the first {pages} pages of the document.", "ไม่พบ “{text}” ในหน้า {pages} หน้าแรกของเอกสาร"),
+    ("“{text}” is not in the document.", "ไม่พบ “{text}” ในเอกสาร"),
+    ("There is no text to type.", "ไม่มีข้อความให้ป้อน"),
+    ("There is no page {page}: the last page is {count}.", "ไม่มีหน้า {page}: หน้าสุดท้ายคือหน้า {count}"),
+    ("{name} was not saved: {why}", "ยังไม่ได้บันทึกไฟล์ {name}: {why}"),
+    ("Nora has nothing left to undo.", "Nora ไม่มีการเปลี่ยนแปลงให้เลิกทำแล้ว"),
+    (
+        "The document has changed since Nora's last change: use Undo in the editor instead.",
+        "เอกสารมีการเปลี่ยนแปลงหลังการแก้ไขล่าสุดของ Nora: โปรดใช้เลิกทำในตัวแก้ไขแทน",
+    ),
+    ("Undo failed at step {step} of {count}: {error}", "เลิกทำไม่สำเร็จที่ขั้นตอนที่ {step} จาก {count}: {error}"),
+    ("New conversation", "การสนทนาใหม่"),
+    ("Undo the last change Nora made to the document", "เลิกทำการเปลี่ยนแปลงล่าสุดที่ Nora ทำกับเอกสาร"),
+    ("Ask Nora…", "ถาม Nora…"),
+    ("Send", "ส่ง"),
+    ("Nora is working…", "Nora กำลังทำงาน…"),
+    ("Ask Nora to read, summarize, fill in or annotate your document.", "ขอให้ Nora อ่าน สรุป กรอก หรือใส่คำอธิบายประกอบในเอกสารของคุณ"),
+    ("Nora wants to:", "Nora ต้องการ:"),
+    ("Refuse", "ปฏิเสธ"),
+    ("Read the document", "อ่านเอกสาร"),
+    ("Run {command}", "รัน {command}"),
+    ("Run several commands ({count})", "รันหลายคำสั่ง ({count})"),
+    ("Select “{text}”", "เลือก “{text}”"),
+    ("Type “{text}”", "ป้อน “{text}”"),
+    ("Look at page {page}", "ดูหน้า {page}"),
+    ("Save the document", "บันทึกเอกสาร"),
+    ("Undo the last change", "เลิกทำการเปลี่ยนแปลงล่าสุด"),
+    ("Assistant", "ผู้ช่วย"),
+    ("Show the Nora assistant pane (experimental)", "แสดงแผงผู้ช่วย Nora (ทดลอง)"),
+    ("Nora assistant", "ผู้ช่วย Nora"),
+    // the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+    ("`{command}` is refused: your signature and initials are yours to add.", "คำสั่ง `{command}` ถูกปฏิเสธ: ลายเซ็นและอักษรย่อของคุณต้องเพิ่มด้วยตัวคุณเองเท่านั้น"),
+    (
+        "`{command}` is refused: this document's security forbids copying its text.",
+        "คำสั่ง `{command}` ถูกปฏิเสธ: การรักษาความปลอดภัยของเอกสารนี้ไม่อนุญาตให้คัดลอกข้อความ",
+    ),
+    (
+        "Nora's change is too old to be taken back whole: use Undo in the editor instead.",
+        "การเปลี่ยนแปลงของ Nora เก่าเกินไปจนเลิกทำทั้งหมดไม่ได้: โปรดใช้เลิกทำในตัวแก้ไขแทน",
+    ),
+    // the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+    ("Stop", "หยุด"),
+    ("Stopped.", "หยุดแล้ว"),
+    ("Nora did not answer in time.", "Nora ตอบไม่ทันเวลา"),
+    ("Nora could not be reached. Check the connection and try again.", "ไม่สามารถติดต่อ Nora ได้ โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง"),
+    ("Your session has expired. Sign in again.", "เซสชันของคุณหมดอายุแล้ว โปรดเข้าสู่ระบบอีกครั้ง"),
+    ("The server could not answer (error {status}). Try again in a moment.", "เซิร์ฟเวอร์ตอบกลับไม่ได้ (ข้อผิดพลาด {status}) โปรดลองอีกครั้งในอีกสักครู่"),
+    ("Nora's answer could not be read.", "ไม่สามารถอ่านคำตอบของ Nora ได้"),
+    // the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+    ("This tab was in the background: Nora could not act in the document.", "แท็บนี้อยู่เบื้องหลัง: Nora ไม่สามารถดำเนินการในเอกสารได้"),
+    ("Resume", "ทำต่อ"),
+    (
+        "Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.",
+        "ยังไม่ได้ดำเนินการใดๆ ในเอกสาร: Nora ไม่สามารถดำเนินการได้ทันเวลา ลองขอใหม่อีกครั้งหากยังต้องการ",
+    ),
+    ("Not all of this was done: part of it could not run in the document in time.", "ยังไม่ได้ดำเนินการครบทุกอย่าง: บางส่วนไม่สามารถทำงานในเอกสารได้ทันเวลา"),
+    // the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+    ("Ask Nora", "ถาม Nora"),
+    ("Nora, the Neoffice assistant", "Nora ผู้ช่วยของ Neoffice"),
+];

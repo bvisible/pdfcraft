@@ -1,0 +1,122 @@
+// //// Neoffice — added file (no upstream equivalent)
+//! Romanian words of the Nora assistant pane, its switch in Preferences and its command: English source, then translation
+//! (written by a language model for the fork, not separately native-reviewed). Read by `super::plain`.
+
+pub(super) const ROWS: &[(&str, &str)] = &[
+    // the Nora assistant pane (nora_pane.rs), its switch in Preferences and its command `ui.nora`.
+    ("Nora isn't available in this version yet", "Nora nu este încă disponibilă în această versiune"),
+    ("Nora is waiting for you to finish what you are doing in the document.", "Nora așteaptă să terminați ceea ce faceți în document."),
+    (
+        "Answer this card in Nora's chat in Neoffice: NeoPDF does not take it yet.",
+        "Răspundeți la acest card în chat-ul Nora din Neoffice: NeoPDF nu îl poate prelua încă.",
+    ),
+    ("There is no document open for Nora to work in.", "Nu este deschis niciun document în care Nora să poată lucra."),
+    ("`{command}` is refused: Nora may not run it.", "`{command}` este refuzată: Nora nu are voie să o execute."),
+    (
+        "`{command}` can't be run by Nora in NeoPDF: it works only through the interface.",
+        "`{command}` nu poate fi executată de Nora în NeoPDF: funcționează doar prin interfață.",
+    ),
+    (
+        "`{command}` is played by several tools ({tools}): name the one to run.",
+        "`{command}` este propusă de mai multe instrumente ({tools}): indicați-l pe cel de executat.",
+    ),
+    (
+        "`{command}` is not a command of NeoPDF: command_list lists the ones Nora can run.",
+        "`{command}` nu este o comandă a NeoPDF: command_list enumeră cele pe care Nora le poate executa.",
+    ),
+    ("`{command}` is refused: its parameters are nested too deeply.", "`{command}` este refuzată: parametrii săi sunt imbricați prea adânc."),
+    (
+        "`{command}` is refused: `{key}` would reach a file of the computer.",
+        "`{command}` este refuzată: `{key}` ar ajunge la un fișier de pe calculator.",
+    ),
+    (
+        "`{command}` is refused: `{key}` is a password, which only you enter.",
+        "`{command}` este refuzată: `{key}` este o parolă, pe care doar dvs. o introduceți.",
+    ),
+    ("The parameters of `{command}` must be an object.", "Parametrii lui `{command}` trebuie să fie un obiect."),
+    (
+        "Nora works in the document open in this window: `doc` names another one.",
+        "Nora lucrează în documentul deschis în această fereastră: `doc` desemnează alt document.",
+    ),
+    (
+        "`{command}` failed unexpectedly ({error}); the document was not changed.",
+        "`{command}` a eșuat neașteptat ({error}); documentul nu a fost modificat.",
+    ),
+    ("Commands in one batch: {count} at most.", "Comenzi într-un singur lot: cel mult {count}."),
+    ("`{command}` failed: {error}", "`{command}` a eșuat: {error}"),
+    ("Occurrences of “{text}” in the document: {count} (not {occurrence}).", "Apariții ale „{text}” în document: {count} (nu {occurrence})."),
+    ("“{text}” is not in the first {pages} pages of the document.", "„{text}” nu se află în primele {pages} pagini ale documentului."),
+    ("“{text}” is not in the document.", "„{text}” nu se află în document."),
+    ("There is no text to type.", "Nu există text de introdus."),
+    ("There is no page {page}: the last page is {count}.", "Nu există pagina {page}: ultima este pagina {count}."),
+    ("{name} was not saved: {why}", "{name} nu a fost salvat: {why}"),
+    ("Nora has nothing left to undo.", "Nora nu mai are nimic de anulat."),
+    (
+        "The document has changed since Nora's last change: use Undo in the editor instead.",
+        "Documentul s-a modificat de la ultima modificare făcută de Nora: utilizați în schimb Anulare acțiune din editor.",
+    ),
+    ("Undo failed at step {step} of {count}: {error}", "Anularea a eșuat la pasul {step} din {count}: {error}"),
+    ("New conversation", "Conversație nouă"),
+    ("Undo the last change Nora made to the document", "Anulează ultima modificare făcută de Nora în document"),
+    ("Ask Nora…", "Întrebați-o pe Nora…"),
+    ("Send", "Trimite"),
+    ("Nora is working…", "Nora lucrează…"),
+    (
+        "Ask Nora to read, summarize, fill in or annotate your document.",
+        "Cereți lui Nora să citească, să rezume, să completeze sau să adnoteze documentul dvs.",
+    ),
+    ("Nora wants to:", "Nora dorește să:"),
+    ("Refuse", "Refuză"),
+    ("Read the document", "Citește documentul"),
+    ("Run {command}", "Execută {command}"),
+    ("Run several commands ({count})", "Execută mai multe comenzi ({count})"),
+    ("Select “{text}”", "Selectează „{text}”"),
+    ("Type “{text}”", "Scrie „{text}”"),
+    ("Look at page {page}", "Consultă pagina {page}"),
+    ("Save the document", "Salvare document"),
+    ("Undo the last change", "Anulare ultimă modificare"),
+    ("Assistant", "Asistent"),
+    ("Show the Nora assistant pane (experimental)", "Afișează panoul asistentului Nora (experimental)"),
+    ("Nora assistant", "Asistentul Nora"),
+    // the Nora assistant pane (nora_pane.rs): what it refuses, and its Undo of an old change.
+    (
+        "`{command}` is refused: your signature and initials are yours to add.",
+        "`{command}` este refuzată: semnătura și inițialele le adaugă numai dvs.",
+    ),
+    (
+        "`{command}` is refused: this document's security forbids copying its text.",
+        "`{command}` este refuzată: protecția acestui document interzice copierea textului său.",
+    ),
+    (
+        "Nora's change is too old to be taken back whole: use Undo in the editor instead.",
+        "Modificarea făcută de Nora este prea veche pentru a fi anulată integral: utilizați în schimb Anulare acțiune din editor.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): its Stop button, and its words for a failure of the connection to Nora (craft-libs adbcef6).
+    ("Stop", "Oprire"),
+    ("Stopped.", "Oprit."),
+    ("Nora did not answer in time.", "Nora nu a răspuns la timp."),
+    (
+        "Nora could not be reached. Check the connection and try again.",
+        "Nu s-a putut stabili legătura cu Nora. Verificați conexiunea și încercați din nou.",
+    ),
+    ("Your session has expired. Sign in again.", "Sesiunea dvs. a expirat. Conectați-vă din nou."),
+    (
+        "The server could not answer (error {status}). Try again in a moment.",
+        "Serverul nu a putut răspunde (eroare {status}). Încercați din nou peste puțin timp.",
+    ),
+    ("Nora's answer could not be read.", "Răspunsul dat de Nora nu a putut fi citit."),
+    // the Nora assistant pane (nora_pane.rs): a request a tab in the background kept from acting, and a reply that could not act in time (craft-libs 620d408).
+    ("This tab was in the background: Nora could not act in the document.", "Fila aceasta era în fundal: Nora nu a putut acționa în document."),
+    ("Resume", "Reia"),
+    (
+        "Nothing was done in the document: Nora could not act in it in time. Ask again if you still need it.",
+        "Nu s-a făcut nimic în document: Nora nu a putut acționa în el la timp. Cere din nou dacă mai ai nevoie.",
+    ),
+    (
+        "Not all of this was done: part of it could not run in the document in time.",
+        "Nu s-a făcut totul: o parte nu a putut rula în document la timp.",
+    ),
+    // the Nora assistant pane (nora_pane.rs): Nora's button in the top bar, which opens and closes it (craft-libs launcher).
+    ("Ask Nora", "Întrebați-o pe Nora"),
+    ("Nora, the Neoffice assistant", "Nora, asistenta Neoffice"),
+];

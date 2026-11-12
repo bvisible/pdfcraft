@@ -23,6 +23,45 @@ pub(crate) struct Hotbar {
     search: String,
     #[serde(skip)]
     picker_open: bool,
+    /// Where the Hotbar tools window stays while the Toolbar size slider is being adjusted.
+    #[serde(skip)]
+    picker_drag_pos: Option<egui::Pos2>,
+    /// The Toolbar size slider is being adjusted with the keyboard (until it loses focus).
+    #[serde(skip)]
+    keyboard_sizing: bool,
+    /// The pass the Hotbar tools window was last drawn on.
+    #[serde(skip)]
+    picker_shown: Option<u64>,
+}
+
+impl Hotbar {
+    /// The Hotbar tools window is over the pages: open, and drawn on the last pass. Read mode, full
+    /// screen, Organize and a document that hides the toolbars don't draw the hotbar, and a window
+    /// they hide holds no keys.
+    pub(crate) fn picker_over_pages(&self, ctx: &egui::Context) -> bool {
+        self.picker_open && self.picker_shown.is_some_and(|pass| pass.saturating_add(1) >= ctx.cumulative_pass_nr())
+    }
+
+    /// Closes the Hotbar tools window when the hotbar is `hidden` on this pass (Read mode or full
+    /// screen, which a native menu's click may have turned on just now), or the last pass didn't
+    /// draw it (Organize, or a document that hides the toolbars). Left open, it would hold the keys of the pass that hides it, and come
+    /// back over the pages on the pass that shows the hotbar again, after that pass's page keys
+    /// had been read without it.
+    pub(crate) fn close_hidden_picker(&mut self, ctx: &egui::Context, hidden: bool) {
+        if self.picker_open && (hidden || !self.picker_over_pages(ctx)) {
+            self.close_picker();
+        }
+    }
+
+    /// Closes the Hotbar tools window.
+    pub(crate) fn close_picker(&mut self) {
+        self.picker_open = false;
+        self.picker_shown = None;
+        // Closed on a pass that doesn't draw the hotbar, `show` can't end a size adjustment: the
+        // next opening would start at the held position.
+        self.picker_drag_pos = None;
+        self.keyboard_sizing = false;
+    }
 }
 
 impl Default for Hotbar {
@@ -38,6 +77,9 @@ impl Default for Hotbar {
             placed: false,
             search: String::new(),
             picker_open: false,
+            picker_drag_pos: None,
+            keyboard_sizing: false,
+            picker_shown: None,
         }
     }
 }
@@ -112,7 +154,7 @@ impl Hotbar {
 fn settings_button(ui: &mut egui::Ui, cell: f32, picker_open: &mut bool) -> bool {
     let settings = ui
         .push_id("hotbar-settings", |ui| {
-            icons::button(ui, "settings", cell, false, tl!("Hotbar settings")).on_hover_text(tl!("Hotbar settings / add tools"))
+            icons::labeled_button(ui, "settings", cell, false, tl!("Hotbar settings"), tl!("Hotbar settings / add tools"))
         })
         .inner;
     if settings.clicked() {
@@ -150,6 +192,11 @@ fn matches_search(spec: &pdfcraft_engine::commands::CommandSpec, query: &str) ->
 fn tool_buttons(ui: &mut egui::Ui, app: &PdfCraftApp, tools: &[String], cell: f32, run: &mut Option<&'static str>, remove: &mut Option<usize>) {
     for (index, id) in tools.iter().enumerate() {
         let Some(spec) = command(id) else { continue };
+        // //// Neoffice — not a command a hosting page hides (Open, Combine…): upstream's hotbar offers the whole registry, and
+        // a saved choice from another build of the editor can name one. It would only tell the person that the page opens the documents.
+        if app.host_hides(id) {
+            continue;
+        }
         let active = crate::comments::CommentTool::from_command(id).is_some_and(|tool| app.quick_tool == crate::QuickTool::Comment(tool));
         let button = ui.add_enabled_ui(app.command_enabled(spec), |ui| icons::button(ui, spec.icon, cell, active, tl!(spec.label))).inner;
         if button.clicked() {
@@ -172,6 +219,12 @@ fn core_tool_buttons(ui: &mut egui::Ui, app: &mut PdfCraftApp, cell: f32, popup_
     if icons::button(ui, "hand", cell, app.quick_tool == QuickTool::Hand, tl!("Hand (H)")).clicked() {
         app.quick_tool = QuickTool::Hand;
     }
+    let may_crop = command("page.crop").is_some_and(|spec| app.command_enabled(spec));
+    ui.add_enabled_ui(may_crop, |ui| {
+        if icons::button(ui, "crop", cell, app.quick_tool == QuickTool::Crop, tl!("Crop pages")).clicked() {
+            app.execute("page.crop");
+        }
+    });
     // Comment ▸, Highlight ▸, Draw ▸ (Acrobat's comment toolbar groups). Clicking a
     // group selects its last-used tool; clicking it again opens the flyout.
     for g in 0..comments::GROUPS.len() {
@@ -537,13 +590,38 @@ fn segmented_dock_picker(ui: &mut egui::Ui, bar: &mut Hotbar, t: &Tokens) {
     }
 }
 
+/// The arrow keys the Toolbar size slider answers to while it has focus.
+const SIZE_SLIDER_KEYS: [egui::Key; 4] = [egui::Key::ArrowLeft, egui::Key::ArrowRight, egui::Key::ArrowUp, egui::Key::ArrowDown];
+
+/// Whether an arrow key was pressed this frame. Read it before the slider is added, because the
+/// slider consumes the keys it acts on.
+fn size_slider_key_pressed(ui: &egui::Ui) -> bool {
+    ui.input(|input| SIZE_SLIDER_KEYS.iter().any(|key| input.key_pressed(*key)))
+}
+
+/// Whether the Toolbar size slider is being adjusted, which keeps its picker from moving.
+///
+/// A pointer adjustment lasts while the button is held. A keyboard one starts with the first arrow
+/// key press that changes the value and lasts until the slider loses focus, so the picker does not
+/// jump between presses. `keyboard` carries that state from frame to frame. Focusing the slider, or
+/// releasing the pointer on it, does not count as a keyboard adjustment.
+fn size_slider_adjusting(slider: &egui::Response, key_pressed: bool, keyboard: &mut bool) -> bool {
+    let pointer = slider.is_pointer_button_down_on();
+    if pointer || !slider.has_focus() {
+        *keyboard = false;
+    } else if key_pressed && slider.changed() {
+        *keyboard = true;
+    }
+    pointer || *keyboard
+}
+
 /// Draw the unified floating or side-docked toolbar, combining quick actions, core tools, and custom shortcuts.
 pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui: &mut egui::Ui) {
     let ctx = ui.ctx().clone();
     let mut bar = std::mem::take(&mut app.hotbar);
     bar.normalize();
     let t = Tokens::get(&ctx);
-    let id = egui::Id::unique("quick-bar");
+    let id = app.panes.area_id("quick-bar");
     let full_side = bar.full_side && bar.dock.is_some();
     let bounds = if full_side { area } else { area.shrink(10.0) };
     if let Some(side) = bar.dock.clone() {
@@ -705,6 +783,8 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
             }
         }
     });
+    // //// Neoffice — the commands a hosting page hides, for the picker below (`host_hides`).
+    let hidden: Vec<&str> = COMMANDS.iter().map(|spec| spec.id).filter(|id| app.host_hides(id)).collect();
     let picker_id = egui::Id::unique("hotbar-picker");
     // A remembered collapsed state can survive disabling the collapse affordance.
     let mut expanded = egui::collapsing_header::CollapsingState::load_with_default_open(&ctx, picker_id.with("collapsing"), true);
@@ -725,7 +805,11 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
     } else {
         bar_rect.top().clamp(screen.top(), (screen.bottom() - 480.0).max(screen.top()))
     };
-    let picker_pos = egui::pos2(picker_x.clamp(screen.left(), (screen.right() - outer_width).max(screen.left())), picker_y);
+    // Resizing the bar can move or flip its picker; hold the picker in place until the pointer is
+    // released, or, for the keyboard, until the slider loses focus.
+    let picker_pos =
+        bar.picker_drag_pos.unwrap_or_else(|| egui::pos2(picker_x.clamp(screen.left(), (screen.right() - outer_width).max(screen.left())), picker_y));
+    let mut sizing = false;
     let mut close_dialog = false;
     let picker_resp = egui::Window::new(tl!("Hotbar tools"))
         .id(picker_id)
@@ -767,7 +851,9 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
                 ui.label(egui::RichText::new(tl!("Toolbar size")).size(12.5).color(t.text));
                 let slider_width = (ui.available_width() - 55.0).clamp(50.0, 140.0);
                 ui.spacing_mut().slider_width = slider_width;
-                ui.add(egui::Slider::new(&mut bar.button_size, 24.0..=64.0).show_value(false));
+                let key_pressed = size_slider_key_pressed(ui);
+                let slider = ui.add(egui::Slider::new(&mut bar.button_size, 24.0..=64.0).show_value(false));
+                sizing = size_slider_adjusting(&slider, key_pressed, &mut bar.keyboard_sizing);
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     ui.label(egui::RichText::new(format!("{:.0} px", bar.button_size)).size(12.0).color(t.text_muted));
                 });
@@ -834,7 +920,8 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
             egui::ScrollArea::vertical().max_height(max_list_height).auto_shrink([false, false]).show(ui, |ui| {
                 ui.spacing_mut().item_spacing.y = 5.0;
                 for spec in COMMANDS {
-                    if !matches_search(spec, &bar.search) {
+                    // //// Neoffice — nor offered in the picker: what a hosting page hides (`host_hides`) can't be put on the bar.
+                    if !matches_search(spec, &bar.search) || hidden.contains(&spec.id) {
                         continue;
                     }
                     let mut selected = bar.tools.iter().any(|id| id == spec.id);
@@ -860,11 +947,16 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
     if close_dialog {
         picker_open = false;
     }
+    if !picker_open {
+        bar.keyboard_sizing = false;
+    }
+    bar.picker_drag_pos = (picker_open && sizing).then_some(picker_pos);
     ctx.data_mut(|data| {
         data.insert_temp(id, shown.response.rect.size());
         data.insert_temp(egui::Id::unique("custom-hotbar"), shown.response.rect.size());
     });
     bar.picker_open = picker_open;
+    bar.picker_shown = picker_open.then(|| ctx.cumulative_pass_nr());
     app.hotbar = bar;
     if let Some(id) = run {
         app.execute(id);
@@ -874,6 +966,140 @@ pub(crate) fn show(app: &mut PdfCraftApp, area: Rect, page_left: Option<f32>, ui
 #[cfg(test)]
 mod tests {
     use super::*;
+    use egui_kittest::{Harness, kittest::Queryable};
+
+    // Build a harness that draws the hotbar docked to `$side`, with its tools picker open.
+    macro_rules! hotbar_harness {
+        ($side:expr, $vertical:expr, $full_side:expr) => {{
+            let mut app = PdfCraftApp::new();
+            app.hotbar.place($side).unwrap();
+            app.hotbar.vertical = $vertical;
+            app.hotbar.full_side = $full_side;
+            app.hotbar.position = [0.5, 0.5];
+            app.hotbar.picker_open = true;
+            let mut fonts = false;
+            let mut harness = Harness::builder().with_size(vec2(1000.0, 900.0)).with_accessibility_check(false).build_ui_state(
+                move |ui, app: &mut PdfCraftApp| {
+                    if !fonts {
+                        ui.ctx().set_fonts(theme::font_definitions());
+                        fonts = true;
+                    }
+                    show(app, ui.max_rect(), None, ui);
+                },
+                app,
+            );
+            harness.run_steps(5);
+            harness
+        }};
+    }
+
+    // Drag the size slider from `$from` to `$to` and release, checking on every step that the picker
+    // (found through its slider) has not left `$pinned`.
+    macro_rules! drag_slider_pinned {
+        ($h:expr, $pinned:expr, $from:expr, $to:expr, $what:expr) => {{
+            let (from, to): (egui::Pos2, egui::Pos2) = ($from, $to);
+            $h.hover_at(from);
+            $h.run_steps(1);
+            $h.drag_at(from);
+            $h.run_steps(1);
+            for step in 1..=8 {
+                $h.hover_at(from + (to - from) * (step as f32 / 8.0));
+                $h.run_steps(2);
+                assert_eq!($h.get_by_role(egui::accesskit::Role::Slider).rect(), $pinned, "{}: picker moved during drag", $what);
+            }
+            $h.drop_at(to);
+            $h.run_steps(3);
+        }};
+    }
+
+    /// Dragging the Toolbar size slider with the pointer keeps the picker where it is, in both
+    /// directions and in every layout, and the picker takes its recalculated place after release.
+    #[test]
+    fn picker_stays_put_while_resizing_hotbar() {
+        for (side, vertical, full_side) in [
+            ("top", false, false),
+            ("bottom", false, false),
+            ("float", false, false),
+            ("top", false, true),
+            ("bottom", false, true),
+            ("left", true, false),
+            ("right", true, false),
+            ("float", true, false),
+            ("left", true, true),
+            ("right", true, true),
+        ] {
+            let what = format!("{side}, vertical={vertical}, strip={full_side}");
+            let mut h = hotbar_harness!(side, vertical, full_side);
+
+            // Drag the slider up to the largest size.
+            let slider = h.get_by_role(egui::accesskit::Role::Slider).rect();
+            drag_slider_pinned!(h, slider, slider.left_center() + vec2(slider.width() * 0.2, 0.0), slider.right_center() - vec2(2.0, 0.0), what);
+            assert!(h.state().hotbar.button_size > 60.0, "{what}: slider did not reach the upper end");
+            assert!(h.state().hotbar.picker_drag_pos.is_none(), "{what}: release must unpin the picker");
+            let resized = h.get_by_role(egui::accesskit::Role::Slider).rect();
+            assert_ne!(resized, slider, "{what}: picker should take its new place after release");
+            if !vertical && !full_side {
+                assert!(resized.left() < slider.left(), "{what}: picker should move to the left after release");
+            }
+
+            // And back down to the smallest.
+            drag_slider_pinned!(h, resized, resized.right_center() - vec2(2.0, 0.0), resized.left_center() + vec2(2.0, 0.0), what);
+            assert!(h.state().hotbar.button_size < 28.0, "{what}: slider did not reach the lower end");
+            assert!(h.state().hotbar.picker_drag_pos.is_none(), "{what}: release must unpin the picker");
+            let restored = h.get_by_role(egui::accesskit::Role::Slider).rect();
+            assert_ne!(restored, resized, "{what}: picker should take its new place after the reverse drag");
+            if !vertical && !full_side {
+                assert!(restored.left() > resized.left(), "{what}: picker should return to the right");
+            }
+        }
+    }
+
+    /// Adjusting the Toolbar size slider with the arrow keys also keeps the picker where it is, until
+    /// the slider loses focus.
+    #[test]
+    fn picker_stays_put_while_resizing_hotbar_with_keyboard() {
+        for (side, vertical, full_side) in [("top", false, false), ("float", false, false), ("bottom", false, true), ("left", true, false)] {
+            let what = format!("{side}, vertical={vertical}, strip={full_side}");
+            let mut h = hotbar_harness!(side, vertical, full_side);
+            let slider = h.get_by_role(egui::accesskit::Role::Slider).rect();
+            h.get_by_role(egui::accesskit::Role::Slider).focus();
+            h.run_steps(2);
+            assert!(h.state().hotbar.picker_drag_pos.is_none(), "{what}: focusing the slider alone must not pin the picker");
+
+            // The slider moves about a pixel per key press, so this crosses its whole travel.
+            for _ in 0..150 {
+                h.key_press(egui::Key::ArrowRight);
+                h.run_steps(1);
+                assert_eq!(h.get_by_role(egui::accesskit::Role::Slider).rect(), slider, "{what}: picker moved during keyboard resize");
+            }
+            assert!(h.state().hotbar.button_size > 60.0, "{what}: keys did not reach the upper end");
+            assert!(h.state().hotbar.picker_drag_pos.is_some(), "{what}: picker must stay pinned while the slider has focus");
+
+            // Moving focus away ends the adjustment.
+            h.key_press(egui::Key::Tab);
+            h.run_steps(3);
+            assert!(h.state().hotbar.picker_drag_pos.is_none(), "{what}: losing focus must unpin the picker");
+            assert_ne!(h.get_by_role(egui::accesskit::Role::Slider).rect(), slider, "{what}: picker should take its new place after focus leaves");
+        }
+    }
+
+    /// A picker closed while the hotbar isn't drawn (Read mode, full screen, Organize) ends a size
+    /// adjustment too, so it doesn't open again at the position it was held at.
+    #[test]
+    fn closing_the_picker_ends_a_size_adjustment() {
+        let mut h = hotbar_harness!("top", false, false);
+        h.get_by_role(egui::accesskit::Role::Slider).focus();
+        h.run_steps(2);
+        for _ in 0..20 {
+            h.key_press(egui::Key::ArrowRight);
+            h.run_steps(1);
+        }
+        assert!(h.state().hotbar.picker_drag_pos.is_some() && h.state().hotbar.keyboard_sizing, "pinned while the keys resize the bar");
+        // What `close_hidden_picker` does on a pass that hides the hotbar: `show` doesn't run.
+        h.state_mut().hotbar.close_picker();
+        assert!(h.state().hotbar.picker_drag_pos.is_none(), "closing ends the held position");
+        assert!(!h.state().hotbar.keyboard_sizing, "closing ends the keyboard adjustment");
+    }
 
     #[test]
     fn hotbar_validation_and_placement() {
@@ -951,5 +1177,61 @@ mod tests {
         assert!(matches_search(ink, "comment.ink"), "command ID must still match");
         assert!(!matches_search(ink, "introuvable"));
         crate::i18n::set_current(crate::i18n::Lang::EN);
+    }
+
+    // //// Neoffice — added test: the hotbar of a window a page hosts offers no command the page hides, on the bar and in its picker.
+    #[test]
+    fn a_hosting_page_s_hotbar_offers_no_command_that_opens_or_creates_a_document() {
+        for hosted in [false, true] {
+            let mut app = PdfCraftApp::new();
+            app.set_option("language", "en").unwrap();
+            app.host_owns_documents = hosted;
+            // A saved choice from another build of the editor can name the commands a page hides.
+            app.hotbar.tools = vec!["file.open".into(), "page.combine".into(), "page.rotate".into()];
+            app.hotbar.picker_open = true;
+            app.hotbar.search = "pages".into();
+            let mut fonts = false;
+            let mut harness = Harness::builder().with_size(vec2(1000.0, 900.0)).with_accessibility_check(false).build_ui_state(
+                move |ui, app: &mut PdfCraftApp| {
+                    if !fonts {
+                        ui.ctx().set_fonts(theme::font_definitions());
+                        fonts = true;
+                    }
+                    show(app, ui.max_rect(), None, ui);
+                },
+                app,
+            );
+            harness.run_steps(5);
+            // On the bar (the button's name) and in the picker (the search finds "Combine files…" by "files").
+            let on_the_bar = |label: &str| harness.query_all_by_label(label).count();
+            assert!(on_the_bar("Rotate pages clockwise") > 0, "hosted {hosted}: the commands the page keeps are on the bar");
+            assert_eq!(on_the_bar("Open…") > 0, !hosted, "hosted {hosted}: Open… on the bar");
+            assert_eq!(on_the_bar("Combine files…") > 0, !hosted, "hosted {hosted}: Combine files… on the bar");
+        }
+    }
+
+    // //// Neoffice — added test: the picker lists the registry, less what the page hides.
+    #[test]
+    fn a_hosting_page_s_hotbar_picker_lists_no_command_that_opens_or_creates_a_document() {
+        for hosted in [false, true] {
+            let mut app = PdfCraftApp::new();
+            app.set_option("language", "en").unwrap();
+            app.host_owns_documents = hosted;
+            app.hotbar.picker_open = true;
+            app.hotbar.search = "combine".into();
+            let mut fonts = false;
+            let mut harness = Harness::builder().with_size(vec2(1000.0, 900.0)).with_accessibility_check(false).build_ui_state(
+                move |ui, app: &mut PdfCraftApp| {
+                    if !fonts {
+                        ui.ctx().set_fonts(theme::font_definitions());
+                        fonts = true;
+                    }
+                    show(app, ui.max_rect(), None, ui);
+                },
+                app,
+            );
+            harness.run_steps(5);
+            assert_eq!(harness.query_all_by_label("Combine files…").count() > 0, !hosted, "hosted {hosted}: Combine files… in the picker");
+        }
     }
 }
