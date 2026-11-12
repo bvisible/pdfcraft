@@ -537,18 +537,19 @@ pub(crate) fn preferences_body(ui: &mut egui::Ui, app: &mut PdfCraftApp, t: &Tok
     });
     ui.add_space(12.0);
 
+    // //// Neoffice — The switch of the Nora assistant pane (nora_pane.rs), the `ui.nora` setting; off by default.
+    // Upstream's Preferences were a flat list until 0.19, where this switch had its own heading; now they are cards. Before
+    // JavaScript, the last card: upstream's layout tests read the end of the dialog from it.
+    let title7 = tl!("Assistant");
+    preference_card(ui, t, title7, Some("sparkles"), &mut ctx, |ui, ctx| {
+        ctx.checkbox(ui, &mut app.nora_pane, tl!("Show the Nora assistant pane (experimental)"), t);
+    });
+    ui.add_space(12.0);
+
     // Card 6: JavaScript
     let title6 = "JavaScript";
     preference_card(ui, t, title6, Some("code-xml"), &mut ctx, |ui, ctx| {
         card_javascript(ui, app, t, ctx);
-    });
-    ui.add_space(12.0);
-
-    // //// Neoffice — Card 7: the switch of the Nora assistant pane (nora_pane.rs), the `ui.nora` setting; off by default.
-    // Upstream's Preferences were a flat list until 0.19, where this switch had its own heading; now they are cards.
-    let title7 = tl!("Assistant");
-    preference_card(ui, t, title7, Some("sparkles"), &mut ctx, |ui, ctx| {
-        ctx.checkbox(ui, &mut app.nora_pane, tl!("Show the Nora assistant pane (experimental)"), t);
     });
     ui.add_space(12.0);
 

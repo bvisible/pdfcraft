@@ -22,7 +22,7 @@ picture of what is ours and why.
   from `CRAFT_I18N_DIR` at `craft-i18n.rev`), so our Nora words, which were appended to upstream's 34 catalogs, have a place of their own
   (`i18n/neoffice.rs` and a table per language in `i18n/neoffice/`, below); the web build's host bridge moved to the `craft-web-host` crate, whose answer to a save has no place for
   `pdfcraft:saved { name, ok, error }`, so the bridge we had is kept in `apps/pdfcraft-web/src/host.rs`; Preferences became cards (the
-  Assistant switch is the card 7 of `dialogs/preferences.rs`); the tab strip, the mode bar and the tab menu were rebuilt for split view
+  Assistant switch is a card of `dialogs/preferences.rs`, before JavaScript, which the layout tests want last); the tab strip, the mode bar and the tab menu were rebuilt for split view
   (`chrome.rs`, `panes.rs`: Close Tab and the close button of a view stay hidden for a page's document); the hotbar, the whole registry
   in a strip (`hotbar.rs`: what a hosting page hides is off the bar and out of its picker); a portfolio's first document opens by itself
   (`app/files.rs`: not for a hosting page); the page API `window.pdfcraft` (0.21: not served to a hosting page, `host_page_api.rs`).
