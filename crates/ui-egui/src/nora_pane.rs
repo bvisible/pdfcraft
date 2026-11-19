@@ -460,6 +460,16 @@ pub(crate) fn top_button(app: &mut PdfCraftApp, ui: &mut Ui) {
     }
 }
 
+/// The pane is closed: a dictation under way is given up, its microphone closed and its words, on their way or not, dropped
+/// (craft-nora-ui `NoraPanel::cancel_dictation`, craft-nora `Input::CancelDictation`). Called on each frame the pane is
+/// closed, whatever closed it and whatever the window shows ([`pump_hidden`]); without a dictation it does nothing.
+fn let_go(app: &mut PdfCraftApp) {
+    app.nora.panel.cancel_dictation();
+    if app.nora.session.dictating() || app.nora.session.dictation().is_some() {
+        app.nora.session.handle(Input::CancelDictation);
+    }
+}
+
 /// Nora's pump while the window is hidden: with the window behind another (or the tab in the background) the browser draws
 /// no frame and eframe runs only `logic`, so the pane's own pump (`conversation`) never runs and Nora's actions wait in the
 /// queue, the server asking again every fifteen seconds. Called from `PdfCraftApp::logic`, it reads her queue, plays her
@@ -468,6 +478,12 @@ pub(crate) fn top_button(app: &mut PdfCraftApp, ui: &mut Ui) {
 /// Nobody is at the window, so the pointer and the text boxes (state left over from the last frame drawn) hold nothing
 /// back; what the person left under way in the document, or a dialog or the palette left open, still does.
 pub(crate) fn pump_hidden(app: &mut PdfCraftApp, ctx: &egui::Context) {
+    // As this runs on every frame, drawn or not, it is also where a closed pane gives its dictation up ([`let_go`]): the pane
+    // is closed by its close button, Nora's button, Preferences or the page, and the window may show Full Screen or the OCR
+    // Verify screen (neither draws the pane) when it is.
+    if !app.nora_pane {
+        let_go(app);
+    }
     // A closed pane is not pumped where it is drawn either (`pane`): the conversation waits for the person to open it again.
     if !app.nora_pane || app.nora_http.is_none() || !app.nora.session.is_busy() || ctx.input(|input| input.viewport().visible()) != Some(false) {
         return;
@@ -2855,6 +2871,92 @@ mod tests {
         assert!(!h.state().nora_pane, "closed by the panel's button");
         assert!(h.query_by_label("New conversation").is_none(), "nothing of the pane is drawn any more");
         assert!(!h.state_mut().nora.panel.take_close_request(), "the request was taken");
+    }
+
+    /// The pane's close button: the window has other panels with a close button of that name, the pane's is the rightmost.
+    fn click_the_pane_close_button(h: &Window) {
+        h.get_all_by_label("Close panel").max_by(|a, b| a.rect().center().x.total_cmp(&b.rect().center().x)).unwrap().click();
+    }
+
+    /// The tester's gesture, by each way the pane closes: a dictation started by the pane's microphone, then the pane closed by
+    /// its close button, by Nora's button in the top bar, or by the page: the microphone is let go at once, and the pane opened
+    /// again shows no recording running, its microphone on offer again.
+    #[test]
+    fn closing_the_pane_lets_the_microphone_go_whatever_closes_it() {
+        type Way = fn(&mut Window);
+        let ways: [(&str, Way); 3] = [
+            ("its close button", |h| click_the_pane_close_button(h)),
+            ("Nora's button", |h| h.get_by_label("Ask Nora").click()),
+            ("the page", |h| h.state_mut().nora_pane = false),
+        ];
+        for (way, close) in ways {
+            let mut app = document();
+            let (_outbox, _inbox) = connect(&mut app);
+            app.nora_dictation = true;
+            app.nora.panel.pretend_microphone();
+            let mut h = window(app);
+            h.get_by_label("Dictate").click();
+            h.run_steps(4);
+            assert!(h.state().nora.panel.dictation_under_way(), "{way}: the microphone is asked for");
+            assert!(h.query_by_label("Dictate").is_none(), "{way}: the pane shows the recording");
+            close(&mut h);
+            h.run_steps(4);
+            assert!(!h.state().nora_pane, "{way}: closed");
+            assert!(!h.state().nora.panel.dictation_under_way(), "{way}: the microphone is let go");
+            h.get_by_label("Ask Nora").click();
+            h.run_steps(6);
+            assert!(h.state().nora_pane, "{way}: open again");
+            assert!(!h.state().nora.panel.dictation_under_way(), "{way}: no recording runs");
+            assert!(h.query_by_label("Dictate").is_some(), "{way}: the pane's microphone is on offer again");
+        }
+    }
+
+    /// The pane closed while what the person said is on its way to be written down (its close button, then Nora's button in the
+    /// top bar): the dictation is given up, and the words that come in afterwards are written nowhere, the pane open again.
+    #[test]
+    fn closing_the_pane_gives_the_dictation_up() {
+        let mut app = document();
+        let (outbox, inbox) = connect(&mut app);
+        app.nora_dictation = true;
+        let mut h = window(app);
+        let sent = h.state_mut().nora.session.handle(Input::Transcribe { audio_base64: "AAAA".into(), mime: "audio/webm".into() });
+        let Some(Output::Http(dictation)) = sent.first() else { panic!("the recording goes to the server: {sent:?}") };
+        assert!(h.state().nora.session.dictating());
+        click_the_pane_close_button(&h);
+        h.run_steps(4);
+        assert!(!h.state().nora_pane, "closed");
+        assert!(!h.state().nora.session.dictating(), "no words are awaited any more");
+        take(&outbox);
+        answer(&inbox, dictation, json!({"success": true, "text": "nobody may read this"}));
+        h.get_by_label("Ask Nora").click();
+        h.run_steps(6);
+        assert!(h.state().nora_pane, "open again");
+        assert_eq!(h.state().nora.panel.draft(), "", "the words of the dictation given up are not in the box");
+    }
+
+    /// The pane closed by the page in Full Screen, while the pane's microphone is open and what was said before is on its way to
+    /// be written down: the page on black covers the window and the pane is not drawn, yet the microphone is let go and the
+    /// dictation given up at once, not when Full Screen ends.
+    #[test]
+    fn closing_the_pane_in_full_screen_gives_the_dictation_up_at_once() {
+        let mut app = document();
+        let (_outbox, _inbox) = connect(&mut app);
+        app.nora_dictation = true;
+        app.nora.panel.pretend_microphone();
+        let mut h = window(app);
+        let sent = h.state_mut().nora.session.handle(Input::Transcribe { audio_base64: "AAAA".into(), mime: "audio/webm".into() });
+        assert!(matches!(sent.first(), Some(Output::Http(_))), "the recording goes to the server: {sent:?}");
+        h.get_by_label("Dictate").click();
+        h.run_steps(4);
+        assert!(h.state().nora.panel.dictation_under_way(), "the microphone is asked for");
+        h.state_mut().full_screen = true;
+        h.run_steps(2);
+        assert!(h.query_by_label("Ask Nora").is_none(), "Full Screen shows the page alone");
+        h.state_mut().nora_pane = false;
+        h.run_steps(2);
+        assert!(h.state().full_screen, "still in Full Screen");
+        assert!(!h.state().nora.panel.dictation_under_way(), "the microphone is let go");
+        assert!(!h.state().nora.session.dictating(), "no words are awaited any more");
     }
 
     /// An empty page greets, and offers three requests that are ready: one click sends it as if it had been typed.

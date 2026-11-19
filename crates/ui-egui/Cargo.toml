@@ -111,6 +111,9 @@ image = { version = "0.25", default-features = false, features = ["png"] }
 # Glyph-coverage test of the interface fonts; the same skrifa pdfcraft-fonts already uses.
 skrifa = "0.44"
 proptest = { workspace = true }
+# //// Neoffice — the Nora panel's microphone pretended outside a browser, for the tests of a pane that gives a dictation up
+# when it closes (nora_pane.rs); a dev-dependency's feature, never a build's.
+craft-nora-ui = { workspace = true, features = ["test-support"] }
 
 [build-dependencies]
 serde_json = { workspace = true }
