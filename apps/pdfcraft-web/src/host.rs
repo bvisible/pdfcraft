@@ -18,6 +18,9 @@
 //!   the notice says why (`error`). `ok: true`, or no answer, leaves it saved.
 //! - `pdfcraft:dirty` (to the parent): `{ dirty }` whenever unsaved work appears or goes away.
 //! - `pdfcraft:failed` (to the parent): `{ error }` when the app couldn't start.
+//! - `pdfcraft:openFailed` (to the parent): `{ name, error }` when a file the parent sent could not be opened (it is not
+//!   a PDF, it is damaged). The parent says so instead of leaving the editor's Home page on its page. Not sent for a
+//!   document that asks for its password.
 //!
 //! Only the parent window on the app's own origin is heard or answered. With a parent on
 //! another origin there is no bridge: the app runs as if unframed and saves download.
@@ -68,6 +71,16 @@ impl Bridge {
         if let Some(m) = message(&[("type", "pdfcraft:failed".into()), ("error", error.into())]) {
             let _ = self.post(&m, None);
         }
+    }
+
+    /// What tells the parent that a file it sent did not open (`pdfcraft:openFailed`).
+    pub fn open_failed_fn(&self) -> pdfcraft_ui_egui::HostOpenFailedFn {
+        let bridge = self.clone();
+        Box::new(move |name: &str, error: &str| {
+            if let Some(m) = message(&[("type", "pdfcraft:openFailed".into()), ("name", name.into()), ("error", error.into())]) {
+                let _ = bridge.post(&m, None);
+            }
+        })
     }
 
     /// Hear `pdfcraft:open` from the parent and queue the file like a `?file=` download.

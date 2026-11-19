@@ -201,6 +201,8 @@ impl PdfCraftApp {
             os_events: None,
             host_save: None,
             host_dirty: None,
+            // //// Neoffice — see `host_open_failed`.
+            host_open_failed: None,
             // //// Neoffice — see `hide_community` and `host_saves`.
             hide_community: false,
             host_owns_documents: false,
@@ -698,6 +700,10 @@ impl PdfCraftApp {
                 let activate = !self.startup_superseded;
                 if let Err(e) = self.open_bytes_with_focus(&name, None, bytes, activate) {
                     self.notify_fmt("Couldn't open {name}: {e}", &[("name", &name), ("e", &e)]);
+                    // //// Neoffice — the embedding page hears of it too, and shows its card (`host_open_failed`).
+                    if let Some(tell) = &self.host_open_failed {
+                        tell(&name, &e);
+                    }
                 }
             }
         }

@@ -30,6 +30,10 @@ pub type HostSaveFn = Box<dyn Fn(&str, &[u8], bool) -> Result<(), String>>;
 /// rejected, so a host page can warn before leaving.
 pub type HostDirtyFn = Box<dyn FnMut(bool)>;
 
+// //// Neoffice — the embedding page hears that the file it sent did not open (`PdfCraftApp::host_open_failed`).
+/// Told `(file name, reason)` when a file the embedding page sent could not be opened.
+pub type HostOpenFailedFn = Box<dyn Fn(&str, &str)>;
+
 // //// Neoffice — the connection of the Nora assistant pane (`nora_pane`). Nora (the agent) lives on the Neoffice server,
 // so the pane needs the session and the credentials of whoever hosts the editor: the host makes the HTTP call and delivers
 // the answer through `NoraInbox`. Without a connection the pane says that Nora isn't available and offers no text box.

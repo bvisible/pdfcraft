@@ -84,6 +84,8 @@ fn main() {
                         bridge.listen(app.startup_inbox.clone(), app.refused_saves.clone(), cc.egui_ctx.clone());
                         app.host_save = Some(bridge.save_fn());
                         app.host_dirty = Some(bridge.dirty_fn());
+                        // //// Neoffice — the page hears that a file it sent did not open, and shows its card over the Home page.
+                        app.host_open_failed = Some(bridge.open_failed_fn());
                         // //// Neoffice — a page that frames the editor has its own community: upstream's links are not shown.
                         app.hide_community = true;
                         // //// Neoffice — and it opens the documents: no Open, Recent or dropped document in the editor.

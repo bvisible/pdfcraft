@@ -147,7 +147,7 @@ use dialogs::standards_ui;
 use dialogs::word_count_ui;
 pub use home::folders_ui;
 // //// Neoffice — and the connection of the Nora pane (`NoraHttpFn`, `NoraInbox`, hooks.rs).
-pub use hooks::{FailedInbox, HostDirtyFn, HostSaveFn, Inbox, NoraHttpFn, NoraInbox, OsEvent, OsEventsFn};
+pub use hooks::{FailedInbox, HostDirtyFn, HostOpenFailedFn, HostSaveFn, Inbox, NoraHttpFn, NoraInbox, OsEvent, OsEventsFn};
 // //// Neoffice — what a host sends to Nora and gets back.
 pub use craft_nora::{HttpRequest, HttpResponse};
 use menus::tab_context;
@@ -583,6 +583,10 @@ pub struct PdfCraftApp {
     pub host_save: Option<HostSaveFn>,
     /// Reports unsaved work, or an open OCR review, to the embedding page (web, see [`HostDirtyFn`]).
     pub host_dirty: Option<HostDirtyFn>,
+    // //// Neoffice — added field: the embedding page's file did not open. The page shows its own card and offers the file,
+    // where the editor would stay on its Home page behind a notice that fades (a damaged PDF in the Drive of the Suite).
+    /// Told when a file of [`Self::startup_inbox`] sent by the embedding page could not be opened, instead of a notice.
+    pub host_open_failed: Option<HostOpenFailedFn>,
     // //// Neoffice — added field: a hosting page hides the links to upstream's community (Discord).
     /// Hide the links to upstream's community: the title bar's button, the Home page's card, the Discord command (web host).
     pub hide_community: bool,

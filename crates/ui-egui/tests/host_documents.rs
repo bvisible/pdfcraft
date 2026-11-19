@@ -259,3 +259,79 @@ fn the_menu_bar_lists_no_tool_that_opens_another_document_to_a_host_that_opens_t
     assert!(compare_panel(shown.state()), "the Compare panel is in View ▸ Side panels elsewhere");
     assert!(!compare_panel(hosted.state()), "and not in the window the page opens the documents of");
 }
+
+/// What the embedding page was told of its files that did not open: (name, reason).
+type Told = std::sync::Arc<std::sync::Mutex<Vec<(String, String)>>>;
+
+fn telling() -> (Harness<'static, PdfCraftApp>, Told) {
+    let told = Told::default();
+    let mut h = harness(true);
+    let sink = told.clone();
+    h.state_mut().host_open_failed =
+        Some(Box::new(move |name: &str, reason: &str| sink.lock().unwrap().push((name.to_string(), reason.to_string()))));
+    (h, told)
+}
+
+/// Bytes that are not a PDF, from the embedding page: it hears of it, with the file's name and the reason, and no tab
+/// opens (a page that framed the editor kept its Home page). The notice is still there for a page that does not listen.
+#[test]
+fn a_file_of_the_page_that_is_no_pdf_is_told_to_the_page() {
+    let (mut h, told) = telling();
+    let views = h.state().views.len();
+    h.state().startup_inbox.lock().unwrap().push(("Casse.pdf".into(), b"not a PDF at all".to_vec()));
+    h.run_steps(3);
+    let heard = told.lock().unwrap().clone();
+    assert_eq!(heard.len(), 1, "{heard:?}");
+    assert_eq!(heard[0].0, "Casse.pdf");
+    assert!(!heard[0].1.trim().is_empty(), "the reason is given");
+    assert_eq!(h.state().views.len(), views, "no document came in");
+    let said = h.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
+    assert!(said.contains("Casse.pdf"), "{said:?}");
+}
+
+/// Without a page that listens, the editor says it itself, as upstream has it.
+#[test]
+fn without_a_page_that_listens_the_editor_says_it_itself() {
+    let mut h = harness(false);
+    h.state().startup_inbox.lock().unwrap().push(("Casse.pdf".into(), b"not a PDF at all".to_vec()));
+    h.run_steps(3);
+    let said = h.state().toast.as_ref().map(|(m, _)| m.clone()).unwrap_or_default();
+    assert!(said.contains("Casse.pdf"), "{said:?}");
+}
+
+/// An `n`-page document with a proper xref table.
+fn fixture(n: usize) -> Vec<u8> {
+    let mut objs: Vec<String> = vec!["<< /Type /Catalog /Pages 2 0 R >>".into()];
+    let kids: Vec<String> = (0..n).map(|i| format!("{} 0 R", 4 + 2 * i)).collect();
+    objs.push(format!("<< /Type /Pages /Kids [{}] /Count {n} /MediaBox [0 0 200 300] >>", kids.join(" ")));
+    objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>".into());
+    for i in 0..n {
+        objs.push(format!("<< /Type /Page /Parent 2 0 R /Contents {} 0 R /Resources << /Font << /F1 3 0 R >> >> >>", 5 + 2 * i));
+        let body = format!("BT /F1 24 Tf 20 150 Td (Page {}) Tj ET", i + 1);
+        objs.push(format!("<< /Length {} >>\nstream\n{body}\nendstream", body.len()));
+    }
+    let mut out = b"%PDF-1.7\n".to_vec();
+    let mut offsets = Vec::new();
+    for (i, o) in objs.iter().enumerate() {
+        offsets.push(out.len());
+        out.extend_from_slice(format!("{} 0 obj\n{o}\nendobj\n", i + 1).as_bytes());
+    }
+    let xref = out.len();
+    out.extend_from_slice(format!("xref\n0 {}\n0000000000 65535 f \n", objs.len() + 1).as_bytes());
+    for o in offsets {
+        out.extend_from_slice(format!("{o:010} 00000 n \n").as_bytes());
+    }
+    out.extend_from_slice(format!("trailer\n<< /Size {} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n", objs.len() + 1).as_bytes());
+    out
+}
+
+/// A document that opens is no failure: the page hears nothing.
+#[test]
+fn a_pdf_that_opens_is_not_told_to_the_page() {
+    let (mut h, told) = telling();
+    let views = h.state().views.len();
+    h.state().startup_inbox.lock().unwrap().push(("Devis.pdf".into(), fixture(1)));
+    h.run_steps(3);
+    assert!(told.lock().unwrap().is_empty(), "{:?}", told.lock().unwrap());
+    assert_eq!(h.state().views.len(), views + 1, "the document opened");
+}

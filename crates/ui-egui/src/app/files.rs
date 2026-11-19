@@ -725,7 +725,14 @@ impl PdfCraftApp {
         let opened = self.try_open(&p.name, p.path.take(), p.bytes.clone(), Some(&pw), p.activate);
         drop(pw);
         match opened {
-            Err(e) => self.notify_fmt("Couldn't open {name}: {e}", &[("name", &p.name), ("e", &e.to_string())]),
+            Err(e) => {
+                self.notify_fmt("Couldn't open {name}: {e}", &[("name", &p.name), ("e", &e.to_string())]);
+                // //// Neoffice — the password was right and the file still did not open: the embedding page hears of it
+                // (`host_open_failed`), as of a file that fails before any password.
+                if let Some(tell) = &self.host_open_failed {
+                    tell(&p.name, &e.to_string());
+                }
+            }
             // A recovered encrypted document is open once its prompt is gone.
             Ok(()) if self.password_prompt.is_none() => {
                 #[cfg(not(target_arch = "wasm32"))]
